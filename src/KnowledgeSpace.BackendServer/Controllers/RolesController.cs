@@ -55,7 +55,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         //URL: GET: http://localhost:5001/api/roles/?filter={filter}&pageIndex=1&pageSize=10
-        [HttpGet]
+        [HttpGet("filter")]
         public async Task<IActionResult> GetRolesPaging(string filter, int pageIndex, int pageSize)
         {
             var query = _roleManager.Roles;
