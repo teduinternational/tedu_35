@@ -73,7 +73,7 @@ namespace KnowledgeSpace.BackendServer
             });
 
             services.AddControllersWithViews()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleVmValidator>());
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleCreateRequestValidator>());
 
             services.AddAuthentication()
                .AddLocalApi("Bearer", option =>
