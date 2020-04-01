@@ -9,10 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KnowledgeSpace.BackendServer.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize("Bearer")]
-    public class RolesController : ControllerBase
+    public class RolesController : BaseController
     {
         private readonly RoleManager<IdentityRole> _roleManager;
 
@@ -23,18 +20,18 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         //URL: POST: http://localhost:5001/api/roles
         [HttpPost]
-        public async Task<IActionResult> PostRole(RoleVm roleVm)
+        public async Task<IActionResult> PostRole(RoleCreateRequest request)
         {
             var role = new IdentityRole()
             {
-                Id = roleVm.Id,
-                Name = roleVm.Name,
-                NormalizedName = roleVm.Name.ToUpper()
+                Id = request.Id,
+                Name = request.Name,
+                NormalizedName = request.Name.ToUpper()
             };
             var result = await _roleManager.CreateAsync(role);
             if (result.Succeeded)
             {
-                return CreatedAtAction(nameof(GetById), new { id = role.Id }, roleVm);
+                return CreatedAtAction(nameof(GetById), new { id = role.Id }, request);
             }
             else
             {
@@ -102,7 +99,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         //URL: PUT: http://localhost:5001/api/roles/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRole(string id, [FromBody]RoleVm roleVm)
+        public async Task<IActionResult> PutRole(string id, [FromBody]RoleCreateRequest roleVm)
         {
             if (id != roleVm.Id)
                 return BadRequest();
