@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -27,5 +28,7 @@ namespace KnowledgeSpace.ViewModels.Contents
         public string Note { get; set; }
 
         public string Labels { get; set; }
+
+        public List<IFormFile> Attachments { get; set; }
     }
 }
