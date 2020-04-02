@@ -55,6 +55,7 @@ namespace KnowledgeSpace.BackendServer
             .AddInMemoryClients(Config.Clients)
             .AddInMemoryIdentityResources(Config.Ids)
             .AddAspNetIdentity<User>()
+            .AddProfileService<IdentityProfileService>()
             .AddDeveloperSigningCredential();
 
             services.Configure<IdentityOptions>(options =>

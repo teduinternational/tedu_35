@@ -22,6 +22,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetCommants()
         {
+            var user = User.Identity.Name;
             var commands = _context.Commands;
 
             var commandVms = await commands.Select(u => new CommandVm()
