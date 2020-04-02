@@ -104,6 +104,7 @@ namespace KnowledgeSpace.BackendServer
             });
             services.AddTransient<DbInitializer>();
             services.AddTransient<IEmailSender, EmailSenderService>();
+            services.AddTransient<ISequenceService, SequenceService>();
 
             services.AddSwaggerGen(c =>
             {
