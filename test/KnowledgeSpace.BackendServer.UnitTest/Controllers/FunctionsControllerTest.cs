@@ -4,6 +4,8 @@ using KnowledgeSpace.BackendServer.Data.Entities;
 using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Systems;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +18,26 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
     public class FunctionsControllerTest
     {
         private ApplicationDbContext _context;
+        private Mock<ILogger<FunctionsController>> _mockLogger;
 
         public FunctionsControllerTest()
         {
             _context = new InMemoryDbContextFactory().GetApplicationDbContext();
+            _mockLogger = new Mock<ILogger<FunctionsController>>();
         }
 
         [Fact]
         public void Should_Create_Instance_Not_Null_Success()
         {
-            var controller = new FunctionsController(_context);
+            var controller = new FunctionsController(_context, _mockLogger.Object);
             Assert.NotNull(controller);
         }
 
         [Fact]
         public async Task PostFunction_ValidInput_Success()
         {
-            var usersController = new FunctionsController(_context);
-            var result = await usersController.PostFunction(new FunctionCreateRequest()
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.PostFunction(new FunctionCreateRequest()
             {
                 Id = "PostFunction_ValidInput_Success",
                 ParentId = null,
@@ -59,9 +63,9 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
                 }
             });
             await _context.SaveChangesAsync();
-            var functionsController = new FunctionsController(_context);
+            var controller = new FunctionsController(_context, _mockLogger.Object);
 
-            var result = await functionsController.PostFunction(new FunctionCreateRequest()
+            var result = await controller.PostFunction(new FunctionCreateRequest()
             {
                 Id = "PostUser_ValidInput_Failed",
                 ParentId = null,
@@ -87,8 +91,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
                 }
             });
             await _context.SaveChangesAsync();
-            var functionsController = new FunctionsController(_context);
-            var result = await functionsController.GetFunctions();
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.GetFunctions();
             var okResult = result as OkObjectResult;
             var UserVms = okResult.Value as IEnumerable<FunctionVm>;
             Assert.True(UserVms.Count() > 0);
@@ -129,8 +133,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
                 }
             });
             await _context.SaveChangesAsync();
-            var functionsController = new FunctionsController(_context);
-            var result = await functionsController.GetFunctionsPaging(null, 1, 2);
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.GetFunctionsPaging(null, 1, 2);
             var okResult = result as OkObjectResult;
             var UserVms = okResult.Value as Pagination<FunctionVm>;
             Assert.Equal(4, UserVms.TotalRecords);
@@ -152,8 +156,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
             });
             await _context.SaveChangesAsync();
 
-            var functionsController = new FunctionsController(_context);
-            var result = await functionsController.GetFunctionsPaging("GetUsersPaging_HasFilter_ReturnSuccess", 1, 2);
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.GetFunctionsPaging("GetUsersPaging_HasFilter_ReturnSuccess", 1, 2);
             var okResult = result as OkObjectResult;
             var UserVms = okResult.Value as Pagination<FunctionVm>;
             Assert.Equal(1, UserVms.TotalRecords);
@@ -174,8 +178,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
                 }
             });
             await _context.SaveChangesAsync();
-            var functionsController = new FunctionsController(_context);
-            var result = await functionsController.GetById("GetById_HasData_ReturnSuccess");
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.GetById("GetById_HasData_ReturnSuccess");
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult);
 
@@ -197,8 +201,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
                 }
             });
             await _context.SaveChangesAsync();
-            var functionsController = new FunctionsController(_context);
-            var result = await functionsController.PutFunction("PutUser_ValidInput_Success", new FunctionCreateRequest()
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.PutFunction("PutUser_ValidInput_Success", new FunctionCreateRequest()
             {
                 ParentId = null,
                 Name = "PutUser_ValidInput_Success updated",
@@ -211,9 +215,9 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
         [Fact]
         public async Task PutUser_ValidInput_Failed()
         {
-            var functionsController = new FunctionsController(_context);
+            var controller = new FunctionsController(_context, _mockLogger.Object);
 
-            var result = await functionsController.PutFunction("PutUser_ValidInput_Failed", new FunctionCreateRequest()
+            var result = await controller.PutFunction("PutUser_ValidInput_Failed", new FunctionCreateRequest()
             {
                 ParentId = null,
                 Name = "PutUser_ValidInput_Failed update",
@@ -237,16 +241,16 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
                 }
             });
             await _context.SaveChangesAsync();
-            var functionsController = new FunctionsController(_context);
-            var result = await functionsController.DeleteFunction("DeleteUser_ValidInput_Success");
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.DeleteFunction("DeleteUser_ValidInput_Success");
             Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
         public async Task DeleteUser_ValidInput_Failed()
         {
-            var functionsController = new FunctionsController(_context);
-            var result = await functionsController.DeleteFunction("DeleteUser_ValidInput_Failed");
+            var controller = new FunctionsController(_context, _mockLogger.Object);
+            var result = await controller.DeleteFunction("DeleteUser_ValidInput_Failed");
             Assert.IsType<NotFoundObjectResult>(result);
         }
     }

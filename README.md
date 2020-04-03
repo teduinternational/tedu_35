@@ -22,3 +22,5 @@ For each KB, user can vote it and comment to below KB.
 - [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1)
 - [Visual Studio](https://visualstudio.microsoft.com/)
 - [IdentityServer4](https://identityserver.io/)
+
+- https://medium.com/@matthew.bajorek/configuring-serilog-in-asp-net-core-2-2-web-api-5e0f4d89749c

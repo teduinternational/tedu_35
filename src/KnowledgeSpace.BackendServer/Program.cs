@@ -42,8 +42,10 @@ namespace KnowledgeSpace.BackendServer
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                    .UseSerilog()
+                     .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                    .ReadFrom.Configuration(hostingContext.Configuration))
                     .ConfigureWebHostDefaults(webBuilder =>
+
                     {
                         webBuilder.UseStartup<Startup>();
                     });
