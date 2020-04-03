@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using KnowledgeSpace.BackendServer.Authorization;
+﻿using KnowledgeSpace.BackendServer.Authorization;
 using KnowledgeSpace.BackendServer.Constants;
 using KnowledgeSpace.BackendServer.Data;
 using KnowledgeSpace.BackendServer.Data.Entities;
@@ -9,6 +7,8 @@ using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Contents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KnowledgeSpace.BackendServer.Controllers
 {
@@ -43,7 +43,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest(new ApiBadRequestResponse("Create category failed"));
             }
         }
 
@@ -88,7 +88,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
-                return NotFound();
+                return NotFound(new ApiNotFoundResponse($"Category with id: {id} is not found"));
 
             CategoryVm categoryvm = CreateCategoryVm(category);
 
@@ -102,11 +102,11 @@ namespace KnowledgeSpace.BackendServer.Controllers
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
-                return NotFound();
+                return NotFound(new ApiNotFoundResponse($"Category with id: {id} is not found"));
 
             if (id == request.ParentId)
             {
-                return BadRequest("Category cannot be a child itself.");
+                return BadRequest(new ApiBadRequestResponse("Category cannot be a child itself."));
             }
 
             category.Name = request.Name;
@@ -122,7 +122,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             {
                 return NoContent();
             }
-            return BadRequest();
+            return BadRequest(new ApiBadRequestResponse("Update category failed"));
         }
 
         [HttpDelete("{id}")]
@@ -131,7 +131,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
-                return NotFound();
+                return NotFound(new ApiNotFoundResponse($"Category with id: {id} is not found"));
 
             _context.Categories.Remove(category);
             var result = await _context.SaveChangesAsync();

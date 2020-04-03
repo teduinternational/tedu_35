@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
 {
-    class KnowledgeBasesControllerTest
+    internal class KnowledgeBasesControllerTest
     {
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using KnowledgeSpace.BackendServer.Authorization;
+﻿using KnowledgeSpace.BackendServer.Authorization;
 using KnowledgeSpace.BackendServer.Constants;
 using KnowledgeSpace.BackendServer.Data;
 using KnowledgeSpace.BackendServer.Data.Entities;
@@ -9,9 +6,9 @@ using KnowledgeSpace.BackendServer.Helpers;
 using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Systems;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KnowledgeSpace.BackendServer.Controllers
 {
@@ -125,6 +122,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         [HttpPut("{id}")]
         [ClaimRequirement(FunctionCode.SYSTEM_FUNCTION, CommandCode.UPDATE)]
+        [ApiValidationFilter]
         public async Task<IActionResult> PutFunction(string id, [FromBody]FunctionCreateRequest request)
         {
             var function = await _context.Functions.FindAsync(id);
@@ -143,7 +141,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             {
                 return NoContent();
             }
-            return BadRequest();
+            return BadRequest(new ApiBadRequestResponse("Create function failed"));
         }
 
         [HttpDelete("{id}")]
@@ -168,7 +166,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 };
                 return Ok(functionvm);
             }
-            return BadRequest();
+            return BadRequest(new ApiBadRequestResponse("Delete function failed"));
         }
 
         [HttpGet("{functionId}/commands")]
@@ -227,6 +225,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         [HttpPost("{functionId}/commands")]
         [ClaimRequirement(FunctionCode.SYSTEM_FUNCTION, CommandCode.CREATE)]
+        [ApiValidationFilter]
         public async Task<IActionResult> PostCommandToFunction(string functionId, [FromBody] AddCommandToFunctionRequest request)
         {
             var commandInFunction = await _context.CommandInFunctions.FindAsync(request.CommandId, request.FunctionId);
@@ -273,7 +272,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             }
             else
             {
-                return BadRequest("Delete command to function failed");
+                return BadRequest(new ApiBadRequestResponse("Delete command to function failed"));
             }
         }
     }

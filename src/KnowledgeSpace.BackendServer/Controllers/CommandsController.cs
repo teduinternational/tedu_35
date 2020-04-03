@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KnowledgeSpace.BackendServer.Data;
+﻿using KnowledgeSpace.BackendServer.Data;
 using KnowledgeSpace.ViewModels.Systems;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KnowledgeSpace.BackendServer.Controllers
 {
@@ -19,7 +16,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             _context = context;
         }
 
-        [HttpGet()]
+        [HttpGet]
         public async Task<IActionResult> GetCommants()
         {
             var user = User.Identity.Name;
