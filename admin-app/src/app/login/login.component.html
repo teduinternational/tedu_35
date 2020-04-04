@@ -1,22 +1,13 @@
-<div class="login-page" [@routerTransition]>
-    <div class="row justify-content-md-center">
-        <div class="col-md-4">
-            <img src="assets/images/logo.png" width="150px" class="user-avatar" />
-            <h1>SB Admin BS4 Angular8</h1>
-            <form role="form">
-                <div class="form-content">
-                    <div class="form-group">
-                        <input type="text" ng-model="name" class="form-control input-underline input-lg" id="" placeholder="{{ 'Email' | translate }}">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="{{ 'Password' | translate }}">
-                    </div>
-                </div>
-                <a class="btn rounded-btn" [routerLink]="['/dashboard']" (click)="onLoggedin()">{{ 'Log in' | translate }}</a>
-                &nbsp;
-                <a class="btn rounded-btn" [routerLink]="['/signup']">{{ 'Register' | translate }}</a>
-            </form>
-        </div>
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <h1 class="mt-5">{{title}}</h1>
+        <p class="lead">This step uses the <a
+                href="http://docs.identityserver.io/en/latest/topics/grant_types.html#implicit" target="_blank">implicit
+                flow type</a> and redirects to the IdentityServer instance to perform the authentication step. Before
+            you can login here, you must <a routerLink="/register">register a new account</a>.</p>
+        <img src="assets/images/open-identity.png" width="175" class="mb-4" />
+        <p>
+            <button class="btn btn-lg btn-primary" (click)="login()">Login with IdentityServer</button>
+        </p>
     </div>
 </div>

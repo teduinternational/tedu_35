@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { routerTransition } from '../router.animations';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { AuthService } from '@app/shared/services';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    animations: [routerTransition()]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-    constructor(
-      public router: Router
-    ) {}
 
-    ngOnInit() {}
+  constructor(private authService: AuthService, private spinner: NgxSpinnerService) { }
 
-    onLoggedin() {
-        localStorage.setItem('isLoggedin', 'true');
-    }
+  title = 'Login';
+
+  login() {
+    this.spinner.show();
+    this.authService.login();
+  }
+
+  ngOnInit() {
+  }
 }

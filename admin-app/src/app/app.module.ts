@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -7,7 +7,8 @@ import { LanguageTranslationModule } from './shared/modules/language-translation
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './shared';
+import { AuthService, AuthGuard, UserService } from './shared/services';
+import { AuthorizeInterceptor } from './shared/interceptors/authorize.interceptor';
 
 @NgModule({
     imports: [
@@ -19,7 +20,15 @@ import { AuthGuard } from './shared';
         AppRoutingModule
     ],
     declarations: [AppComponent],
-    providers: [AuthGuard],
+    providers: [
+        AuthService,
+        AuthGuard,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthorizeInterceptor,
+            multi: true
+        }
+    ],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
