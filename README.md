@@ -24,3 +24,10 @@ For each KB, user can vote it and comment to below KB.
 - [IdentityServer4](https://identityserver.io/)
 
 - https://medium.com/@matthew.bajorek/configuring-serilog-in-asp-net-core-2-2-web-api-5e0f4d89749c
+
+# Angular Installation
+- NPM (https://nodejs.org/en/)
+- https://git-scm.com/downloads
+- npm install -g @angular/cli
+- Visual Studio Code (https://code.visualstudio.com/)
+- Run command: git clone https://github.com/start-angular/SB-Admin-BS4-Angular-8.git admin-app
