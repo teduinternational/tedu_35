@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace KnowledgeSpace.BackendServer
 {
@@ -55,7 +56,7 @@ namespace KnowledgeSpace.BackendServer
                 options.Events.RaiseSuccessEvents = true;
             })
             .AddInMemoryApiResources(Config.Apis)
-            .AddInMemoryClients(Config.Clients)
+            .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
             .AddInMemoryIdentityResources(Config.Ids)
             .AddAspNetIdentity<User>()
             .AddProfileService<IdentityProfileService>()
