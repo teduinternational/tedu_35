@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
+import { AuthService } from '../shared/services';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
     selector: 'app-login',
@@ -10,12 +11,15 @@ import { routerTransition } from '../router.animations';
 })
 export class LoginComponent implements OnInit {
     constructor(
-      public router: Router
+      private authService: AuthService,
+      private spinner: NgxSpinnerService
     ) {}
 
     ngOnInit() {}
 
-    onLoggedin() {
-        localStorage.setItem('isLoggedin', 'true');
-    }
+    login() {
+        this.spinner.show();
+        this.authService.login();
+      }
+
 }
