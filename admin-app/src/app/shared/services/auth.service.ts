@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import { BehaviorSubject } from 'rxjs';
 import { BaseService } from './base.service';
+import { Profile } from '../models';
 
 
 @Injectable({
@@ -50,6 +51,9 @@ export class AuthService extends BaseService {
     return this.user != null ? this.user.profile.name : '';
   }
 
+  get profile(): Profile {
+    return this.user != null ? this.user.profile : null;
+  }
   async signout() {
     await this.manager.signoutRedirect();
   }
