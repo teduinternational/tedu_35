@@ -85,7 +85,7 @@ export class RolesComponent implements OnInit, OnDestroy {
       return;
     }
     const initialState = {
-      id: this.selectedItems[0].id
+      entityId: this.selectedItems[0].id
     };
     this.bsModalRef = this.modalService.show(RolesDetailComponent,
       {

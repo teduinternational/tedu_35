@@ -21,9 +21,9 @@ export class RolesDetailComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
   public entityForm: FormGroup;
-  public title: string;
+  public dialogTitle: string;
   private savedEvent: EventEmitter<any> = new EventEmitter();
-  public id: string;
+  public entityId: string;
   public btnDisabled = false;
 
   public blockedPanel = false;
@@ -51,12 +51,12 @@ export class RolesDetailComponent implements OnInit, OnDestroy {
         Validators.maxLength(50)
       ]))
     });
-    if (this.id) {
-      this.loadFormDetails(this.id);
-      this.title = 'Thêm mới';
+    if (this.entityId) {
+      this.loadFormDetails(this.entityId);
+      this.dialogTitle = 'Thêm mới';
       this.entityForm.controls['id'].disable({ onlySelf: true });
     } else {
-      this.title = 'Cập nhật';
+      this.dialogTitle = 'Cập nhật';
       this.entityForm.controls['id'].enable({ onlySelf: true });
     }
   }
@@ -76,8 +76,8 @@ export class RolesDetailComponent implements OnInit, OnDestroy {
   public saveChange() {
     this.btnDisabled = true;
     this.blockedPanel = true;
-    if (this.id) {
-      this.subscription.add(this.rolesService.update(this.id, this.entityForm.getRawValue())
+    if (this.entityId) {
+      this.subscription.add(this.rolesService.update(this.entityId, this.entityForm.getRawValue())
         .subscribe(() => {
           this.savedEvent.emit(this.entityForm.value);
           this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
