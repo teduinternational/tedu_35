@@ -26,7 +26,6 @@ namespace KnowledgeSpace.BackendServer.Controllers
             _context = context;
         }
 
-        //URL: POST: http://localhost:5001/api/roles
         [HttpPost]
         [ClaimRequirement(FunctionCode.SYSTEM_ROLE, CommandCode.CREATE)]
         [ApiValidationFilter]
@@ -49,7 +48,6 @@ namespace KnowledgeSpace.BackendServer.Controllers
             }
         }
 
-        //URL: GET: http://localhost:5001/api/roles/
         [HttpGet]
         [ClaimRequirement(FunctionCode.SYSTEM_ROLE, CommandCode.VIEW)]
         public async Task<IActionResult> GetRoles()
@@ -65,7 +63,6 @@ namespace KnowledgeSpace.BackendServer.Controllers
             return Ok(rolevms);
         }
 
-        //URL: GET: http://localhost:5001/api/roles/?filter={filter}&pageIndex=1&pageSize=10
         [HttpGet("filter")]
         [ClaimRequirement(FunctionCode.SYSTEM_ROLE, CommandCode.VIEW)]
         public async Task<IActionResult> GetRolesPaging(string filter, int pageIndex, int pageSize)
@@ -76,7 +73,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 query = query.Where(x => x.Id.Contains(filter) || x.Name.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
-            var items = await query.Skip((pageIndex - 1 * pageSize))
+            var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(r => new RoleVm()
                 {
@@ -93,7 +90,6 @@ namespace KnowledgeSpace.BackendServer.Controllers
             return Ok(pagination);
         }
 
-        //URL: GET: http://localhost:5001/api/roles/{id}
         [HttpGet("{id}")]
         [ClaimRequirement(FunctionCode.SYSTEM_ROLE, CommandCode.VIEW)]
         public async Task<IActionResult> GetById(string id)
@@ -110,7 +106,6 @@ namespace KnowledgeSpace.BackendServer.Controllers
             return Ok(roleVm);
         }
 
-        //URL: PUT: http://localhost:5001/api/roles/{id}
         [HttpPut("{id}")]
         [ClaimRequirement(FunctionCode.SYSTEM_ROLE, CommandCode.UPDATE)]
         [ApiValidationFilter]
@@ -135,7 +130,6 @@ namespace KnowledgeSpace.BackendServer.Controllers
             return BadRequest(new ApiBadRequestResponse(result));
         }
 
-        //URL: DELETE: http://localhost:5001/api/roles/{id}
         [HttpDelete("{id}")]
         [ClaimRequirement(FunctionCode.SYSTEM_ROLE, CommandCode.DELETE)]
         public async Task<IActionResult> DeleteRole(string id)
