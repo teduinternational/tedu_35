@@ -76,7 +76,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 query = query.Where(x => x.Id.Contains(filter) || x.Name.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
-            var items = await query.Skip((pageIndex - 1 * pageSize))
+            var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(r => new RoleVm()
                 {
