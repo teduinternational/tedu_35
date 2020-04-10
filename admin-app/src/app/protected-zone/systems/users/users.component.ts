@@ -16,7 +16,6 @@ export class UsersComponent implements OnInit {
   public bsModalRef: BsModalRef;
   public blockedPanel = false;
   public blockedPanelRole = false;
-  public gridHeight = localStorage.getItem(SystemConstants.HEIGHT_01GRID);
   /**
    * Paging
    */
@@ -49,10 +48,7 @@ export class UsersComponent implements OnInit {
   }
 
   showHideRoleTable() {
-    if (!this.showRoleAssign) {
-      this.gridHeight = localStorage.getItem(SystemConstants.HEIGHT_01GRID);
-    } else {
-      this.gridHeight = localStorage.getItem(SystemConstants.HEIGHT_02GRID);
+    if (this.showRoleAssign) {
       if (this.selectedItems.length === 1) {
         this.loadUserRoles();
       }
