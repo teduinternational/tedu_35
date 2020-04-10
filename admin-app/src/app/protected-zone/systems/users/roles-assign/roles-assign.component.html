@@ -6,7 +6,7 @@
   </button>
 </div>
 <div class="modal-body div-scroll">
-  <p-table #dt2 [value]="items" selectionMode="multiple" [(selection)]="selection" [metaKeySelection]="true"
+  <p-table #dt2 [value]="items" selectionMode="multiple" [(selection)]="selectedItems" [metaKeySelection]="true"
     [responsive]="true" [scrollable]="true" scrollHeight="{{gridHeight}}">
     <ng-template pTemplate="header">
       <tr>
