@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UsersService, NotificationService } from '@app/shared/services';
-import { SystemConstants, MessageConstants } from '@app/shared/constants';
+import { MessageConstants } from '@app/shared/constants';
 import { UsersDetailComponent } from './users-detail/users-detail.component';
 import { Pagination, User } from '@app/shared/models';
 import { RolesAssignComponent } from './roles-assign/roles-assign.component';

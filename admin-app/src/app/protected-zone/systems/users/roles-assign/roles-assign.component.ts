@@ -1,5 +1,4 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { SystemConstants } from '@app/shared/constants';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { UsersService, RolesService } from '@app/shared/services';
 
@@ -13,7 +12,6 @@ export class RolesAssignComponent implements OnInit {
   // Default
   private chosenEvent: EventEmitter<any> = new EventEmitter();
   public blockedPanel = false;
-  public gridHeight = localStorage.getItem(SystemConstants.HEIGHT_01GRID);
   // User Role
   public items: any[];
   public selectedItems = [];
