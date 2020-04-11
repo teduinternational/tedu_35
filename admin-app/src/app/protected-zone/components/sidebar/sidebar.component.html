@@ -5,9 +5,9 @@
                 <i class="fa {{item.icon}}"></i>&nbsp;
                 <span>{{ item.name }}</span>
             </a>
-            <li class="nested" [class.expand]="showMenu === item.id" *ngFor="let subItem of item.children">
+            <li class="nested" [class.expand]="showMenu === item.id">
                 <ul class="submenu">
-                    <li>
+                    <li *ngFor="let subItem of item.children">
                         <a href="javascript:void(0)" routerLink="{{subItem.url}}"
                             [routerLinkActive]="['router-link-active']">
                             <i class="fa {{subItem.icon}}"></i>&nbsp;

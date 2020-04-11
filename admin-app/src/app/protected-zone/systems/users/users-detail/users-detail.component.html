@@ -1,0 +1,104 @@
+<!--Modal add and edit-->
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{dialogTitle}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form class="form-horizontal form-label-left" novalidate [formGroup]="entityForm" (ngSubmit)="saveChange()">
+    <div class="modal-body div-scroll">
+        <p-panel #pnl header="Thông tin" [toggleable]="true" [collapsed]="false">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Tài khoản:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText [pKeyFilter]="noSpecial" formControlName="userName">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="userName"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Mật khẩu:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="password" pInputText formControlName="password">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="password"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Tên:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText [pKeyFilter]="noSpecial" formControlName="firstName">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="firstName"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Họ:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText [pKeyFilter]="noSpecial" formControlName="lastName">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="lastName"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span>Ngày sinh:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar formControlName="dob" dateFormat="dd/mm/yy" [showIcon]="true" [locale]="vi"
+                            [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2030" showButtonBar="true">
+                        </p-calendar>
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Email:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText pKeyFilter="email" formControlName="email">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="email"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span>Điện thoại:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText pKeyFilter="int" formControlName="phoneNumber">
+                    </div>
+                </div>
+            </div>
+            <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+                <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+                    strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+            </p-blockUI>
+        </p-panel>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" pbutton class="btn btn-primary" [disabled]="!entityForm.valid || btnDisabled">Lưu
+            lại</button>
+        &nbsp;
+        <button type="button" pbutton class="btn btn-default" (click)="bsModalRef.hide()">Đóng</button>
+    </div>
+</form>
