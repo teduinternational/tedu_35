@@ -185,6 +185,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
             var existingPermissions = _context.Permissions.Where(x => x.RoleId == roleId);
             _context.Permissions.RemoveRange(existingPermissions);
+
             _context.Permissions.AddRange(newPermissions);
             var result = await _context.SaveChangesAsync();
             if (result > 0)
