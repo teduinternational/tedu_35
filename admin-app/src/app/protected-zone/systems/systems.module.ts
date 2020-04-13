@@ -26,6 +26,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { FunctionsDetailComponent } from './functions/functions-detail/functions-detail.component';
 import { CommandsAssignComponent } from './functions/commands-assign/commands-assign.component';
+import { SharedDirectivesModule } from '@app/shared/directives/shared-directives.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { CommandsAssignComponent } from './functions/commands-assign/commands-as
     CheckboxModule,
     TreeTableModule,
     DropdownModule,
+    SharedDirectivesModule,
     ModalModule.forRoot()
   ],
   providers: [
