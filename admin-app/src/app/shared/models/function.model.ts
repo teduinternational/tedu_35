@@ -4,5 +4,5 @@ export class Function {
     url: string;
     sortOrder: number;
     parentId: string;
-    icon:string;
+    icon: string;
 }
