@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MonthlyNewKbsComponent } from './monthly-new-kbs/monthly-new-kbs.component';
 import { MonthlyNewMembersComponent } from './monthly-new-members/monthly-new-members.component';
 import { MonthlyNewCommentsComponent } from './monthly-new-comments/monthly-new-comments.component';
+import { AuthGuard } from '@app/shared';
 
 const routes: Routes = [
     {
@@ -11,15 +12,27 @@ const routes: Routes = [
     },
     {
         path: 'monthly-new-kbs',
-        component: MonthlyNewKbsComponent
+        component: MonthlyNewKbsComponent,
+        data: {
+            functionCode: 'STATISTIC_MONTHLY_NEWKB'
+        },
+        canActivate: [AuthGuard]
     },
     {
         path: 'monthly-new-members',
-        component: MonthlyNewMembersComponent
+        component: MonthlyNewMembersComponent,
+        data: {
+            functionCode: 'STATISTIC_MONTHLY_NEWMEMBER'
+        },
+        canActivate: [AuthGuard]
     },
     {
         path: 'monthly-new-comments',
-        component: MonthlyNewCommentsComponent
+        component: MonthlyNewCommentsComponent,
+        data: {
+            functionCode: 'STATISTIC_MONTHLY_COMMENT'
+        },
+        canActivate: [AuthGuard]
     }
 ];
 

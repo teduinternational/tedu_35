@@ -27,6 +27,7 @@ import { TreeTableModule } from 'primeng/treetable';
 import { DropdownModule } from 'primeng/dropdown';
 import { FunctionsDetailComponent } from './functions/functions-detail/functions-detail.component';
 import { CommandsAssignComponent } from './functions/commands-assign/commands-assign.component';
+import { SharedDirectivesModule } from '@app/shared/directives/shared-directives.module';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import { CommandsAssignComponent } from './functions/commands-assign/commands-as
     CheckboxModule,
     TreeTableModule,
     DropdownModule,
+    SharedDirectivesModule,
     ModalModule.forRoot()
   ],
   providers: [

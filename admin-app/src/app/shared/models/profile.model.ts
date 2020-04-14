@@ -3,5 +3,5 @@ export class Profile {
     userName: string;
     role: string;
     email: string;
-    permissions: string[]
+    permissions: string;
 }
