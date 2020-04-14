@@ -23,6 +23,10 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { TreeTableModule } from 'primeng/treetable';
+import { DropdownModule } from 'primeng/dropdown';
+import { FunctionsDetailComponent } from './functions/functions-detail/functions-detail.component';
+import { CommandsAssignComponent } from './functions/commands-assign/commands-assign.component';
 
 
 @NgModule({
@@ -33,7 +37,9 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     PermissionsComponent,
     RolesDetailComponent,
     UsersDetailComponent,
-    RolesAssignComponent],
+    RolesAssignComponent,
+    FunctionsDetailComponent,
+    CommandsAssignComponent],
   imports: [
     CommonModule,
     SystemsRoutingModule,
@@ -50,6 +56,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     KeyFilterModule,
     CalendarModule,
     CheckboxModule,
+    TreeTableModule,
+    DropdownModule,
     ModalModule.forRoot()
   ],
   providers: [
