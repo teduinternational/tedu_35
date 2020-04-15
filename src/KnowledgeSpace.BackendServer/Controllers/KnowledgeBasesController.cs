@@ -2,6 +2,7 @@
 using KnowledgeSpace.BackendServer.Constants;
 using KnowledgeSpace.BackendServer.Data;
 using KnowledgeSpace.BackendServer.Data.Entities;
+using KnowledgeSpace.BackendServer.Extensions;
 using KnowledgeSpace.BackendServer.Helpers;
 using KnowledgeSpace.BackendServer.Services;
 using KnowledgeSpace.ViewModels;
@@ -43,6 +44,11 @@ namespace KnowledgeSpace.BackendServer.Controllers
         {
             _logger.LogInformation("Begin PostKnowledgeBase API");
             KnowledgeBase knowledgeBase = CreateKnowledgeBaseEntity(request);
+            knowledgeBase.OwnerUserId = User.GetUserId();
+            if (string.IsNullOrEmpty(knowledgeBase.SeoAlias))
+            {
+                knowledgeBase.SeoAlias = TextHelper.ToUnsignString(knowledgeBase.Title);
+            }
             knowledgeBase.Id = await _sequenceService.GetKnowledgeBaseNewId();
 
             //Process attachment
@@ -57,7 +63,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             _context.KnowledgeBases.Add(knowledgeBase);
 
             //Process label
-            if (!string.IsNullOrEmpty(request.Labels))
+            if (request.Labels?.Length > 0)
             {
                 await ProcessLabel(request, knowledgeBase);
             }
@@ -109,7 +115,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 query = query.Where(x => x.Title.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
-            var items = await query.Skip((pageIndex - 1 * pageSize))
+            var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(u => new KnowledgeBaseQuickVm()
                 {
@@ -154,7 +160,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
             _context.KnowledgeBases.Update(knowledgeBase);
 
-            if (!string.IsNullOrEmpty(request.Labels))
+            if (request.Labels?.Length > 0)
             {
                 await ProcessLabel(request, knowledgeBase);
             }
@@ -231,7 +237,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         private static KnowledgeBase CreateKnowledgeBaseEntity(KnowledgeBaseCreateRequest request)
         {
-            return new KnowledgeBase()
+            var entity = new KnowledgeBase()
             {
                 CategoryId = request.CategoryId,
 
@@ -251,10 +257,13 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
                 Workaround = request.Workaround,
 
-                Note = request.Note,
-
-                Labels = request.Labels,
+                Note = request.Note
             };
+            if (request.Labels?.Length > 0)
+            {
+                entity.Labels = string.Join(',', request.Labels);
+            }
+            return entity;
         }
 
         private async Task<Attachment> SaveFile(int knowledegeBaseId, IFormFile file)
@@ -275,17 +284,16 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         private async Task ProcessLabel(KnowledgeBaseCreateRequest request, KnowledgeBase knowledgeBase)
         {
-            string[] labels = request.Labels.Split(',');
-            foreach (var labelText in labels)
+            foreach (var labelText in knowledgeBase.Labels)
             {
-                var labelId = TextHelper.ToUnsignString(labelText);
+                var labelId = TextHelper.ToUnsignString(labelText.ToString());
                 var existingLabel = await _context.Labels.FindAsync(labelId);
                 if (existingLabel == null)
                 {
                     var labelEntity = new Label()
                     {
                         Id = labelId,
-                        Name = labelText
+                        Name = labelText.ToString()
                     };
                     _context.Labels.Add(labelEntity);
                 }
@@ -320,7 +328,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
             knowledgeBase.Note = request.Note;
 
-            knowledgeBase.Labels = request.Labels;
+            knowledgeBase.Labels = string.Join(',', request.Labels);
         }
 
         #endregion Private methods

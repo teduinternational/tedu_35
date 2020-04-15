@@ -69,7 +69,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 || x.Name.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
-            var items = await query.Skip((pageIndex - 1 * pageSize))
+            var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize).ToListAsync();
 
             var data = items.Select(c => CreateCategoryVm(c)).ToList();
@@ -84,7 +84,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         [HttpGet("{id}")]
         [ClaimRequirement(FunctionCode.CONTENT_CATEGORY, CommandCode.VIEW)]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
@@ -127,7 +127,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         [HttpDelete("{id}")]
         [ClaimRequirement(FunctionCode.CONTENT_CATEGORY, CommandCode.DELETE)]
-        public async Task<IActionResult> DeleteCategory(string id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
