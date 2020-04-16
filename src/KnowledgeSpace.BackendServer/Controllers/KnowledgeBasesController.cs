@@ -246,7 +246,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
                 OwnerUserId = knowledgeBase.OwnerUserId,
 
-                Labels = knowledgeBase.Labels,
+                Labels = !string.IsNullOrEmpty(knowledgeBase.Labels) ? knowledgeBase.Labels.Split(',') : null,
 
                 CreateDate = knowledgeBase.CreateDate,
 
@@ -309,7 +309,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         private async Task ProcessLabel(KnowledgeBaseCreateRequest request, KnowledgeBase knowledgeBase)
         {
-            foreach (var labelText in knowledgeBase.Labels)
+            foreach (var labelText in request.Labels)
             {
                 var labelId = TextHelper.ToUnsignString(labelText.ToString());
                 var existingLabel = await _context.Labels.FindAsync(labelId);
@@ -322,12 +322,14 @@ namespace KnowledgeSpace.BackendServer.Controllers
                     };
                     _context.Labels.Add(labelEntity);
                 }
-                var labelInKnowledgeBase = new LabelInKnowledgeBase()
+                if (await _context.LabelInKnowledgeBases.FindAsync(labelId, knowledgeBase.Id) == null)
                 {
-                    KnowledgeBaseId = knowledgeBase.Id,
-                    LabelId = labelId
-                };
-                _context.LabelInKnowledgeBases.Add(labelInKnowledgeBase);
+                    _context.LabelInKnowledgeBases.Add(new LabelInKnowledgeBase()
+                    {
+                        KnowledgeBaseId = knowledgeBase.Id,
+                        LabelId = labelId
+                    });
+                }
             }
         }
 

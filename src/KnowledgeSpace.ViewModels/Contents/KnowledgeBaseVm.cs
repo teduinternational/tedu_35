@@ -32,7 +32,7 @@ namespace KnowledgeSpace.ViewModels.Contents
 
         public string OwnerUserId { get; set; }
 
-        public string Labels { get; set; }
+        public string[] Labels { get; set; }
 
         public DateTime CreateDate { get; set; }
 

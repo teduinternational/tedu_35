@@ -25,9 +25,7 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder) {
   }
-  @ViewChild('fileInput') fileInput: FileUpload;
-
-  private subscription = new Subscription();
+  private subscription: Subscription[] = [];
   public entityForm: FormGroup;
   public dialogTitle: string;
   public entityId: string;
@@ -73,11 +71,11 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
       'note': new FormControl(''),
       'labels': new FormControl(''),
     });
-    this.subscription.add(this.activeRoute.params.subscribe(params => {
+    this.subscription.push(this.activeRoute.params.subscribe(params => {
       this.entityId = params['id'];
     }));
 
-    this.subscription.add(this.categoriesService.getAll()
+    this.subscription.push(this.categoriesService.getAll()
       .subscribe((response: Category[]) => {
         response.forEach(element => {
           this.categories.push({ label: element.name, value: element.id });
@@ -97,7 +95,7 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
   }
   private loadFormDetails(id: any) {
     this.blockedPanel = true;
-    this.subscription.add(this.knowledgeBasesService.getDetail(id).subscribe((response: any) => {
+    this.subscription.push(this.knowledgeBasesService.getDetail(id).subscribe((response: any) => {
       this.entityForm.setValue({
         title: response.title,
         categoryId: response.categoryId,
@@ -132,8 +130,7 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
   }
   public deleteAttachment(attachmentId) {
     this.blockedPanel = true;
-
-    this.subscription.add(this.knowledgeBasesService.deleteAttachment(this.entityId, attachmentId)
+    this.subscription.push(this.knowledgeBasesService.deleteAttachment(this.entityId, attachmentId)
       .subscribe(() => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
         this.attachments.splice(this.attachments.findIndex(item => item.id === attachmentId), 1);
@@ -149,8 +146,6 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
   }
   public saveChange() {
     this.blockedPanel = true;
-
-
     const formValues = this.entityForm.getRawValue();
     const formData = this.utilitiesService.ToFormData(formValues);
     this.selectedFiles.forEach(file => {
@@ -158,7 +153,7 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
     });
 
     if (this.entityId) {
-      this.subscription.add(this.knowledgeBasesService.update(this.entityId, formData)
+      this.subscription.push(this.knowledgeBasesService.update(this.entityId, formData)
         .subscribe(() => {
           setTimeout(() => {
             this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
@@ -169,7 +164,7 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
           setTimeout(() => { this.blockedPanel = false; }, 1000);
         }));
     } else {
-      this.subscription.add(this.knowledgeBasesService.add(formData)
+      this.subscription.push(this.knowledgeBasesService.add(formData)
         .subscribe(() => {
           setTimeout(() => {
             this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
@@ -182,6 +177,8 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
     return false;
   }
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription.forEach(element => {
+      element.unsubscribe();
+    });
   }
 }
