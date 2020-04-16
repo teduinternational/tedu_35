@@ -1,9 +1,13 @@
-import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { KnowledgeBasesService, NotificationService, CategoriesService, UtilitiesService } from '@app/shared/services';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MessageConstants } from '@app/shared/constants';
 import { Category } from '@app/shared/models';
+import { FileUpload } from 'primeng/fileupload';
+import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from '@environments/environment';
+import { SelectItem } from 'primeng/api/selectitem';
 
 @Component({
   selector: 'app-knowledge-bases-detail',
@@ -17,18 +21,21 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
     private categoriesService: CategoriesService,
     private notificationService: NotificationService,
     private utilitiesService: UtilitiesService,
+    private activeRoute: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder) {
   }
+  @ViewChild('fileInput') fileInput: FileUpload;
 
   private subscription = new Subscription();
   public entityForm: FormGroup;
   public dialogTitle: string;
-  private savedEvent: EventEmitter<any> = new EventEmitter();
   public entityId: string;
-  public categories = [];
-  public btnDisabled = false;
-
+  public categories: SelectItem[] = [];
   public blockedPanel = false;
+  public selectedFiles: File[] = [];
+  public attachments: any[] = [];
+  public backendApiUrl = environment.apiUrl;
 
   // Validate
   validation_messages = {
@@ -66,9 +73,15 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
       'note': new FormControl(''),
       'labels': new FormControl(''),
     });
+    this.subscription.add(this.activeRoute.params.subscribe(params => {
+      this.entityId = params['id'];
+    }));
+
     this.subscription.add(this.categoriesService.getAll()
       .subscribe((response: Category[]) => {
-        this.categories = response;
+        response.forEach(element => {
+          this.categories.push({ label: element.name, value: element.id });
+        });
 
         if (this.entityId) {
           this.loadFormDetails(this.entityId);
@@ -86,41 +99,87 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
     this.blockedPanel = true;
     this.subscription.add(this.knowledgeBasesService.getDetail(id).subscribe((response: any) => {
       this.entityForm.setValue({
-        id: response.id,
-        name: response.name,
+        title: response.title,
+        categoryId: response.categoryId,
+        seoAlias: response.seoAlias,
+        description: response.description,
+        environment: response.environment,
+        problem: response.problem,
+        stepToReproduce: response.stepToReproduce,
+        errorMessage: response.errorMessage,
+        workaround: response.workaround,
+        note: response.note,
+        labels: response.labels
       });
-      setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+      this.attachments = response.attachments;
+      setTimeout(() => { this.blockedPanel = false; }, 1000);
     }, error => {
-      setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+      setTimeout(() => { this.blockedPanel = false; }, 1000);
     }));
   }
-  public saveChange() {
-    this.btnDisabled = true;
+  public selectAttachments($event) {
+    if ($event.currentFiles) {
+      $event.currentFiles.forEach(element => {
+        this.selectedFiles.push(element);
+      });
+    }
+  }
+  public removeAttachments($event) {
+    if ($event.file) {
+      this.selectedFiles.splice(this.selectedFiles.findIndex(item => item.name === $event.file.name), 1);
+    }
+
+  }
+  public deleteAttachment(attachmentId) {
     this.blockedPanel = true;
-    const value = this.entityForm.getRawValue();
-    value.categoryId = value.categoryId.id;
-    const formValue = this.utilitiesService.ToFormData(value);
+
+    this.subscription.add(this.knowledgeBasesService.deleteAttachment(this.entityId, attachmentId)
+      .subscribe(() => {
+        this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+        this.attachments.splice(this.attachments.findIndex(item => item.id === attachmentId), 1);
+        setTimeout(() => { this.blockedPanel = false; }, 1000);
+
+      }, error => {
+        setTimeout(() => { this.blockedPanel = false; }, 1000);
+      }));
+    return false;
+  }
+  goBackToList() {
+    this.router.navigateByUrl('/contents/knowledge-bases');
+  }
+  public saveChange() {
+    this.blockedPanel = true;
+
+
+    const formValues = this.entityForm.getRawValue();
+    const formData = this.utilitiesService.ToFormData(formValues);
+    this.selectedFiles.forEach(file => {
+      formData.append('attachments', file, file.name);
+    });
+
     if (this.entityId) {
-      this.subscription.add(this.knowledgeBasesService.update(this.entityId, formValue)
+      this.subscription.add(this.knowledgeBasesService.update(this.entityId, formData)
         .subscribe(() => {
-          this.savedEvent.emit(this.entityForm.value);
-          this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
-          this.btnDisabled = false;
-          setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+          setTimeout(() => {
+            this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
+
+            this.router.navigateByUrl('/contents/knowledge-bases');
+          }, 1000);
         }, error => {
-          setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+          setTimeout(() => { this.blockedPanel = false; }, 1000);
         }));
     } else {
-      this.subscription.add(this.knowledgeBasesService.add(formValue)
+      this.subscription.add(this.knowledgeBasesService.add(formData)
         .subscribe(() => {
-          this.savedEvent.emit(this.entityForm.value);
-          this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
-          this.btnDisabled = false;
-          setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+          setTimeout(() => {
+            this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
+            this.router.navigateByUrl('/contents/knowledge-bases');
+          }, 1000);
         }, error => {
-          setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+          setTimeout(() => { this.blockedPanel = false; }, 1000);
         }));
     }
+    return false;
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

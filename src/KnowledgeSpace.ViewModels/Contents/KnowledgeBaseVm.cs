@@ -43,5 +43,7 @@ namespace KnowledgeSpace.ViewModels.Contents
         public int? NumberOfVotes { get; set; }
 
         public int? NumberOfReports { get; set; }
+
+        public List<AttachmentVm> Attachments { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, share } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { Pagination, KnowledgeBase } from '../models';
 
@@ -14,15 +14,19 @@ export class KnowledgeBasesService extends BaseService {
         this._sharedHeaders = this._sharedHeaders.set('Content-Type', 'application/json');
     }
     add(formData: FormData) {
-        return this.http.post(`${environment.apiUrl}/api/knowledgeBases`, formData)
-            .pipe(catchError(this.handleError));
+        return this.http.post(`${environment.apiUrl}/api/knowledgeBases`, formData,
+            {
+                reportProgress: true,
+                observe: 'events'
+            }).pipe(catchError(this.handleError));
     }
 
     update(id: string, formData: FormData) {
-        let headers = new HttpHeaders();
-        headers = headers.set('Content-Type', 'multipart/form-data');
-        return this.http.put(`${environment.apiUrl}/api/knowledgeBases/${id}`, formData)
-            .pipe(catchError(this.handleError));
+        return this.http.put(`${environment.apiUrl}/api/knowledgeBases/${id}`, formData,
+            {
+                reportProgress: true,
+                observe: 'events'
+            }).pipe(catchError(this.handleError));
     }
 
     getDetail(id) {
@@ -50,4 +54,13 @@ export class KnowledgeBasesService extends BaseService {
                 return response;
             }), catchError(this.handleError));
     }
+
+    deleteAttachment(knowledgeBaseId, attachmentId) {
+        return this.http.delete(environment.apiUrl + '/api/knowledgeBases/' + knowledgeBaseId
+            + '/attachments/' + attachmentId, { headers: this._sharedHeaders })
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
 }

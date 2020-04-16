@@ -40,6 +40,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [HttpPost]
         [ClaimRequirement(FunctionCode.CONTENT_KNOWLEDGEBASE, CommandCode.CREATE)]
         [ApiValidationFilter]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> PostKnowledgeBase([FromForm] KnowledgeBaseCreateRequest request)
         {
             _logger.LogInformation("Begin PostKnowledgeBase API");
@@ -109,21 +110,24 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [ClaimRequirement(FunctionCode.CONTENT_KNOWLEDGEBASE, CommandCode.VIEW)]
         public async Task<IActionResult> GetKnowledgeBasesPaging(string filter, int pageIndex, int pageSize)
         {
-            var query = _context.KnowledgeBases.AsQueryable();
+            var query = from k in _context.KnowledgeBases
+                        join c in _context.Categories on k.CategoryId equals c.Id
+                        select new { k, c };
             if (!string.IsNullOrEmpty(filter))
             {
-                query = query.Where(x => x.Title.Contains(filter));
+                query = query.Where(x => x.k.Title.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
             var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(u => new KnowledgeBaseQuickVm()
                 {
-                    Id = u.Id,
-                    CategoryId = u.CategoryId,
-                    Description = u.Description,
-                    SeoAlias = u.SeoAlias,
-                    Title = u.Title
+                    Id = u.k.Id,
+                    CategoryId = u.k.CategoryId,
+                    Description = u.k.Description,
+                    SeoAlias = u.k.SeoAlias,
+                    Title = u.k.Title,
+                    CategoryName = u.c.Name
                 })
                 .ToListAsync();
 
@@ -143,21 +147,42 @@ namespace KnowledgeSpace.BackendServer.Controllers
             if (knowledgeBase == null)
                 return NotFound(new ApiNotFoundResponse($"Cannot found knowledge base with id: {id}"));
 
-            var knowledgeBasevm = CreateKnowledgeBaseVm(knowledgeBase);
+            var attachments = await _context.Attachments
+                .Where(x => x.KnowledgeBaseId == id)
+                .Select(x => new AttachmentVm()
+                {
+                    FileName = x.FileName,
+                    FilePath = x.FilePath,
+                    FileSize = x.FileSize,
+                    Id = x.Id,
+                    FileType = x.FileType
+                }).ToListAsync();
+            var knowledgeBaseVm = CreateKnowledgeBaseVm(knowledgeBase);
+            knowledgeBaseVm.Attachments = attachments;
 
-            return Ok(knowledgeBasevm);
+            return Ok(knowledgeBaseVm);
         }
 
         [HttpPut("{id}")]
         [ClaimRequirement(FunctionCode.CONTENT_KNOWLEDGEBASE, CommandCode.UPDATE)]
         [ApiValidationFilter]
-        public async Task<IActionResult> PutKnowledgeBase(int id, [FromBody]KnowledgeBaseCreateRequest request)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> PutKnowledgeBase(int id, [FromForm]KnowledgeBaseCreateRequest request)
         {
             var knowledgeBase = await _context.KnowledgeBases.FindAsync(id);
             if (knowledgeBase == null)
                 return NotFound(new ApiNotFoundResponse($"Cannot found knowledge base with id {id}"));
             UpdateKnowledgeBase(request, knowledgeBase);
 
+            //Process attachment
+            if (request.Attachments != null && request.Attachments.Count > 0)
+            {
+                foreach (var attachment in request.Attachments)
+                {
+                    var attachmentEntity = await SaveFile(knowledgeBase.Id, attachment);
+                    _context.Attachments.Add(attachmentEntity);
+                }
+            }
             _context.KnowledgeBases.Update(knowledgeBase);
 
             if (request.Labels?.Length > 0)
@@ -175,7 +200,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
         [HttpDelete("{id}")]
         [ClaimRequirement(FunctionCode.CONTENT_KNOWLEDGEBASE, CommandCode.DELETE)]
-        public async Task<IActionResult> DeleteKnowledgeBase(string id)
+        public async Task<IActionResult> DeleteKnowledgeBase(int id)
         {
             var knowledgeBase = await _context.KnowledgeBases.FindAsync(id);
             if (knowledgeBase == null)

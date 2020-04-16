@@ -15,7 +15,7 @@
                     </div>
                     <div class="ui-grid-col-6">
                         <p-dropdown [options]="categories" [style]="{'width':'100%'}" placeholder="Chọn danh mục"
-                            optionLabel="name" dataKey="id" filter="true" [showClear]="true" formControlName="categoryId">
+                            filter="true" [showClear]="true" formControlName="categoryId">
                         </p-dropdown>
                     </div>
                     <div class="ui-grid-col-4">
@@ -61,7 +61,7 @@
                 </div>
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-2">
-                        <span class="required">Mô tả:</span>
+                        <span class="required">Môi trường:</span>
                     </div>
                     <div class="ui-grid-col-6">
                         <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="environment"
@@ -149,6 +149,19 @@
                         <span class="required">Đính kèm:</span>
                     </div>
                     <div class="ui-grid-col-6">
+                        <p-fileUpload showUploadButton="false" (onRemove)="removeAttachments($event)"
+                            (onSelect)="selectAttachments($event)" showCancelButton="false" multiple="multiple"
+                            accept="image/*" maxFileSize="1000000">
+
+                        </p-fileUpload>
+                        <ul>
+                            <li *ngFor="let file of attachments"><a
+                                    href="{{backendApiUrl + file.filePath}}">{{file.fileName}}</a>
+                                &nbsp;
+                                <p-button icon="pi pi-trash" class="ui-button-danger"
+                                    (click)="deleteAttachment(file.id)"></p-button>
+                            </li>
+                        </ul>
                     </div>
                     <div class="ui-grid-col-4">
 

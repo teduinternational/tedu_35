@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { CategoriesService, NotificationService } from '@app/shared/services';
+import { CategoriesService, NotificationService, UtilitiesService } from '@app/shared/services';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MessageConstants } from '@app/shared/constants';
@@ -16,6 +16,7 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy {
     public bsModalRef: BsModalRef,
     private categoriesService: CategoriesService,
     private notificationService: NotificationService,
+    private utilitiesService: UtilitiesService,
     private fb: FormBuilder) {
   }
 
@@ -69,7 +70,10 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy {
       this.dialogTitle = 'Thêm mới';
     }
   }
-
+  public generateSeoAlias() {
+    const seoAlias = this.utilitiesService.MakeSeoTitle(this.entityForm.controls['name'].value);
+    this.entityForm.controls['seoAlias'].setValue(seoAlias);
+  }
   private loadFormDetails(id: any) {
     this.blockedPanel = true;
     this.subscription.add(this.categoriesService.getDetail(id).subscribe((response: any) => {

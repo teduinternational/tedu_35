@@ -14,7 +14,7 @@
                         <span class="required">Tên:</span>
                     </div>
                     <div class="ui-grid-col-6">
-                        <input type="text" pInputText pKeyFilter="alphanum" formControlName="name">
+                        <input type="text" pInputText (keyup)="generateSeoAlias()" formControlName="name">
                     </div>
                     <div class="ui-grid-col-4">
                         <app-validation-message [entityForm]="entityForm" fieldName="name"
