@@ -27,7 +27,7 @@ namespace KnowledgeSpace.ViewModels.Contents
 
         public string Note { get; set; }
 
-        public string Labels { get; set; }
+        public string[] Labels { get; set; }
 
         public List<IFormFile> Attachments { get; set; }
     }

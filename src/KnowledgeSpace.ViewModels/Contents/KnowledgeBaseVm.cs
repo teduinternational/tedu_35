@@ -32,7 +32,7 @@ namespace KnowledgeSpace.ViewModels.Contents
 
         public string OwnerUserId { get; set; }
 
-        public string Labels { get; set; }
+        public string[] Labels { get; set; }
 
         public DateTime CreateDate { get; set; }
 
@@ -43,5 +43,7 @@ namespace KnowledgeSpace.ViewModels.Contents
         public int? NumberOfVotes { get; set; }
 
         public int? NumberOfReports { get; set; }
+
+        public List<AttachmentVm> Attachments { set; get; }
     }
 }

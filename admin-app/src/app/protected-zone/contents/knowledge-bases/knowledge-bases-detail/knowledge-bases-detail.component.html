@@ -1,0 +1,184 @@
+<p>{{dialogTitle}}</p>
+<div class="animated fadeIn">
+    <p-panel #pnl>
+        <p-header>
+            <div class="ui-g-6">
+                <button pButton type="button" label="Quay lại trang danh sách" icon="fa fa-arrow-left"
+                    (click)="goBackToList()"></button>
+            </div>
+        </p-header>
+        <form class="form-horizontal form-label-left" novalidate [formGroup]="entityForm" (ngSubmit)="saveChange()">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Danh mục:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-dropdown [options]="categories" [style]="{'width':'100%'}" placeholder="Chọn danh mục"
+                            filter="true" [showClear]="true" formControlName="categoryId">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="categoryId"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Tiêu đề:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" (keyup)="generateSeoAlias()" pInputText formControlName="title">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="title"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Tiêu đề SEO:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText pKeyFilter="alphanum" formControlName="seoAlias">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="seoAlias"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Mô tả:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="description"
+                            rows="5"></textarea>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Môi trường:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-editor formControlName="environment" [style]=" {'height':'320px'}"></p-editor>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Vấn đề:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="problem" rows="5"></textarea>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="problem"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Các bước để tái hiện:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="stepToReproduce"
+                            rows="5"></textarea>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Lỗi:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="errorMessage"
+                            rows="5"></textarea>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Sửa nhanh:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="workaround"
+                            rows="5"></textarea>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Chú ý:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="note" rows="5"></textarea>
+                    </div>
+                    <div class="ui-grid-col-4">
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Nhãn:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-chips formControlName="labels"></p-chips>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Đính kèm:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-fileUpload showUploadButton="false" (onRemove)="removeAttachments($event)"
+                            (onSelect)="selectAttachments($event)" showCancelButton="false" multiple="multiple"
+                            accept="image/*" maxFileSize="1000000">
+
+                        </p-fileUpload>
+                        <ul>
+                            <li *ngFor="let file of attachments"><a
+                                    href="{{backendApiUrl + file.filePath}}">{{file.fileName}}</a>
+                                &nbsp;
+                                <p-button icon="pi pi-trash" class="ui-button-danger"
+                                    (click)="deleteAttachment(file.id)"></p-button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <p-footer>
+            <button pButton type="button" label="Quay lại trang danh sách" icon="fa fa-arrow-left"
+                (click)="goBackToList()"></button>
+            <button pButton type="button" class="ui-button-success" label="Lưu lại" icon="fa fa-floppy-o"
+                (click)="saveChange()"></button>
+
+            <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+                <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+                    strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+            </p-blockUI>
+        </p-footer>
+    </p-panel>
+</div>
