@@ -18,6 +18,7 @@ import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ChipsModule } from 'primeng/chips';
 import { FileUploadModule } from 'primeng/fileupload';
+import { EditorModule } from 'primeng/editor';
 
 import { SharedDirectivesModule } from '@app/shared/directives/shared-directives.module';
 import { NotificationService } from '@app/shared/services';
@@ -64,6 +65,7 @@ import { CategoriesDetailComponent } from './categories/categories-detail/catego
     InputTextareaModule,
     ChipsModule,
     FileUploadModule,
+    EditorModule,
     SharedDirectivesModule,
     ModalModule.forRoot()
   ],
