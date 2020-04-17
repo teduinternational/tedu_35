@@ -154,22 +154,22 @@ export class KnowledgeBasesDetailComponent implements OnInit, OnDestroy {
 
     if (this.entityId) {
       this.subscription.push(this.knowledgeBasesService.update(this.entityId, formData)
-        .subscribe(() => {
-          setTimeout(() => {
+        .subscribe((response: any) => {
+          if (response.status === 204) {
             this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
-
             this.router.navigateByUrl('/contents/knowledge-bases');
-          }, 1000);
+          }
+
         }, error => {
           setTimeout(() => { this.blockedPanel = false; }, 1000);
         }));
     } else {
       this.subscription.push(this.knowledgeBasesService.add(formData)
-        .subscribe(() => {
-          setTimeout(() => {
+        .subscribe((response: any) => {
+          if (response.status === 200) {
             this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
             this.router.navigateByUrl('/contents/knowledge-bases');
-          }, 1000);
+          }
         }, error => {
           setTimeout(() => { this.blockedPanel = false; }, 1000);
         }));
