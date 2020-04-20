@@ -1,11 +1,17 @@
 <nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
     <div class="list-group">
         <div class="nested-menu" *ngFor="let item of functions">
-            <a class="list-group-item" (click)="addExpandClass(item.id)">
+            <a class="list-group-item" (click)="addExpandClass(item.id)"
+                *ngIf="item.children.length > 0">
                 <i class="fa {{item.icon}}"></i>&nbsp;
                 <span>{{ item.name }}</span>
             </a>
-            <li class="nested" [class.expand]="showMenu === item.id">
+            <a [routerLinkActive]="['router-link-active']" routerLink="{{item.url}}"
+                *ngIf="item.children.length == 0" class="list-group-item">
+                <i class="fa {{item.icon}}"></i>&nbsp;
+                <span>{{ item.name }}</span>
+            </a>
+            <li *ngIf="item.children.length > 0" class="nested" [class.expand]="showMenu === item.id">
                 <ul class="submenu">
                     <li *ngFor="let subItem of item.children">
                         <a href="javascript:void(0)" routerLink="{{subItem.url}}"
