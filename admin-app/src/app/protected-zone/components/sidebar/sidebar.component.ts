@@ -36,6 +36,7 @@ export class SidebarComponent implements OnInit {
         const profile = this.authService.profile;
         this.userService.getMenuByUser(profile.sub).subscribe((response: Function[]) => {
             this.functions = response;
+            localStorage.setItem('functions', JSON.stringify(response));
         });
     }
     ngOnInit() {

@@ -3,14 +3,11 @@
     <p-panel #pnl>
         <p-header>
             <div class="ui-g-6">
-                <button appPermission appFunction="CONTENT_CATEGORY" appAction="CREATE" pButton type="button" label="Thêm"
-                    icon="fa fa-plus" (click)="showAddModal()"></button>
-                <button appPermission appFunction="CONTENT_CATEGORY" appAction="DELETE" pButton type="button" label="Xóa"
+                <button appPermission appFunction="CONTENT_COMMENT" appAction="VIEW" pButton type="button" label="Chi tiết"
+                    icon="fa fa-eye" (click)="showDetailModel()"></button>
+                <button appPermission appFunction="CONTENT_COMMENT" appAction="DELETE" pButton type="button" label="Xóa"
                     icon="fa fa-trash" class="ui-button-danger" *ngIf="selectedItems.length > 0"
                     (click)="deleteItems()"></button>
-                <button appPermission appFunction="CONTENT_CATEGORY" appAction="UPDATE" pButton type="button" label="Sửa"
-                    icon="fa fa-edit" class="ui-button-warning" *ngIf="selectedItems.length== 1"
-                    (click)="showEditModal()"></button>
             </div>
             <div class="ui-g-6">
                 <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="keyword"
@@ -28,14 +25,14 @@
                     <th [pSortableColumn]="'id'">Mã
                         <p-sortIcon [field]="'id'"></p-sortIcon>
                     </th>
-                    <th [pSortableColumn]="'name'">Tên
-                        <p-sortIcon [field]="'name'"></p-sortIcon>
+                    <th [pSortableColumn]="'content'">Nội dung
+                        <p-sortIcon [field]="'content'"></p-sortIcon>
                     </th>
-                    <th [pSortableColumn]="'seoAlias'">Alias
-                        <p-sortIcon [field]="'seoAlias'"></p-sortIcon>
+                    <th [pSortableColumn]="'createDate'">Ngày tạo
+                        <p-sortIcon [field]="'createDate'"></p-sortIcon>
                     </th>
-                    <th [pSortableColumn]="'sortOrder'">Thứ tự
-                        <p-sortIcon [field]="'sortOrder'"></p-sortIcon>
+                    <th [pSortableColumn]="'ownerName'">Người tạo
+                        <p-sortIcon [field]="'ownerName'"></p-sortIcon>
                     </th>
                 </tr>
 
@@ -47,9 +44,9 @@
                         <p-tableCheckbox [value]="row"></p-tableCheckbox>
                     </td>
                     <td>{{row.id}}</td>
-                    <td>{{row.name}}</td>
-                    <td>{{row.seoAlias}}</td>
-                    <td>{{row.sortOrder}}</td>
+                    <td>{{row.content}}</td>
+                    <td>{{row.createDate}}</td>
+                    <td>{{row.ownerName}}</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary">

@@ -1,4 +1,4 @@
-<p>Danh sách bài đăng</p>
+<p>{{screenTitle}}</p>
 <div class="animated fadeIn">
     <p-panel #pnl>
         <p-header>
@@ -11,6 +11,10 @@
                 <button appPermission appFunction="CONTENT_KNOWLEDGEBASE" appAction="UPDATE" pButton type="button"
                     label="Sửa" icon="fa fa-edit" class="ui-button-warning" *ngIf="selectedItems.length== 1"
                     (click)="showEditModal()"></button>
+
+                <button appPermission appFunction="CONTENT_COMMENT" appAction="VIEW" pButton type="button" label="Bình luận"
+                    icon="fa fa-eye" class="ui-button-primary" *ngIf="selectedItems.length== 1"
+                    (click)="viewComments()"></button>
             </div>
             <div class="ui-g-6">
                 <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="keyword"

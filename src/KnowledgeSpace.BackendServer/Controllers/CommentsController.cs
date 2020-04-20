@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using KnowledgeSpace.BackendServer.Authorization;
 using KnowledgeSpace.BackendServer.Constants;
 using KnowledgeSpace.BackendServer.Data.Entities;
+using KnowledgeSpace.BackendServer.Extensions;
 using KnowledgeSpace.BackendServer.Helpers;
 using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Contents;
@@ -19,22 +20,27 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [ClaimRequirement(FunctionCode.CONTENT_COMMENT, CommandCode.VIEW)]
         public async Task<IActionResult> GetCommentsPaging(int knowledgeBaseId, string filter, int pageIndex, int pageSize)
         {
-            var query = _context.Comments.Where(x => x.KnowledgeBaseId == knowledgeBaseId).AsQueryable();
+            var query = from c in _context.Comments
+                        join u in _context.Users
+                            on c.OwnerUserId equals u.Id
+                        where c.KnowledgeBaseId == knowledgeBaseId
+                        select new { c, u };
             if (!string.IsNullOrEmpty(filter))
             {
-                query = query.Where(x => x.Content.Contains(filter));
+                query = query.Where(x => x.c.Content.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
-            var items = await query.Skip((pageIndex - 1 * pageSize))
+            var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(c => new CommentVm()
                 {
-                    Id = c.Id,
-                    Content = c.Content,
-                    CreateDate = c.CreateDate,
-                    KnowledgeBaseId = c.KnowledgeBaseId,
-                    LastModifiedDate = c.LastModifiedDate,
-                    OwnwerUserId = c.OwnwerUserId
+                    Id = c.c.Id,
+                    Content = c.c.Content,
+                    CreateDate = c.c.CreateDate,
+                    KnowledgeBaseId = c.c.KnowledgeBaseId,
+                    LastModifiedDate = c.c.LastModifiedDate,
+                    OwnerUserId = c.c.OwnerUserId,
+                    OwnerName = c.u.FirstName + " " + c.u.LastName
                 })
                 .ToListAsync();
 
@@ -53,7 +59,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             var comment = await _context.Comments.FindAsync(commentId);
             if (comment == null)
                 return NotFound(new ApiNotFoundResponse($"Cannot found comment with id: {commentId}"));
-
+            var user = await _context.Users.FindAsync(comment.OwnerUserId);
             var commentVm = new CommentVm()
             {
                 Id = comment.Id,
@@ -61,7 +67,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 CreateDate = comment.CreateDate,
                 KnowledgeBaseId = comment.KnowledgeBaseId,
                 LastModifiedDate = comment.LastModifiedDate,
-                OwnwerUserId = comment.OwnwerUserId
+                OwnerUserId = comment.OwnerUserId,
+                OwnerName = user.FirstName + " " + user.LastName
             };
 
             return Ok(commentVm);
@@ -76,7 +83,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             {
                 Content = request.Content,
                 KnowledgeBaseId = request.KnowledgeBaseId,
-                OwnwerUserId = string.Empty/*TODO: GET USER FROM CLAIM*/,
+                OwnerUserId = User.GetUserId()
             };
             _context.Comments.Add(comment);
 
@@ -106,7 +113,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             var comment = await _context.Comments.FindAsync(commentId);
             if (comment == null)
                 return BadRequest(new ApiBadRequestResponse($"Cannot found comment with id: {commentId}"));
-            if (comment.OwnwerUserId != User.Identity.Name)
+            if (comment.OwnerUserId != User.Identity.Name)
                 return Forbid();
 
             comment.Content = request.Content;
@@ -148,7 +155,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
                     CreateDate = comment.CreateDate,
                     KnowledgeBaseId = comment.KnowledgeBaseId,
                     LastModifiedDate = comment.LastModifiedDate,
-                    OwnwerUserId = comment.OwnwerUserId
+                    OwnerUserId = comment.OwnerUserId
                 };
                 return Ok(commentVm);
             }

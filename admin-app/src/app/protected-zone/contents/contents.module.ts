@@ -27,22 +27,23 @@ import { ValidationMessageModule } from '@app/shared/modules/validation-message/
 
 import { CategoriesComponent } from './categories/categories.component';
 import { KnowledgeBasesComponent } from './knowledge-bases/knowledge-bases.component';
-import { CommentsComponent } from './comments/comments.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ContentsRoutingModule } from './contents-routing.module';
 import { KnowledgeBasesDetailComponent } from './knowledge-bases/knowledge-bases-detail/knowledge-bases-detail.component';
 import { CategoriesDetailComponent } from './categories/categories-detail/categories-detail.component';
-
+import { CommentsDetailComponent } from './knowledge-bases/comments-detail/comments-detail.component';
+import { CommentsComponent } from './knowledge-bases/comments/comments.component';
 
 
 @NgModule({
   declarations: [
     CategoriesComponent,
     KnowledgeBasesComponent,
-    CommentsComponent,
     ReportsComponent,
     KnowledgeBasesDetailComponent,
-    CategoriesDetailComponent
+    CategoriesDetailComponent,
+    CommentsComponent,
+    CommentsDetailComponent,
   ],
   imports: [
     CommonModule,
