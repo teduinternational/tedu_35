@@ -19,23 +19,29 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [HttpGet("{knowledgeBaseId}/reports/filter")]
         public async Task<IActionResult> GetReportsPaging(int knowledgeBaseId, string filter, int pageIndex, int pageSize)
         {
-            var query = _context.Reports.Where(x => x.KnowledgeBaseId == knowledgeBaseId).AsQueryable();
+            var query = from r in _context.Reports
+                        join u in _context.Users
+                            on r.ReportUserId equals u.Id
+                        where r.KnowledgeBaseId == knowledgeBaseId
+                        select new { r, u };
+
             if (!string.IsNullOrEmpty(filter))
             {
-                query = query.Where(x => x.Content.Contains(filter));
+                query = query.Where(x => x.r.Content.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
-            var items = await query.Skip((pageIndex - 1 * pageSize))
+            var items = await query.Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(c => new ReportVm()
                 {
-                    Id = c.Id,
-                    Content = c.Content,
-                    CreateDate = c.CreateDate,
-                    KnowledgeBaseId = c.KnowledgeBaseId,
-                    LastModifiedDate = c.LastModifiedDate,
+                    Id = c.r.Id,
+                    Content = c.r.Content,
+                    CreateDate = c.r.CreateDate,
+                    KnowledgeBaseId = c.r.KnowledgeBaseId,
+                    LastModifiedDate = c.r.LastModifiedDate,
                     IsProcessed = false,
-                    ReportUserId = c.ReportUserId
+                    ReportUserId = c.r.ReportUserId,
+                    ReportUserName = c.u.FirstName + " " + c.u.LastName
                 })
                 .ToListAsync();
 
@@ -53,6 +59,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             var report = await _context.Reports.FindAsync(reportId);
             if (report == null)
                 return NotFound();
+            var user = await _context.Users.FindAsync(report.ReportUserId);
 
             var reportVm = new ReportVm()
             {
@@ -62,7 +69,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 KnowledgeBaseId = report.KnowledgeBaseId,
                 LastModifiedDate = report.LastModifiedDate,
                 IsProcessed = report.IsProcessed,
-                ReportUserId = report.ReportUserId
+                ReportUserId = report.ReportUserId,
+                ReportUserName = user.FirstName + " " + user.LastName
             };
 
             return Ok(reportVm);

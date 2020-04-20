@@ -11,3 +11,4 @@ export * from './permission.model';
 export * from './knowledge-base.model';
 export * from './category.model';
 export * from './comment.model';
+export * from './report.model';

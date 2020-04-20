@@ -1,22 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { KnowledgeBasesService } from '@app/shared/services/knowledge-bases.service';
-import { NotificationService } from '@app/shared/services';
-import { Pagination, KnowledgeBase } from '@app/shared/models';
-import { MessageConstants } from '@app/shared/constants';
-import { Router } from '@angular/router';
 import { BaseComponent } from '@app/protected-zone/base/base.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationService, ReportsService } from '@app/shared/services';
+import { Pagination, Report } from '@app/shared/models';
+import { MessageConstants } from '@app/shared/constants';
+import { ReportsDetailComponent } from '../reports-detail/reports-detail.component';
 
 @Component({
-  selector: 'app-knowledge-bases',
-  templateUrl: './knowledge-bases.component.html',
-  styleUrls: ['./knowledge-bases.component.css']
+  selector: 'app-reports',
+  templateUrl: './reports.component.html',
+  styleUrls: ['./reports.component.scss']
 })
-export class KnowledgeBasesComponent extends BaseComponent implements OnInit, OnDestroy {
-
+export class ReportsComponent extends BaseComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   // Default
+  public bsModalRef: BsModalRef;
   public blockedPanel = false;
+  public entityId: number;
   /**
    * Paging
    */
@@ -28,28 +30,32 @@ export class KnowledgeBasesComponent extends BaseComponent implements OnInit, On
   // Role
   public items: any[];
   public selectedItems = [];
-  constructor(private knowledgeBasesService: KnowledgeBasesService,
+  constructor(private reportsService: ReportsService,
     private notificationService: NotificationService,
-    private router: Router) {
-    super('CONTENT_KNOWLEDGEBASE');
-  }
+    private activeRoute: ActivatedRoute,
+    private modalService: BsModalService) {
+      super('CONTENT_REPORT');
+     }
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.subscription.add(this.activeRoute.params.subscribe(params => {
+      this.entityId = params['knowledgeBaseId'];
+    }));
     this.loadData();
   }
 
   loadData(selectedId = null) {
     this.blockedPanel = true;
-    this.subscription.add(this.knowledgeBasesService.getAllPaging(this.keyword, this.pageIndex, this.pageSize)
-      .subscribe((response: Pagination<KnowledgeBase>) => {
+    this.subscription.add(this.reportsService.getAllPaging(this.entityId, this.keyword, this.pageIndex, this.pageSize)
+      .subscribe((response: Pagination<Report>) => {
         this.processLoadData(selectedId, response);
         setTimeout(() => { this.blockedPanel = false; }, 1000);
       }, error => {
         setTimeout(() => { this.blockedPanel = false; }, 1000);
       }));
   }
-  private processLoadData(selectedId = null, response: Pagination<KnowledgeBase>) {
+  private processLoadData(selectedId = null, response: Pagination<Report>) {
     this.items = response.items;
     this.pageIndex = this.pageIndex;
     this.pageSize = this.pageSize;
@@ -67,30 +73,20 @@ export class KnowledgeBasesComponent extends BaseComponent implements OnInit, On
     this.loadData();
   }
 
-  showAddModal() {
-    this.router.navigateByUrl('/contents/knowledge-bases-detail/');
-  }
-  viewComments() {
+  showDetailModel() {
     if (this.selectedItems.length === 0) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    this.router.navigateByUrl('/contents/knowledge-bases/' + this.selectedItems[0].id + '/comments');
-  }
-
-  viewReports() {
-    if (this.selectedItems.length === 0) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    this.router.navigateByUrl('/contents/knowledge-bases/' + this.selectedItems[0].id + '/reports');
-  }
-  showEditModal() {
-    if (this.selectedItems.length === 0) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    this.router.navigateByUrl('/contents/knowledge-bases-detail/' + this.selectedItems[0].id);
+    const initialState = {
+      entityId: this.selectedItems[0].id
+    };
+    this.bsModalRef = this.modalService.show(ReportsDetailComponent,
+      {
+        initialState: initialState,
+        class: 'modal-lg',
+        backdrop: 'static'
+      });
   }
 
   deleteItems() {
@@ -100,7 +96,7 @@ export class KnowledgeBasesComponent extends BaseComponent implements OnInit, On
   }
   deleteItemsConfirm(id) {
     this.blockedPanel = true;
-    this.subscription.add(this.knowledgeBasesService.delete(id).subscribe(() => {
+    this.subscription.add(this.reportsService.delete(this.entityId, id).subscribe(() => {
       this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
       this.loadData();
       this.selectedItems = [];
@@ -113,5 +109,4 @@ export class KnowledgeBasesComponent extends BaseComponent implements OnInit, On
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
 }
