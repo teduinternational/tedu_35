@@ -4,6 +4,8 @@ import { CategoriesService, NotificationService, UtilitiesService } from '@app/s
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MessageConstants } from '@app/shared/constants';
+import { SelectItem } from 'primeng/api/selectitem';
+import { Category } from '@app/shared/models';
 
 @Component({
   selector: 'app-categories-detail',
@@ -24,12 +26,12 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy {
   public entityForm: FormGroup;
   public dialogTitle: string;
   private savedEvent: EventEmitter<any> = new EventEmitter();
-  public entityId: string;
+  public entityId: number;
   public btnDisabled = false;
 
   public blockedPanel = false;
 
-  public categories: [];
+  public categories: SelectItem[] = [];
 
   // Validate
   validation_messages = {
@@ -40,6 +42,9 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy {
     'name': [
       { type: 'required', message: 'Trường này bắt buộc' },
       { type: 'maxlength', message: 'Bạn không được nhập quá 30 kí tự' }
+    ],
+    'sortOrder': [
+      { type: 'required', message: 'Trường này bắt buộc' },
     ]
   };
 
@@ -53,12 +58,17 @@ export class CategoriesDetailComponent implements OnInit, OnDestroy {
         Validators.required
       ])),
       'seoDescription': new FormControl(''),
-      'sortOrder': new FormControl(),
+      'sortOrder': new FormControl(null, Validators.required),
       'parentId': new FormControl(null)
     });
     this.subscription.add(this.categoriesService.getAll()
-      .subscribe((response: any) => {
-        this.categories = response;
+      .subscribe((response: Category[]) => {
+        response.forEach(element => {
+          this.categories.push({
+            value: element.id,
+            label: element.name
+          });
+        });
         if (this.entityId) {
           this.dialogTitle = 'Cập nhật';
           this.loadFormDetails(this.entityId);

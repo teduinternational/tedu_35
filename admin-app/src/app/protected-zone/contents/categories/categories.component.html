@@ -1,14 +1,14 @@
-<p>Danh sách danh mục</p>
+<p>{{screenTitle}}</p>
 <div class="animated fadeIn">
     <p-panel #pnl>
         <p-header>
             <div class="ui-g-6">
-                <button appPermission appFunction="SYSTEM_ROLE" appAction="CREATE" pButton type="button" label="Thêm"
+                <button appPermission appFunction="CONTENT_CATEGORY" appAction="CREATE" pButton type="button" label="Thêm"
                     icon="fa fa-plus" (click)="showAddModal()"></button>
-                <button appPermission appFunction="SYSTEM_ROLE" appAction="DELETE" pButton type="button" label="Xóa"
+                <button appPermission appFunction="CONTENT_CATEGORY" appAction="DELETE" pButton type="button" label="Xóa"
                     icon="fa fa-trash" class="ui-button-danger" *ngIf="selectedItems.length > 0"
                     (click)="deleteItems()"></button>
-                <button appPermission appFunction="SYSTEM_ROLE" appAction="UPDATE" pButton type="button" label="Sửa"
+                <button appPermission appFunction="CONTENT_CATEGORY" appAction="UPDATE" pButton type="button" label="Sửa"
                     icon="fa fa-edit" class="ui-button-warning" *ngIf="selectedItems.length== 1"
                     (click)="showEditModal()"></button>
             </div>
