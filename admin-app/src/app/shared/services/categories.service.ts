@@ -18,7 +18,7 @@ export class CategoriesService extends BaseService {
             .pipe(catchError(this.handleError));
     }
 
-    update(id: string, entity: Category) {
+    update(id: number, entity: Category) {
         return this.http.put(`${environment.apiUrl}/api/categories/${id}`, JSON.stringify(entity), { headers: this._sharedHeaders })
             .pipe(catchError(this.handleError));
     }

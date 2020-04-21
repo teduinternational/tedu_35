@@ -5,13 +5,14 @@ import { CategoriesService, NotificationService } from '@app/shared/services';
 import { Pagination, Category } from '@app/shared/models';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
+import { BaseComponent } from '@app/protected-zone/base/base.component';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css']
 })
-export class CategoriesComponent implements OnInit, OnDestroy {
+export class CategoriesComponent extends BaseComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
   // Default
@@ -30,9 +31,12 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   public selectedItems = [];
   constructor(private categoriesService: CategoriesService,
     private notificationService: NotificationService,
-    private modalService: BsModalService) { }
+    private modalService: BsModalService) {
+      super('CONTENT_CATEGORY');
+     }
 
   ngOnInit(): void {
+    super.ngOnInit();
     this.loadData();
   }
 
