@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using KnowledgeSpace.BackendServer.Data.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KnowledgeSpace.BackendServer.Data.Entities
 {
-    public class User : IdentityUser
+    public class User : IdentityUser, IDateTracking
     {
         public User()
         {
@@ -39,5 +40,7 @@ namespace KnowledgeSpace.BackendServer.Data.Entities
         public int? NumberOfVotes { get; set; }
 
         public int? NumberOfReports { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
     }
 }
