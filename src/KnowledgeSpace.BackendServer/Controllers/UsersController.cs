@@ -42,7 +42,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 UserName = request.UserName,
                 LastName = request.LastName,
                 FirstName = request.FirstName,
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
+                CreateDate = DateTime.Now,
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
@@ -142,6 +143,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.Dob = DateTime.Parse(request.Dob);
+            user.LastModifiedDate = DateTime.Now;
 
             var result = await _userManager.UpdateAsync(user);
 
