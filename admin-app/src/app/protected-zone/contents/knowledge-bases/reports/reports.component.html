@@ -3,22 +3,11 @@
     <p-panel #pnl>
         <p-header>
             <div class="ui-g-6">
-                <button appPermission appFunction="CONTENT_KNOWLEDGEBASE" appAction="CREATE" pButton type="button"
-                    label="Thêm" icon="fa fa-plus" (click)="showAddModal()"></button>
-                <button appPermission appFunction="CONTENT_KNOWLEDGEBASE" appAction="DELETE" pButton type="button"
-                    label="Xóa" icon="fa fa-trash" class="ui-button-danger" *ngIf="selectedItems.length > 0"
+                <button appPermission appFunction="CONTENT_COMMENT" appAction="VIEW" pButton type="button" label="Chi tiết"
+                    icon="fa fa-eye" (click)="showDetailModel()"></button>
+                <button appPermission appFunction="CONTENT_COMMENT" appAction="DELETE" pButton type="button" label="Xóa"
+                    icon="fa fa-trash" class="ui-button-danger" *ngIf="selectedItems.length > 0"
                     (click)="deleteItems()"></button>
-                <button appPermission appFunction="CONTENT_KNOWLEDGEBASE" appAction="UPDATE" pButton type="button"
-                    label="Sửa" icon="fa fa-edit" class="ui-button-warning" *ngIf="selectedItems.length== 1"
-                    (click)="showEditModal()"></button>
-
-                <button appPermission appFunction="CONTENT_COMMENT" appAction="VIEW" pButton type="button"
-                    label="Bình luận" icon="fa fa-eye" class="ui-button-primary" *ngIf="selectedItems.length== 1"
-                    (click)="viewComments()"></button>
-
-                <button appPermission appFunction="CONTENT_REPORT" appAction="VIEW" pButton type="button"
-                    label="Báo xấu" icon="fa fa-magic" class="ui-button-primary" *ngIf="selectedItems.length== 1"
-                    (click)="viewReports()"></button>
             </div>
             <div class="ui-g-6">
                 <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="keyword"
@@ -36,11 +25,14 @@
                     <th [pSortableColumn]="'id'">Mã
                         <p-sortIcon [field]="'id'"></p-sortIcon>
                     </th>
-                    <th [pSortableColumn]="'title'">Tiêu đề
-                        <p-sortIcon [field]="'title'"></p-sortIcon>
+                    <th [pSortableColumn]="'content'">Nội dung
+                        <p-sortIcon [field]="'content'"></p-sortIcon>
                     </th>
-                    <th [pSortableColumn]="'categoryName'">Danh mục
-                        <p-sortIcon [field]="'categoryName'"></p-sortIcon>
+                    <th [pSortableColumn]="'createDate'">Ngày tạo
+                        <p-sortIcon [field]="'createDate'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'reportUserName'">Người tạo
+                        <p-sortIcon [field]="'reportUserName'"></p-sortIcon>
                     </th>
                 </tr>
 
@@ -52,8 +44,9 @@
                         <p-tableCheckbox [value]="row"></p-tableCheckbox>
                     </td>
                     <td>{{row.id}}</td>
-                    <td>{{row.title}}</td>
-                    <td>{{row.categoryName}}</td>
+                    <td>{{row.content}}</td>
+                    <td>{{row.createDate}}</td>
+                    <td>{{row.reportUserName}}</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary">
