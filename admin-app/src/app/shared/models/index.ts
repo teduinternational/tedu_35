@@ -12,3 +12,6 @@ export * from './knowledge-base.model';
 export * from './category.model';
 export * from './comment.model';
 export * from './report.model';
+export * from './monthly-new-comment';
+export * from './monthly-new-kb.model';
+export * from './monthly-new-member.model';
