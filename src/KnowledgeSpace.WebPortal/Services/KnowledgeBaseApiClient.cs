@@ -34,7 +34,7 @@ namespace KnowledgeSpace.WebPortal.Services
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
             var response = await client.GetAsync($"/api/knowledgeBases/{id}");
             var knowledgeBase = JsonConvert.DeserializeObject<KnowledgeBaseVm>(await response.Content.ReadAsStringAsync());
-            return knowledgeBase = JsonConvert.DeserializeObject<KnowledgeBaseVm>(await response.Content.ReadAsStringAsync());
+            return knowledgeBase;
         }
 
         public async Task<Pagination<KnowledgeBaseQuickVm>> GetKnowledgeBasesByCategoryId(int categoryId, int pageIndex, int pageSize)
