@@ -17,6 +17,8 @@ namespace KnowledgeSpace.WebPortal.Services
 
         Task<Pagination<KnowledgeBaseQuickVm>> GetKnowledgeBasesByCategoryId(int categoryId, int pageIndex, int pageSize);
 
+        Task<Pagination<KnowledgeBaseQuickVm>> SearchKnowledgeBase(string keyword, int pageIndex, int pageSize);
+
         Task<KnowledgeBaseVm> GetKnowledgeBaseDetail(int id);
 
         Task<List<LabelVm>> GetLabelsByKnowledgeBaseId(int id);

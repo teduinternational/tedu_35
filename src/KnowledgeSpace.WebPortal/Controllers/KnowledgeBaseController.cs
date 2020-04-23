@@ -37,6 +37,18 @@ namespace KnowledgeSpace.WebPortal.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> Search(string keyword, int page = 1)
+        {
+            var pageSize = int.Parse(_configuration["PageSize"]);
+            var data = await _knowledgeBaseApiClient.SearchKnowledgeBase(keyword, page, pageSize);
+            var viewModel = new SearchKnowledgeBaseViewModel()
+            {
+                Data = data,
+                Keyword = keyword
+            };
+            return View(viewModel);
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             var knowledgeBase = await _knowledgeBaseApiClient.GetKnowledgeBaseDetail(id);
