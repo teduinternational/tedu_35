@@ -7,6 +7,7 @@ using KnowledgeSpace.BackendServer.Helpers;
 using KnowledgeSpace.BackendServer.Services;
 using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Contents;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -101,6 +102,47 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 Description = u.Description,
                 SeoAlias = u.SeoAlias,
                 Title = u.Title
+            }).ToListAsync();
+
+            return Ok(knowledgeBasevms);
+        }
+
+        [HttpGet("latest/{take:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLatestKnowledgeBases(int take)
+        {
+            var knowledgeBases = _context.KnowledgeBases
+                .OrderByDescending(x => x.CreateDate)
+                .Take(take);
+
+            var knowledgeBasevms = await knowledgeBases.Select(u => new KnowledgeBaseQuickVm()
+            {
+                Id = u.Id,
+                CategoryId = u.CategoryId,
+                Description = u.Description,
+                SeoAlias = u.SeoAlias,
+                Title = u.Title
+            }).ToListAsync();
+
+            return Ok(knowledgeBasevms);
+        }
+
+        [HttpGet("popular/{take:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPopularKnowledgeBases(int take)
+        {
+            var knowledgeBases = _context.KnowledgeBases
+                .OrderByDescending(x => x.ViewCount)
+                .Take(take);
+
+            var knowledgeBasevms = await knowledgeBases.Select(u => new KnowledgeBaseQuickVm()
+            {
+                Id = u.Id,
+                CategoryId = u.CategoryId,
+                Description = u.Description,
+                SeoAlias = u.SeoAlias,
+                Title = u.Title,
+                ViewCount = u.ViewCount
             }).ToListAsync();
 
             return Ok(knowledgeBasevms);
