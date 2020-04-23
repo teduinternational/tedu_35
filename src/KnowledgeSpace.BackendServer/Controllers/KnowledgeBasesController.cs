@@ -7,6 +7,7 @@ using KnowledgeSpace.BackendServer.Helpers;
 using KnowledgeSpace.BackendServer.Services;
 using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Contents;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -102,6 +103,58 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 SeoAlias = u.SeoAlias,
                 Title = u.Title
             }).ToListAsync();
+
+            return Ok(knowledgeBasevms);
+        }
+
+        [HttpGet("latest/{take:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLatestKnowledgeBases(int take)
+        {
+            var knowledgeBases = from k in _context.KnowledgeBases
+                                 join c in _context.Categories on k.CategoryId equals c.Id
+                                 orderby k.CreateDate descending
+                                 select new { k, c };
+
+            var knowledgeBasevms = await knowledgeBases.Take(take)
+                .Select(u => new KnowledgeBaseQuickVm()
+                {
+                    Id = u.k.Id,
+                    CategoryId = u.k.CategoryId,
+                    Description = u.k.Description,
+                    SeoAlias = u.k.SeoAlias,
+                    Title = u.k.Title,
+                    CategoryAlias = u.c.SeoAlias,
+                    CategoryName = u.c.Name,
+                    NumberOfVotes = u.k.NumberOfVotes,
+                    CreateDate = u.k.CreateDate
+                }).ToListAsync();
+
+            return Ok(knowledgeBasevms);
+        }
+
+        [HttpGet("popular/{take:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPopularKnowledgeBases(int take)
+        {
+            var knowledgeBases = from k in _context.KnowledgeBases
+                                 join c in _context.Categories on k.CategoryId equals c.Id
+                                 orderby k.ViewCount descending
+                                 select new { k, c };
+
+            var knowledgeBasevms = await knowledgeBases.Take(take)
+                .Select(u => new KnowledgeBaseQuickVm()
+                {
+                    Id = u.k.Id,
+                    CategoryId = u.k.CategoryId,
+                    Description = u.k.Description,
+                    SeoAlias = u.k.SeoAlias,
+                    Title = u.k.Title,
+                    CategoryAlias = u.c.SeoAlias,
+                    CategoryName = u.c.Name,
+                    NumberOfVotes = u.k.NumberOfVotes,
+                    CreateDate = u.k.CreateDate
+                }).ToListAsync();
 
             return Ok(knowledgeBasevms);
         }

@@ -1,137 +1,85 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
-    <div class="container">
-        <div class="row">
+<div class="container">
+    <div class="row">
 
-            <!-- start of page content -->
-            <div class="span8 page-content">
+        <!-- start of page content -->
+        <div class="span8 page-content">
 
-                <!-- Basic Home Page Template -->
-                <div class="row separator">
-                    <section class="span4 articles-list">
-                        <h3>Featured Articles</h3>
-                        <ul class="articles">
+            <!-- Basic Home Page Template -->
+            <div class="row separator">
+                <section class="span4 articles-list">
+                    <h3>Bài bài viết xem nhiều</h3>
+                    <ul class="articles">
+                        @foreach (var item in Model.PopularKnowledgeBases)
+                        {
+                            var url = "/kb/" + item.SeoAlias + "-" + item.Id + "/";
                             <li class="article-entry standard">
-                                <h4><a href="single.html">Integrating WordPress with Your Website</a></h4>
-                                <span class="article-meta">25 Feb, 2013 in <a href="#" title="View all posts in Server &amp; Database">Server &amp; Database</a></span>
-                                <span class="like-count">66</span>
+                                <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
+                                <span class="article-meta">
+                                    @item.CreateDate.ToString("dd/MM/yyyy") trong
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @item.CategoryName">@item.CategoryName</a>
+                                </span>
+                                <span class="like-count">@item.NumberOfVotes</span>
                             </li>
-                            <li class="article-entry standard">
-                                <h4><a href="single.html">WordPress Site Maintenance</a></h4>
-                                <span class="article-meta">24 Feb, 2013 in <a href="#" title="View all posts in Website Dev">Website Dev</a></span>
-                                <span class="like-count">15</span>
-                            </li>
-                            <li class="article-entry video">
-                                <h4><a href="single.html">Meta Tags in WordPress</a></h4>
-                                <span class="article-meta">23 Feb, 2013 in <a href="#" title="View all posts in Website Dev">Website Dev</a></span>
-                                <span class="like-count">8</span>
-                            </li>
-                            <li class="article-entry image">
-                                <h4><a href="single.html">WordPress in Your Language</a></h4>
-                                <span class="article-meta">22 Feb, 2013 in <a href="#" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
-                                <span class="like-count">6</span>
-                            </li>
-                            <li class="article-entry standard">
-                                <h4><a href="single.html">Know Your Sources</a></h4>
-                                <span class="article-meta">22 Feb, 2013 in <a href="#" title="View all posts in Website Dev">Website Dev</a></span>
-                                <span class="like-count">2</span>
-                            </li>
-                            <li class="article-entry standard">
-                                <h4><a href="single.html">Validating a Website</a></h4>
-                                <span class="article-meta">21 Feb, 2013 in <a href="#" title="View all posts in Website Dev">Website Dev</a></span>
-                                <span class="like-count">3</span>
-                            </li>
-                        </ul>
-                    </section>
+                        }
+                    </ul>
+                </section>
 
-
-                    <section class="span4 articles-list">
-                        <h3>Latest Articles</h3>
-                        <ul class="articles">
+                <section class="span4 articles-list">
+                    <h3>Bài đăng mới nhất</h3>
+                    <ul class="articles">
+                        @foreach (var item in Model.LatestKnowledgeBases)
+                        {
+                            var url = "/kb/" + item.SeoAlias + "-" + item.Id + "/";
                             <li class="article-entry standard">
-                                <h4><a href="single.html">Integrating WordPress with Your Website</a></h4>
-                                <span class="article-meta">25 Feb, 2013 in <a href="#" title="View all posts in Server &amp; Database">Server &amp; Database</a></span>
-                                <span class="like-count">66</span>
+                                <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
+                                <span class="article-meta">
+                                    @item.CreateDate.ToString("dd/MM/yyyy") trong
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@item.CategoryName</a>
+                                </span>
+                                <span class="like-count">@item.NumberOfVotes</span>
                             </li>
-                            <li class="article-entry standard">
-                                <h4><a href="single.html">Using Javascript</a></h4>
-                                <span class="article-meta">25 Feb, 2013 in <a href="#" title="View all posts in Advanced Techniques">Advanced Techniques</a></span>
-                                <span class="like-count">18</span>
-                            </li>
-                            <li class="article-entry image">
-                                <h4><a href="single.html">Using Images</a></h4>
-                                <span class="article-meta">25 Feb, 2013 in <a href="#" title="View all posts in Designing in WordPress">Designing in WordPress</a></span>
-                                <span class="like-count">7</span>
-                            </li>
-                            <li class="article-entry video">
-                                <h4><a href="single.html">Using Video</a></h4>
-                                <span class="article-meta">24 Feb, 2013 in <a href="#" title="View all posts in WordPress Plugins">WordPress Plugins</a></span>
-                                <span class="like-count">7</span>
-                            </li>
-                            <li class="article-entry standard">
-                                <h4><a href="single.html">WordPress Site Maintenance</a></h4>
-                                <span class="article-meta">24 Feb, 2013 in <a href="#" title="View all posts in Website Dev">Website Dev</a></span>
-                                <span class="like-count">15</span>
-                            </li>
-                            <li class="article-entry standard">
-                                <h4><a href="single.html">WordPress CSS Information and Techniques</a></h4>
-                                <span class="article-meta">24 Feb, 2013 in <a href="#" title="View all posts in Theme Development">Theme Development</a></span>
-                                <span class="like-count">1</span>
-                            </li>
-                        </ul>
-                    </section>
-                </div>
+                        }
+                    </ul>
+                </section>
             </div>
-            <!-- end of page content -->
-            <!-- start of sidebar -->
-            <aside class="span4 page-sidebar">
-
-                <section class="widget">
-                    <div class="support-widget">
-                        <h3 class="title">Support</h3>
-                        <p class="intro">Need more support? If you did not found an answer, contact us for further help.</p>
-                    </div>
-                </section>
-
-                <section class="widget">
-                    <div class="quick-links-widget">
-                        <h3 class="title">Quick Links</h3>
-                        <ul id="menu-quick-links" class="menu clearfix">
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="articles-list.html">Articles List</a></li>
-                            <li><a href="faq.html">FAQs</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </div>
-                </section>
-
-                <section class="widget">
-                    <h3 class="title">Tags</h3>
-                    <div class="tagcloud">
-                        <a href="#" class="btn btn-mini">basic</a>
-                        <a href="#" class="btn btn-mini">beginner</a>
-                        <a href="#" class="btn btn-mini">blogging</a>
-                        <a href="#" class="btn btn-mini">colour</a>
-                        <a href="#" class="btn btn-mini">css</a>
-                        <a href="#" class="btn btn-mini">date</a>
-                        <a href="#" class="btn btn-mini">design</a>
-                        <a href="#" class="btn btn-mini">files</a>
-                        <a href="#" class="btn btn-mini">format</a>
-                        <a href="#" class="btn btn-mini">header</a>
-                        <a href="#" class="btn btn-mini">images</a>
-                        <a href="#" class="btn btn-mini">plugins</a>
-                        <a href="#" class="btn btn-mini">setting</a>
-                        <a href="#" class="btn btn-mini">templates</a>
-                        <a href="#" class="btn btn-mini">theme</a>
-                        <a href="#" class="btn btn-mini">time</a>
-                        <a href="#" class="btn btn-mini">videos</a>
-                        <a href="#" class="btn btn-mini">website</a>
-                        <a href="#" class="btn btn-mini">wordpress</a>
-                    </div>
-                </section>
-
-            </aside>
-            <!-- end of sidebar -->
         </div>
+        <!-- end of page content -->
+        <!-- start of sidebar -->
+        <aside class="span4 page-sidebar">
+
+            <section class="widget">
+                <div class="support-widget">
+                    <h3 class="title">Hỗ trợ</h3>
+                    <p class="intro">Hãy liên hệ với quản trị để được giải đáp thắc mắc.</p>
+                </div>
+            </section>
+
+            <section class="widget">
+                <div class="quick-links-widget">
+                    <h3 class="title">Liên kết</h3>
+                    <ul id="menu-quick-links" class="menu clearfix">
+                        <li><a href="https://tedu.com.vn">TEDU</a></li>
+                        <li><a href="http://forum.tedu.com.vn">Diễn đàn</a></li>
+                        <li><a href="http://youtube.com/">Youtube Channel</a></li>
+                        <li><a href="https://facebook.com/teduchannel">Fanpage</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="title">Tags</h3>
+                <div class="tagcloud">
+                    @foreach (var item in Model.PopularLabels)
+                    {
+                        <a href="tag/@item.Id" class="btn btn-mini">@Html.Raw(item.Name)</a>
+                    }
+                </div>
+            </section>
+        </aside>
+        <!-- end of sidebar -->
     </div>
+</div>
