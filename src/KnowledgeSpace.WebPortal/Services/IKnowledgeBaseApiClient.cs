@@ -16,5 +16,9 @@ namespace KnowledgeSpace.WebPortal.Services
         Task<List<LabelVm>> GetPopularLabels(int take);
 
         Task<Pagination<KnowledgeBaseQuickVm>> GetKnowledgeBasesByCategoryId(int categoryId, int pageIndex, int pageSize);
+
+        Task<KnowledgeBaseVm> GetKnowledgeBaseDetail(int id);
+
+        Task<List<LabelVm>> GetLabelsByKnowledgeBaseId(int id);
     }
 }

@@ -203,7 +203,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpGet("{id}")]
-        [ClaimRequirement(FunctionCode.CONTENT_KNOWLEDGEBASE, CommandCode.VIEW)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var knowledgeBase = await _context.KnowledgeBases.FindAsync(id);
@@ -277,6 +277,26 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 return Ok(knowledgeBasevm);
             }
             return BadRequest();
+        }
+
+        [HttpGet("{knowlegeBaseId}/labels")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLabelsByKnowledgeBaseId(int knowlegeBaseId)
+        {
+            var query = from k in _context.KnowledgeBases
+                        join lik in _context.LabelInKnowledgeBases on k.Id equals lik.KnowledgeBaseId
+                        join l in _context.Labels on lik.LabelId equals l.Id
+                        orderby l.Name ascending
+                        where k.Id == knowlegeBaseId
+                        select new { l.Id, l.Name };
+
+            var labels = await query.Select(u => new LabelVm()
+            {
+                Id = u.Id,
+                Name = u.Name
+            }).ToListAsync();
+
+            return Ok(labels);
         }
 
         #region Private methods
