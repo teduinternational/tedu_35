@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FluentValidation.AspNetCore;
+using IdentityServer4.Models;
 using KnowledgeSpace.BackendServer.Data;
 using KnowledgeSpace.BackendServer.Data.Entities;
 using KnowledgeSpace.BackendServer.Extensions;
@@ -8,6 +9,7 @@ using KnowledgeSpace.BackendServer.IdentityServer;
 using KnowledgeSpace.BackendServer.Services;
 using KnowledgeSpace.ViewModels.Systems;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -34,6 +36,7 @@ namespace KnowledgeSpace.BackendServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //var secret = new IdentityServer4.Models.Secret("secret".Sha256());
             //1. Setup entity framework
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -51,6 +54,7 @@ namespace KnowledgeSpace.BackendServer
             })
             .AddInMemoryApiResources(Config.Apis)
             .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
+            //.AddInMemoryClients(Config.Clients)
             .AddInMemoryIdentityResources(Config.Ids)
             .AddAspNetIdentity<User>()
             .AddProfileService<IdentityProfileService>()
