@@ -12,6 +12,6 @@ namespace KnowledgeSpace.WebPortal.Services
 
         Task<List<KnowledgeBaseQuickVm>> GetLatestKnowledgeBases(int take);
 
-        Task<List<KnowledgeBaseQuickVm>> GetPopularLabels(int take);
+        Task<List<LabelVm>> GetPopularLabels(int take);
     }
 }

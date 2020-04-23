@@ -26,7 +26,15 @@ namespace KnowledgeSpace.WebPortal.Controllers
         {
             var latestKbs = await _knowledgeBaseApiClient.GetLatestKnowledgeBases(6);
             var popularKbs = await _knowledgeBaseApiClient.GetPopularKnowledgeBases(6);
-            return View();
+            var labels = await _knowledgeBaseApiClient.GetPopularLabels(20);
+            var viewModel = new HomeViewModel()
+            {
+                LatestKnowledgeBases = latestKbs,
+                PopularKnowledgeBases = popularKbs,
+                PopularLabels = labels,
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

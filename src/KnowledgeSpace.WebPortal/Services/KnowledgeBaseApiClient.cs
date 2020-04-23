@@ -49,15 +49,15 @@ namespace KnowledgeSpace.WebPortal.Services
             return latestKnowledgeBases;
         }
 
-        public async Task<List<KnowledgeBaseQuickVm>> GetPopularLabels(int take)
+        public async Task<List<LabelVm>> GetPopularLabels(int take)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
             //var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
             //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await client.GetAsync($"/api/knowledgeBases/popular/{take}");
-            var popularKnowledgeBases = JsonConvert.DeserializeObject<List<KnowledgeBaseQuickVm>>(await response.Content.ReadAsStringAsync());
-            return popularKnowledgeBases;
+            var response = await client.GetAsync($"/api/labels/popular/{take}");
+            var labels = JsonConvert.DeserializeObject<List<LabelVm>>(await response.Content.ReadAsStringAsync());
+            return labels;
         }
     }
 }

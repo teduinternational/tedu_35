@@ -111,18 +111,24 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetLatestKnowledgeBases(int take)
         {
-            var knowledgeBases = _context.KnowledgeBases
-                .OrderByDescending(x => x.CreateDate)
-                .Take(take);
+            var knowledgeBases = from k in _context.KnowledgeBases
+                                 join c in _context.Categories on k.CategoryId equals c.Id
+                                 orderby k.CreateDate descending
+                                 select new { k, c };
 
-            var knowledgeBasevms = await knowledgeBases.Select(u => new KnowledgeBaseQuickVm()
-            {
-                Id = u.Id,
-                CategoryId = u.CategoryId,
-                Description = u.Description,
-                SeoAlias = u.SeoAlias,
-                Title = u.Title
-            }).ToListAsync();
+            var knowledgeBasevms = await knowledgeBases.Take(take)
+                .Select(u => new KnowledgeBaseQuickVm()
+                {
+                    Id = u.k.Id,
+                    CategoryId = u.k.CategoryId,
+                    Description = u.k.Description,
+                    SeoAlias = u.k.SeoAlias,
+                    Title = u.k.Title,
+                    CategoryAlias = u.c.SeoAlias,
+                    CategoryName = u.c.Name,
+                    NumberOfVotes = u.k.NumberOfVotes,
+                    CreateDate = u.k.CreateDate
+                }).ToListAsync();
 
             return Ok(knowledgeBasevms);
         }
@@ -131,19 +137,24 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetPopularKnowledgeBases(int take)
         {
-            var knowledgeBases = _context.KnowledgeBases
-                .OrderByDescending(x => x.ViewCount)
-                .Take(take);
+            var knowledgeBases = from k in _context.KnowledgeBases
+                                 join c in _context.Categories on k.CategoryId equals c.Id
+                                 orderby k.ViewCount descending
+                                 select new { k, c };
 
-            var knowledgeBasevms = await knowledgeBases.Select(u => new KnowledgeBaseQuickVm()
-            {
-                Id = u.Id,
-                CategoryId = u.CategoryId,
-                Description = u.Description,
-                SeoAlias = u.SeoAlias,
-                Title = u.Title,
-                ViewCount = u.ViewCount
-            }).ToListAsync();
+            var knowledgeBasevms = await knowledgeBases.Take(take)
+                .Select(u => new KnowledgeBaseQuickVm()
+                {
+                    Id = u.k.Id,
+                    CategoryId = u.k.CategoryId,
+                    Description = u.k.Description,
+                    SeoAlias = u.k.SeoAlias,
+                    Title = u.k.Title,
+                    CategoryAlias = u.c.SeoAlias,
+                    CategoryName = u.c.Name,
+                    NumberOfVotes = u.k.NumberOfVotes,
+                    CreateDate = u.k.CreateDate
+                }).ToListAsync();
 
             return Ok(knowledgeBasevms);
         }
