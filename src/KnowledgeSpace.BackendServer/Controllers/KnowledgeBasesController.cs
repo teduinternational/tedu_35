@@ -160,8 +160,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpGet("filter")]
-        [ClaimRequirement(FunctionCode.CONTENT_KNOWLEDGEBASE, CommandCode.VIEW)]
-        public async Task<IActionResult> GetKnowledgeBasesPaging(string filter, int pageIndex, int pageSize)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetKnowledgeBasesPaging(string filter, int? categoryId, int pageIndex, int pageSize)
         {
             var query = from k in _context.KnowledgeBases
                         join c in _context.Categories on k.CategoryId equals c.Id
@@ -169,6 +169,10 @@ namespace KnowledgeSpace.BackendServer.Controllers
             if (!string.IsNullOrEmpty(filter))
             {
                 query = query.Where(x => x.k.Title.Contains(filter));
+            }
+            if (categoryId.HasValue)
+            {
+                query = query.Where(x => x.k.CategoryId == categoryId.Value);
             }
             var totalRecords = await query.CountAsync();
             var items = await query.Skip((pageIndex - 1) * pageSize)
@@ -180,12 +184,18 @@ namespace KnowledgeSpace.BackendServer.Controllers
                     Description = u.k.Description,
                     SeoAlias = u.k.SeoAlias,
                     Title = u.k.Title,
-                    CategoryName = u.c.Name
+                    CategoryAlias = u.c.SeoAlias,
+                    CategoryName = u.c.Name,
+                    NumberOfVotes = u.k.NumberOfVotes,
+                    CreateDate = u.k.CreateDate,
+                    NumberOfComments = u.k.NumberOfComments
                 })
                 .ToListAsync();
 
             var pagination = new Pagination<KnowledgeBaseQuickVm>
             {
+                PageSize = pageSize,
+                PageIndex = pageIndex,
                 Items = items,
                 TotalRecords = totalRecords,
             };
@@ -364,6 +374,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         {
             foreach (var labelText in request.Labels)
             {
+                if (labelText == null) continue;
                 var labelId = TextHelper.ToUnsignString(labelText.ToString());
                 var existingLabel = await _context.Labels.FindAsync(labelId);
                 if (existingLabel == null)

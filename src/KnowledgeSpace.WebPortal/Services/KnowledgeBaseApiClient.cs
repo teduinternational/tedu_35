@@ -1,4 +1,5 @@
-﻿using KnowledgeSpace.ViewModels.Contents;
+﻿using KnowledgeSpace.ViewModels;
+using KnowledgeSpace.ViewModels.Contents;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,16 @@ namespace KnowledgeSpace.WebPortal.Services
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<Pagination<KnowledgeBaseQuickVm>> GetKnowledgeBasesByCategoryId(int categoryId, int pageIndex, int pageSize)
+        {
+            var apiUrl = $"/api/knowledgeBases/filter?categoryId={categoryId}&pageIndex={pageIndex}&pageSize={pageSize}";
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
+            var response = await client.GetAsync(apiUrl);
+            var knowledgeBases = JsonConvert.DeserializeObject<Pagination<KnowledgeBaseQuickVm>>(await response.Content.ReadAsStringAsync());
+            return knowledgeBases;
         }
 
         public async Task<List<KnowledgeBaseQuickVm>> GetLatestKnowledgeBases(int take)
