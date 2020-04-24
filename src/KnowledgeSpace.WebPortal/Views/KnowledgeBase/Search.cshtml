@@ -1,7 +1,7 @@
-﻿@model ListByCategoryIdViewModel
+﻿@model SearchKnowledgeBaseViewModel
 @{
-    Layout = "_SubLayout";
-    ViewData["Title"] = Model.Category.Name;
+    ViewData["Title"] = "Kết quả tìm kiếm cho từ khóa " + Model.Keyword;
+    Layout = "~/Views/Shared/_SubLayout.cshtml";
 }
 <!-- start of page content -->
 <div class="span8 main-listing">
