@@ -86,6 +86,15 @@ namespace KnowledgeSpace.WebPortal.Services
             return latestKnowledgeBases;
         }
 
+        public async Task<List<CommentVm>> GetRecentComments(int take)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
+            var response = await client.GetAsync($"/api/knowledgeBases/comments/recent/{take}");
+            var comments = JsonConvert.DeserializeObject<List<CommentVm>>(await response.Content.ReadAsStringAsync());
+            return comments;
+        }
+
         public async Task<Pagination<KnowledgeBaseQuickVm>> SearchKnowledgeBase(string keyword, int pageIndex, int pageSize)
         {
             var apiUrl = $"/api/knowledgeBases/filter?filter={keyword}&pageIndex={pageIndex}&pageSize={pageSize}";
