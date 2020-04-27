@@ -16,6 +16,11 @@ namespace KnowledgeSpace.WebPortal.Services
         {
         }
 
+        public async Task<List<CommentVm>> GetCommentsTree(int knowledgeBaseId)
+        {
+            return await GetListAsync<CommentVm>($"/api/knowledgeBases/{knowledgeBaseId}/comments/tree");
+        }
+
         public async Task<KnowledgeBaseVm> GetKnowledgeBaseDetail(int id)
         {
             return await GetAsync<KnowledgeBaseVm>($"/api/knowledgeBases/{id}");
@@ -51,6 +56,11 @@ namespace KnowledgeSpace.WebPortal.Services
         public async Task<List<CommentVm>> GetRecentComments(int take)
         {
             return await GetListAsync<CommentVm>($"/api/knowledgeBases/comments/recent/{take}");
+        }
+
+        public async Task<bool> PostComment(CommentCreateRequest request)
+        {
+            return await PostAsync($"/api/knowledgeBases/{request.KnowledgeBaseId}/comments", request);
         }
 
         public async Task<Pagination<KnowledgeBaseQuickVm>> SearchKnowledgeBase(string keyword, int pageIndex, int pageSize)
