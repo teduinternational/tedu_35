@@ -75,6 +75,7 @@ namespace KnowledgeSpace.WebPortal
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IKnowledgeBaseApiClient, KnowledgeBaseApiClient>();
             services.AddTransient<ILabelApiClient, LabelApiClient>();
+            services.AddTransient<IUserApiClient, UserApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

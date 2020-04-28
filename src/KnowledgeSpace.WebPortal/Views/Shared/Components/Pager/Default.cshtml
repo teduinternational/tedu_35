@@ -29,7 +29,7 @@
     <div id="pagination">
         @if (Model.PageIndex != startIndex)
         {
-            <a href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())" title="@Model.PageCount.ToString()" class="btn">Đầu</a>
+            <a href="@urlTemplate.Replace("{0}", "1")" title="1" class="btn">Đầu</a>
             <a href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())" class="btn">Trước</a>
         }
         @for (var i = startIndex; i <= finishIndex; i++)

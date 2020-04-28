@@ -143,10 +143,10 @@ namespace KnowledgeSpace.BackendServer.Controllers
             _context.Comments.Remove(comment);
 
             var knowledgeBase = await _context.KnowledgeBases.FindAsync(knowledgeBaseId);
-            if (knowledgeBase != null)
+            if (knowledgeBase == null)
                 return BadRequest(new ApiBadRequestResponse($"Cannot found knowledge base with id: {knowledgeBaseId}"));
 
-            knowledgeBase.NumberOfComments = knowledgeBase.NumberOfVotes.GetValueOrDefault(0) - 1;
+            knowledgeBase.NumberOfComments = knowledgeBase.NumberOfComments.GetValueOrDefault(0) - 1;
             _context.KnowledgeBases.Update(knowledgeBase);
 
             var result = await _context.SaveChangesAsync();

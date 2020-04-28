@@ -42,6 +42,16 @@
                     <th [pSortableColumn]="'categoryName'">Danh mục
                         <p-sortIcon [field]="'categoryName'"></p-sortIcon>
                     </th>
+
+                    <th [pSortableColumn]="'numberOfComments'">Bình luận
+                        <p-sortIcon [field]="'numberOfComments'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'numberOfVotes'">Thích
+                        <p-sortIcon [field]="'numberOfVotes'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'numberOfReports'">Báo cáo
+                        <p-sortIcon [field]="'numberOfReports'"></p-sortIcon>
+                    </th>
                 </tr>
 
             </ng-template>
@@ -54,6 +64,9 @@
                     <td>{{row.id}}</td>
                     <td>{{row.title}}</td>
                     <td>{{row.categoryName}}</td>
+                    <td>{{row.numberOfComments}}</td>
+                    <td>{{row.numberOfVotes}}</td>
+                    <td>{{row.numberOfReports}}</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary">

@@ -96,7 +96,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             if (knowledgeBase != null)
                 return BadRequest(new ApiBadRequestResponse($"Cannot found knowledge base with id {knowledgeBaseId}"));
 
-            knowledgeBase.NumberOfComments = knowledgeBase.NumberOfReports.GetValueOrDefault(0) + 1;
+            knowledgeBase.NumberOfReports = knowledgeBase.NumberOfReports.GetValueOrDefault(0) + 1;
             _context.KnowledgeBases.Update(knowledgeBase);
 
             var result = await _context.SaveChangesAsync();
@@ -146,7 +146,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             if (knowledgeBase != null)
                 return BadRequest(new ApiBadRequestResponse($"Cannot found knowledge base with id {knowledgeBaseId}"));
 
-            knowledgeBase.NumberOfComments = knowledgeBase.NumberOfReports.GetValueOrDefault(0) - 1;
+            knowledgeBase.NumberOfReports = knowledgeBase.NumberOfReports.GetValueOrDefault(0) - 1;
             _context.KnowledgeBases.Update(knowledgeBase);
 
             var result = await _context.SaveChangesAsync();
