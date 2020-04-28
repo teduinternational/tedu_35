@@ -322,11 +322,10 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetLabelsByKnowledgeBaseId(int knowlegeBaseId)
         {
-            var query = from k in _context.KnowledgeBases
-                        join lik in _context.LabelInKnowledgeBases on k.Id equals lik.KnowledgeBaseId
+            var query = from lik in _context.LabelInKnowledgeBases
                         join l in _context.Labels on lik.LabelId equals l.Id
                         orderby l.Name ascending
-                        where k.Id == knowlegeBaseId
+                        where lik.KnowledgeBaseId == knowlegeBaseId
                         select new { l.Id, l.Name };
 
             var labels = await query.Select(u => new LabelVm()

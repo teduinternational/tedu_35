@@ -1,29 +1,42 @@
-﻿@using Microsoft.AspNetCore.Authentication
+﻿@model KnowledgeSpace.ViewModels.Systems.UserVm
+@using Microsoft.Extensions.Configuration
 
 @{
-    ViewData["Title"] = "My profile";
+    ViewData["Title"] = "Thông tin cá nhân";
+    Layout = "_SubLayout";
 }
+@inject IConfiguration Configuration
+<div class="span8 page-content">
+    <ul class="breadcrumb">
+        <li><a href="/">Trang chủ</a><span class="divider">/</span></li>
+        <li class="active">Thông tin cá nhân</li>
+    </ul>
 
-<h2><a href="https://localhost:44349/Identity/Account/Manage">My Account</a></h2>
-<br />
-<br />
+    <article class=" type-post format-standard hentry clearfix">
 
-<h2>Claims</h2>
-
-<dl>
-    @foreach (var claim in User.Claims)
-    {
-        <dt>@claim.Type</dt>
-        <dd>@claim.Value</dd>
-    }
-</dl>
-
-<h2>Properties</h2>
-
-<dl>
-    @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
-    {
-        <dt>@prop.Key</dt>
-        <dd>@prop.Value</dd>
-    }
-</dl>
+        <h1 class="post-title"><a href="#">@Model.UserName</a></h1>
+        <table class="table table-bordered">
+            <tr>
+                <td>Họ tên</td>
+                <td>@Model.FirstName @Model.LastName</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <td>Tài khoản</td>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <td>Số điện thoại</td>
+                <td>@Model.PhoneNumber</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a class="btn btn-success" target="_blank" href="@Configuration["BackendApiUrl"]/Account/Manage">Chỉnh sửa</a>
+                </td>
+            </tr>
+        </table>
+    </article>
+</div>

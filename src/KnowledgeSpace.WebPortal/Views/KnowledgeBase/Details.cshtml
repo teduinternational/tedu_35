@@ -6,14 +6,14 @@
 }
 @section scripts{
     <script src="~/lib/mustache.js/mustache.min.js"></script>
-    <script src="~/js/controllers/knowledgeBaseController.js"></script>
+    <script src="~/js/controllers/knowledgeBaseController.js" asp-append-version="true"></script>
     <script>
         var controller = new knowledgeBaseController();
         controller.initialize();
     </script>
 }
 <input type="hidden" id="hid_knowledge_base_id" value="@Model.Detail.Id" />
-<input type="hidden" id="hid_current_login_name" value="@User.Identity.Name" />
+<input type="hidden" id="hid_current_login_name" value="@Model.CurrentUser.FirstName @Model.CurrentUser.LastName" />
 <div class="span8 page-content">
 
     <ul class="breadcrumb">
@@ -101,11 +101,11 @@
 </div>
 
 <script id="tmpl_children_comments" type="x-tmpl-mustache">
-    <li class="comment byuser comment-author-saqib-sarwar bypostauthor odd alt depth-2" id="li-comment-3">
+    <li class="comment byuser comment-author-saqib-sarwar bypostauthor odd alt depth-2" id="li-comment-{{id}}">
         <article id="comment-3">
 
             <a href="">
-                <img alt="" src="http://0.gravatar.com/avatar/2df5eab0988aa5ff219476b1d27df755?s=60&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D60&amp;r=G" class="avatar avatar-60 photo" height="60" width="60">
+                <img alt="{{ownerName}}" src="/images/no-avatar.png" class="avatar avatar-60 photo" height="60" width="60">
             </a>
 
             <div class="comment-meta">
@@ -133,7 +133,7 @@
         <article id="comment-2">
 
             <a href="#">
-                <img alt="" src="http://1.gravatar.com/avatar/50a7625001317a58444a20ece817aeca?s=60&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D60&amp;r=G" class="avatar avatar-60 photo" height="60" width="60">
+                <img alt="{{ownerName}}" src="/images/no-avatar.png" class="avatar avatar-60 photo" height="60" width="60">
             </a>
 
             <div class="comment-meta">
@@ -142,7 +142,7 @@
                     <cite class="fn">
                         <a href="#" rel="external nofollow" class="url">{{ownerName}}</a>
                     </cite>
-                    - <a class="comment-reply-link" href="#">Trả lời</a>
+                    - <a class="comment-reply-link" href="#" data-commentid="{{id}}">Trả lời</a>
                 </h5>
 
                 <p class="date">
@@ -155,11 +155,28 @@
             <div class="comment-body">
                 {{content}}
             </div><!-- end of comment-body -->
+            <div id="reply_comment_{{id}}"></div>
         </article><!-- end of comment -->
 
-        <ul class="children">
+        <ul class="children" id="children_comments_{{id}}">
 
             {{{childrenHtml}}}
         </ul>
     </li>
+</script>
+
+<script id="tmpl_reply_comment" type="x-tmpl-mustache">
+    <div id="respond">
+        <h3>Trả lời bình luận</h3>
+        <form action="/knowledgebase/addNewComment" method="post" id="frm_reply_comment_{{commentId}}">
+            <input type="hidden" name="knowledgeBaseId" value="@Model.Detail.Id" />
+            <input type="hidden" name="replyId" value="{{commentId}}" />
+            <div>
+                <textarea class="span8" name="content" id="txt_reply_content_{{commentId}}" cols="58" rows="5"></textarea>
+            </div>
+            <div>
+                <input class="btn" name="submit" type="submit" id="btn_send_reply" value="Trả lời">
+            </div>
+        </form>
+    </div>
 </script>
