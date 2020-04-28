@@ -344,7 +344,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         {
             return new KnowledgeBaseVm()
             {
-                Id = knowledgeBase.CategoryId,
+                Id = knowledgeBase.Id,
 
                 CategoryId = knowledgeBase.CategoryId,
 
@@ -374,11 +374,11 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
                 LastModifiedDate = knowledgeBase.LastModifiedDate,
 
-                NumberOfComments = knowledgeBase.CategoryId,
+                NumberOfComments = knowledgeBase.NumberOfComments,
 
-                NumberOfVotes = knowledgeBase.CategoryId,
+                NumberOfVotes = knowledgeBase.NumberOfVotes,
 
-                NumberOfReports = knowledgeBase.CategoryId,
+                NumberOfReports = knowledgeBase.NumberOfReports,
             };
         }
 

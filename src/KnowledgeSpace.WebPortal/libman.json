@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "mustache.js@3.1.0",
+      "destination": "wwwroot/lib/mustache.js",
+      "files": [ "mustache.min.js" ]
+    }
+  ]
+}

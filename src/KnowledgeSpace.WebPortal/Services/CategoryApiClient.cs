@@ -12,39 +12,22 @@ using System.Threading.Tasks;
 
 namespace KnowledgeSpace.WebPortal.Services
 {
-    public class CategoryApiClient : ICategoryApiClient
+    public class CategoryApiClient : BaseApiClient, ICategoryApiClient
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
         public CategoryApiClient(IHttpClientFactory httpClientFactory,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, configuration, httpContextAccessor)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<CategoryVm>> GetCategories()
         {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
-            //var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await client.GetAsync("/api/categories");
-            var categories = JsonConvert.DeserializeObject<List<CategoryVm>>(await response.Content.ReadAsStringAsync());
-            return categories;
+            return await GetListAsync<CategoryVm>("/api/categories");
         }
 
         public async Task<CategoryVm> GetCategoryById(int id)
         {
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
-            var response = await client.GetAsync($"/api/categories/{id}");
-            var category = JsonConvert.DeserializeObject<CategoryVm>(await response.Content.ReadAsStringAsync());
-            return category;
+            return await GetAsync<CategoryVm>($"/api/categories/{id}");
         }
     }
 }

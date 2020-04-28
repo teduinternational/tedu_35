@@ -22,5 +22,11 @@ namespace KnowledgeSpace.WebPortal.Services
         Task<KnowledgeBaseVm> GetKnowledgeBaseDetail(int id);
 
         Task<List<LabelVm>> GetLabelsByKnowledgeBaseId(int id);
+
+        Task<List<CommentVm>> GetRecentComments(int take);
+
+        Task<List<CommentVm>> GetCommentsTree(int knowledgeBaseId);
+
+        Task<bool> PostComment(CommentCreateRequest request);
     }
 }
