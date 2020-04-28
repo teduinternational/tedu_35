@@ -1,19 +1,29 @@
 ﻿using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Contents;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace KnowledgeSpace.WebPortal.Services
 {
     public class KnowledgeBaseApiClient : BaseApiClient, IKnowledgeBaseApiClient
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public KnowledgeBaseApiClient(IHttpClientFactory httpClientFactory,
           IConfiguration configuration,
           IHttpContextAccessor httpContextAccessor) : base(httpClientFactory, configuration, httpContextAccessor)
         {
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<List<CommentVm>> GetCommentsTree(int knowledgeBaseId)
@@ -61,6 +71,29 @@ namespace KnowledgeSpace.WebPortal.Services
         public async Task<bool> PostComment(CommentCreateRequest request)
         {
             return await PostAsync($"/api/knowledgeBases/{request.KnowledgeBaseId}/comments", request);
+        }
+
+        public async Task<bool> PostKnowlegdeBase(KnowledgeBaseCreateRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
+
+            using var form = new MultipartFormDataContent();
+            if (request.Attachments?.Count > 0)
+            {
+                foreach (var file in request.Attachments)
+                {
+                    form.Add(new StreamContent(file.OpenReadStream()));
+                }
+            }
+            form.Add(new StringContent("CategoryId"), request.CategoryId.ToString());
+            form.Add(new StringContent("Title"), request.Title.ToString());
+
+            var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.PostAsync($"/api/knowledgeBases/", form);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<Pagination<KnowledgeBaseQuickVm>> SearchKnowledgeBase(string keyword, int pageIndex, int pageSize)
