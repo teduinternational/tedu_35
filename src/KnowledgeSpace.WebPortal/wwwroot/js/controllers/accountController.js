@@ -15,5 +15,29 @@
             $('#attachment_items').prepend('<p><input type="file" name="attachments" /></p>');
             return false;
         });
+
+        $("#frm_new_kb").submit(function (e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = false;
+            if (window.FormData) {
+                formData = new FormData(form[0]);
+            }
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    window.location.href = '/my-kbs';
+                },
+                enctype: 'multipart/form-data',
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+            });
+        });
     }
 };

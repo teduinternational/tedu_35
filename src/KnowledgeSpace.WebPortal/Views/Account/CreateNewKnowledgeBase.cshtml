@@ -22,7 +22,7 @@
         <hr>
     </article>
 
-    <form class="row" asp-action="CreateNewKnowledgeBase" method="post" enctype="multipart/form-data" id="frm_new_kb">
+    <form class="row" action="/account/CreateNewKnowledgeBase" method="post" enctype="multipart/form-data" id="frm_new_kb">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="span2">
             <label asp-for="CategoryId" class="control-label"></label>
@@ -103,8 +103,7 @@
         </div>
         <div class="span6" id="attachment_items">
             <p><input type="file" name="attachments" /></p>
-            <a id="btn_add_attachment" href="#" class="btn btn-success">Thêm đính kèm</a>
-
+            <a id="btn_add_attachment" href="#">Thêm đính kèm</a>
         </div>
 
         <div class="span6 offset2 bm30">
