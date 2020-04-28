@@ -15,8 +15,6 @@ namespace KnowledgeSpace.ViewModels.Contents
 
             RuleFor(x => x.Problem).NotEmpty().WithMessage("Problem is required");
 
-            RuleFor(x => x.Problem).NotEmpty().WithMessage("Problem is required");
-
             RuleFor(x => x.Note).NotEmpty().WithMessage("Note is required");
         }
     }
