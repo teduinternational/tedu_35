@@ -101,7 +101,12 @@ namespace KnowledgeSpace.BackendServer.Controllers
             var result = await _context.SaveChangesAsync();
             if (result > 0)
             {
-                return CreatedAtAction(nameof(GetCommentDetail), new { id = knowledgeBaseId, commentId = comment.Id }, request);
+                return CreatedAtAction(nameof(GetCommentDetail),
+                    new { id = knowledgeBaseId, commentId = comment.Id },
+                    new CommentVm()
+                    {
+                        Id = comment.Id,
+                    });
             }
             else
             {

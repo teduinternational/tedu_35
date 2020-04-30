@@ -13,7 +13,10 @@
     </script>
 }
 <input type="hidden" id="hid_knowledge_base_id" value="@Model.Detail.Id" />
-<input type="hidden" id="hid_current_login_name" value="@Model.CurrentUser.FirstName @Model.CurrentUser.LastName" />
+@if (User.Identity.IsAuthenticated)
+{
+    <input type="hidden" id="hid_current_login_name" value="@Model.CurrentUser.FirstName @Model.CurrentUser.LastName" />
+}
 <div class="span8 page-content">
 
     <ul class="breadcrumb">
@@ -147,7 +150,7 @@
 
                 <p class="date">
                     <a href="#">
-                        <time datetime="2013-02-26T13:18:47+00:00">{{createDate}} vào lúc 1:18 pm</time>
+                        <time datetime="2013-02-26T13:18:47+00:00">{{createDate}}</time>
                     </a>
                 </p>
             </div><!-- end .comment-meta -->

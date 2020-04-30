@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "wwwroot/js/controllers/accountController.min.js",
+    "inputFiles": [
+      "wwwroot/js/controllers/accountController.js"
+    ]
+  }
+]

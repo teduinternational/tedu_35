@@ -17,8 +17,9 @@
 
                 var template = $('#tmpl_comments').html();
                 var newComment = Mustache.render(template, {
+                    id: response.id,
                     content: content,
-                    createDate: new Date(),
+                    createDate: formatRelativeTime(),
                     ownerName: $('#hid_current_login_name').val()
                 });
                 $("#txt_new_comment_content").val('');
@@ -52,7 +53,7 @@
                     var newComment = Mustache.render(template, {
                         id: commentId,
                         content: content,
-                        createDate: new Date(),
+                        createDate: formatRelativeTime(),
                         ownerName: $('#hid_current_login_name').val()
                     });
 
@@ -86,7 +87,7 @@
                                 childrenHtml += Mustache.render(childrenTemplate, {
                                     id: childItem.id,
                                     content: childItem.content,
-                                    createDate: childItem.createDate,
+                                    createDate: formatRelativeTime(childItem.createDate),
                                     ownerName: childItem.ownerName
                                 });
                             });
@@ -95,7 +96,7 @@
                             childrenHtml: childrenHtml,
                             id: item.id,
                             content: item.content,
-                            createDate: item.createDate,
+                            createDate: formatRelativeTime(item.createDate),
                             ownerName: item.ownerName
                         });
                     });

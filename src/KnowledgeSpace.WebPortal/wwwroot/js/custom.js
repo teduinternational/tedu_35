@@ -54,26 +54,6 @@ jQuery(document).ready(function(e) {
 	/*	Flickr Feed
 	/*-----------------------------------------------------------------------------------*/
 	
-	$('#basicuse').jflickrfeed({
-								limit: 9,
-								qstrings: {
-									id: '52617155@N08'
-								},
-								itemTemplate: '<a href="{{image_b}}" title="{{title}}" data-rel="prettyPhoto[flickrg]"><img src="{{image_s}}" alt="{{title}}" /></a>'
-							}, function(data){ 
-										
-											$('a[data-rel]').each(function() {
-												$(this).attr('rel', $(this).data('rel'));
-											});
-
-
-											$("a[rel^='prettyPhoto']").prettyPhoto({
-												deeplinking: false,
-												social_tools: false,
-												overlay_gallery: false
-											});
-							});
-
 
     /*-----------------------------------------------------------------------------------*/
 	/* Pretty Photo Lightbox
@@ -159,8 +139,6 @@ jQuery(document).ready(function(e) {
 
 
     // Twitter Fetcher Target Code
-    twitterFetcher.fetch('353252568291504128', 'twitter_update_list', 2, true, false, true, dateFormatter, false);
-
 
 
 	/* ---------------------------------------------------- */

@@ -27,7 +27,7 @@ namespace KnowledgeSpace.WebPortal.Services
 
         Task<List<CommentVm>> GetCommentsTree(int knowledgeBaseId);
 
-        Task<bool> PostComment(CommentCreateRequest request);
+        Task<CommentVm> PostComment(CommentCreateRequest request);
 
         Task<bool> PostKnowlegdeBase(KnowledgeBaseCreateRequest request);
     }

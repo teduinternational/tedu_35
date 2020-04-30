@@ -69,9 +69,9 @@ namespace KnowledgeSpace.WebPortal.Services
             return await GetListAsync<CommentVm>($"/api/knowledgeBases/comments/recent/{take}");
         }
 
-        public async Task<bool> PostComment(CommentCreateRequest request)
+        public async Task<CommentVm> PostComment(CommentCreateRequest request)
         {
-            return await PostAsync($"/api/knowledgeBases/{request.KnowledgeBaseId}/comments", request);
+            return await PostAsync<CommentCreateRequest, CommentVm>($"/api/knowledgeBases/{request.KnowledgeBaseId}/comments", request);
         }
 
         public async Task<bool> PostKnowlegdeBase(KnowledgeBaseCreateRequest request)

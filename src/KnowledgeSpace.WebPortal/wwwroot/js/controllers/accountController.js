@@ -4,40 +4,63 @@
     };
 
     function registerEvents() {
-        CKEDITOR.replace('txt_environment');
         CKEDITOR.replace('txt_problem');
-        //CKEDITOR.replace('txt_step_reproduce');
-        //CKEDITOR.replace('txt_workaround');
         CKEDITOR.replace('txt_note');
-        //CKEDITOR.replace('txt_description');
 
         $('#btn_add_attachment').off('click').on('click', function () {
             $('#attachment_items').prepend('<p><input type="file" name="attachments" /></p>');
             return false;
         });
-
-        $("#frm_new_kb").submit(function (e) {
-            e.preventDefault(); // avoid to execute the actual submit of the form.
-
-            var form = $(this);
-            var url = form.attr('action');
-            var formData = false;
-            if (window.FormData) {
-                formData = new FormData(form[0]);
-            }
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                success: function (data) {
-                    window.location.href = '/my-kbs';
+        $("#frm_new_kb").validate({
+            ignore: [],
+            rules: {
+                title: {
+                    required: true
                 },
-                enctype: 'multipart/form-data',
-                processData: false,  // Important!
-                contentType: false,
-                cache: false,
-            });
+                note: {
+                    required: function (textarea) {
+                        CKEDITOR.instances[textarea.id].updateElement();
+                        var editorcontent = textarea.value.replace(/<[^>]*>/gi, '');
+                        return editorcontent.length === 0;
+                    }
+                }
+            },
+            messages: {
+                title: {
+                    required: "Nhập tiêu đề"
+                },
+                problem: {
+                    required: "Nhập vấn đề"
+                },
+                note: {
+                    required: "Nhập giải pháp"
+                }
+            },
+            submitHandler: function (e) {
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+                for (instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+                var form = $(this);
+                var url = form.attr('action');
+                var formData = false;
+                if (window.FormData) {
+                    formData = new FormData(form[0]);
+                }
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        window.location.href = '/my-kbs';
+                    },
+                    enctype: 'multipart/form-data',
+                    processData: false,  // Important!
+                    contentType: false,
+                    cache: false,
+                });
+            }
         });
     }
 };

@@ -41,7 +41,15 @@ namespace KnowledgeSpace.WebPortal.Controllers
         public async Task<ActionResult> MyProfile()
         {
             var user = await _userApiClient.GetById(User.GetUserId());
-            return View(user);
+            return View(user); ;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> MyKnowledgeBases(int page = 1, int pageSize = 10)
+        {
+            var kbs = await _userApiClient.GetKnowledgeBasesByUserId(User.GetUserId(), page, pageSize);
+            return View(kbs);
         }
 
         [HttpGet]
@@ -53,6 +61,30 @@ namespace KnowledgeSpace.WebPortal.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateNewKnowledgeBase([FromForm]KnowledgeBaseCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _knowledgeBaseApiClient.PostKnowlegdeBase(request);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest(request);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditKnowledgeBase(int id)
+        {
+            var knowledgeBase = await _knowledgeBaseApiClient.GetKnowledgeBaseDetail(id);
+            await SetCategoriesViewBag();
+            return View(knowledgeBase);
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> EditKnowledgeBase(int id, [FromForm]KnowledgeBaseCreateRequest request)
         {
             if (!ModelState.IsValid)
             {

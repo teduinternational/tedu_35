@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using KnowledgeSpace.WebPortal.Extensions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -57,7 +59,7 @@ namespace KnowledgeSpace.WebPortal.Services
             return data;
         }
 
-        public async Task<bool> PostAsync<T>(string url, T requestContent, bool requiredLogin = true)
+        public async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
@@ -71,7 +73,11 @@ namespace KnowledgeSpace.WebPortal.Services
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
             var response = await client.PostAsync(url, httpContent);
-            return response.IsSuccessStatusCode;
+            var body = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<TResponse>(body);
+
+            throw new Exception(body);
         }
     }
 }
