@@ -337,6 +337,26 @@ namespace KnowledgeSpace.BackendServer.Controllers
             return Ok(labels);
         }
 
+        [HttpPut("{id}/view-count")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateViewCount(int id)
+        {
+            var knowledgeBase = await _context.KnowledgeBases.FindAsync(id);
+            if (knowledgeBase == null)
+                return NotFound();
+            if (knowledgeBase.ViewCount == null)
+                knowledgeBase.ViewCount = 1;
+
+            knowledgeBase.ViewCount += 1;
+            _context.KnowledgeBases.Update(knowledgeBase);
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         #region Private methods
 
         private static KnowledgeBaseVm CreateKnowledgeBaseVm(KnowledgeBase knowledgeBase)

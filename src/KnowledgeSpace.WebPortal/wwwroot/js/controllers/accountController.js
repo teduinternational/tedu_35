@@ -7,41 +7,25 @@
         CKEDITOR.replace('txt_problem');
         CKEDITOR.replace('txt_note');
 
+        CKEDITOR.on('instanceReady', function () {
+            $.each(CKEDITOR.instances, function (instance) {
+                CKEDITOR.instances[instance].document.on("keyup", CK_jQ);
+                CKEDITOR.instances[instance].document.on("paste", CK_jQ);
+                CKEDITOR.instances[instance].document.on("keypress", CK_jQ);
+                CKEDITOR.instances[instance].document.on("blur", CK_jQ);
+                CKEDITOR.instances[instance].document.on("change", CK_jQ);
+            });
+        });
+
         $('#btn_add_attachment').off('click').on('click', function () {
             $('#attachment_items').prepend('<p><input type="file" name="attachments" /></p>');
             return false;
         });
-        $("#frm_new_kb").validate({
-            ignore: [],
-            rules: {
-                title: {
-                    required: true
-                },
-                note: {
-                    required: function (textarea) {
-                        CKEDITOR.instances[textarea.id].updateElement();
-                        var editorcontent = textarea.value.replace(/<[^>]*>/gi, '');
-                        return editorcontent.length === 0;
-                    }
-                }
-            },
-            messages: {
-                title: {
-                    required: "Nhập tiêu đề"
-                },
-                problem: {
-                    required: "Nhập vấn đề"
-                },
-                note: {
-                    required: "Nhập giải pháp"
-                }
-            },
-            submitHandler: function (e) {
-                e.preventDefault(); // avoid to execute the actual submit of the form.
-                for (instance in CKEDITOR.instances) {
-                    CKEDITOR.instances[instance].updateElement();
-                }
-                var form = $(this);
+        $("#frm_new_kb").submit(function(e){
+            e.preventDefault(); // avoid to execute the actual submit of the form.            
+            var form = $(this);
+            form.validate();
+            if (form.valid()) {
                 var url = form.attr('action');
                 var formData = false;
                 if (window.FormData) {
@@ -61,6 +45,13 @@
                     cache: false,
                 });
             }
+            
         });
+    }
+
+    function CK_jQ() {
+        for (instance in CKEDITOR.instances) {
+            CKEDITOR.instances[instance].updateElement();
+        }
     }
 };

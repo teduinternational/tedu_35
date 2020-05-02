@@ -86,6 +86,7 @@ namespace KnowledgeSpace.WebPortal.Controllers
                 var user = await _userApiClient.GetById(User.GetUserId());
                 viewModel.CurrentUser = user;
             }
+            await _knowledgeBaseApiClient.UpdateViewCount(id);
             return View(viewModel);
         }
 

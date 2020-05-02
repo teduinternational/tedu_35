@@ -103,15 +103,21 @@ namespace KnowledgeSpace.WebPortal.Controllers
             return View(request);
         }
 
-        private async Task SetCategoriesViewBag()
+        private async Task SetCategoriesViewBag(int? selectedValue = null)
         {
             var categories = await _categoryApiClient.GetCategories();
-            categories.Insert(0, new CategoryVm()
+
+            var items = categories.Select(i => new SelectListItem()
             {
-                Id = 0,
-                Name = "--Hãy chọn danh mục--"
+                Text = i.Name,
+                Value = i.Id.ToString(),
+            }).ToList();
+            items.Insert(0, new SelectListItem()
+            {
+                Value = null,
+                Text = "--Chọn danh mục--"
             });
-            ViewBag.Categories = categories;
+            ViewBag.Categories = new SelectList(items, "Value", "Text", selectedValue);
         }
     }
 }

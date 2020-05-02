@@ -30,5 +30,7 @@ namespace KnowledgeSpace.WebPortal.Services
         Task<CommentVm> PostComment(CommentCreateRequest request);
 
         Task<bool> PostKnowlegdeBase(KnowledgeBaseCreateRequest request);
+
+        Task<bool> UpdateViewCount(int id);
     }
 }

@@ -123,5 +123,10 @@ namespace KnowledgeSpace.WebPortal.Services
             var apiUrl = $"/api/knowledgeBases/filter?filter={keyword}&pageIndex={pageIndex}&pageSize={pageSize}";
             return await GetAsync<Pagination<KnowledgeBaseQuickVm>>(apiUrl);
         }
+
+        public async Task<bool> UpdateViewCount(int id)
+        {
+            return await PutAsync<object, bool>($"/api/knowledgeBases/{id}/view-count", null, false);
+        }
     }
 }

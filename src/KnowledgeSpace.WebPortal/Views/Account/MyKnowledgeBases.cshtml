@@ -26,7 +26,7 @@
                 @foreach (var item in Model.Items)
                 {
                     <tr>
-                        <td>@item.Title</td>
+                        <td width="40%">@item.Title</td>
                         <td>@item.CreateDate.ToString("dd/MM/yyyy hh:mm")</td>
                         <td>@item.CategoryName</td>
                         <td>@item.ViewCount.GetValueOrDefault(0).ToString("N0")</td>
