@@ -8,6 +8,8 @@ namespace KnowledgeSpace.ViewModels.Contents
 {
     public class KnowledgeBaseCreateRequest
     {
+        public int? Id { get; set; }
+
         [Display(Name = "Danh mục")]
         public int CategoryId { get; set; }
 
