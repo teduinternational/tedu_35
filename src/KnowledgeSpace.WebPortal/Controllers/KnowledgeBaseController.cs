@@ -75,14 +75,18 @@ namespace KnowledgeSpace.WebPortal.Controllers
             var knowledgeBase = await _knowledgeBaseApiClient.GetKnowledgeBaseDetail(id);
             var category = await _categoryApiClient.GetCategoryById(knowledgeBase.CategoryId);
             var labels = await _knowledgeBaseApiClient.GetLabelsByKnowledgeBaseId(id);
-            var user = await _userApiClient.GetById(User.GetUserId());
+
             var viewModel = new KnowledgeBaseDetailViewModel()
             {
                 Detail = knowledgeBase,
                 Category = category,
-                Labels = labels,
-                CurrentUser = user
+                Labels = labels
             };
+            if (User.Identity.IsAuthenticated)
+            {
+                viewModel.CurrentUser = await _userApiClient.GetById(User.GetUserId());
+            }
+            await _knowledgeBaseApiClient.UpdateViewCount(id);
             return View(viewModel);
         }
 
@@ -98,8 +102,8 @@ namespace KnowledgeSpace.WebPortal.Controllers
         public async Task<IActionResult> AddNewComment([FromForm] CommentCreateRequest request)
         {
             var result = await _knowledgeBaseApiClient.PostComment(request);
-            if (result)
-                return Ok();
+            if (result != null)
+                return Ok(result);
             return BadRequest();
         }
 

@@ -337,6 +337,26 @@ namespace KnowledgeSpace.BackendServer.Controllers
             return Ok(labels);
         }
 
+        [HttpPut("{id}/view-count")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateViewCount(int id)
+        {
+            var knowledgeBase = await _context.KnowledgeBases.FindAsync(id);
+            if (knowledgeBase == null)
+                return NotFound();
+            if (knowledgeBase.ViewCount == null)
+                knowledgeBase.ViewCount = 1;
+
+            knowledgeBase.ViewCount += 1;
+            _context.KnowledgeBases.Update(knowledgeBase);
+            var result = await _context.SaveChangesAsync();
+            if (result > 0)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         #region Private methods
 
         private static KnowledgeBaseVm CreateKnowledgeBaseVm(KnowledgeBase knowledgeBase)
@@ -461,7 +481,10 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
             knowledgeBase.Title = request.Title;
 
-            knowledgeBase.SeoAlias = request.SeoAlias;
+            if (string.IsNullOrEmpty(request.SeoAlias))
+                knowledgeBase.SeoAlias = TextHelper.ToUnsignString(request.Title);
+            else
+                knowledgeBase.SeoAlias = request.SeoAlias;
 
             knowledgeBase.Description = request.Description;
 
@@ -477,7 +500,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
 
             knowledgeBase.Note = request.Note;
 
-            knowledgeBase.Labels = string.Join(',', request.Labels);
+            if (request.Labels != null)
+                knowledgeBase.Labels = string.Join(',', request.Labels);
         }
 
         #endregion Private methods

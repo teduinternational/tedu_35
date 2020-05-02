@@ -87,13 +87,14 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   deleteItems() {
-    const id = this.selectedItems[0].id;
+    const commentId = this.selectedItems[0].id;
+    const knowledgeBaseId = this.selectedItems[0].knowledgeBaseId;
     this.notificationService.showConfirmation(MessageConstants.CONFIRM_DELETE_MSG,
-      () => this.deleteItemsConfirm(id));
+      () => this.deleteItemsConfirm(commentId,knowledgeBaseId));
   }
-  deleteItemsConfirm(id) {
+  deleteItemsConfirm(commentId,knowledgeBaseId) {
     this.blockedPanel = true;
-    this.subscription.add(this.commentsService.delete(this.entityId, id).subscribe(() => {
+    this.subscription.add(this.commentsService.delete(knowledgeBaseId, commentId).subscribe(() => {
       this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
       this.loadData();
       this.selectedItems = [];

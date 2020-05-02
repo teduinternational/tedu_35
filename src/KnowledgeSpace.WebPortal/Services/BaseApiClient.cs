@@ -57,7 +57,7 @@ namespace KnowledgeSpace.WebPortal.Services
             return data;
         }
 
-        public async Task<bool> PostAsync<T>(string url, T requestContent, bool requiredLogin = true)
+        public async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true)
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
@@ -71,7 +71,38 @@ namespace KnowledgeSpace.WebPortal.Services
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
             var response = await client.PostAsync(url, httpContent);
-            return response.IsSuccessStatusCode;
+            var body = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<TResponse>(body);
+            }
+            throw new Exception(body);
+        }
+
+        public async Task<bool> PutAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
+            HttpContent httpContent = null;
+            if (requestContent != null)
+            {
+                var json = JsonConvert.SerializeObject(requestContent);
+                httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
+            if (requiredLogin)
+            {
+                var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            var response = await client.PutAsync(url, httpContent);
+            var body = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            throw new Exception(body);
         }
     }
 }

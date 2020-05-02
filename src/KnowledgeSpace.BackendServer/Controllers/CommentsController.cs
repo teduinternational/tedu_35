@@ -34,7 +34,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
                 query = query.Where(x => x.c.Content.Contains(filter));
             }
             var totalRecords = await query.CountAsync();
-            var items = await query.Skip((pageIndex - 1) * pageSize)
+            var items = await query.OrderByDescending(x => x.c.CreateDate)
+                .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .Select(c => new CommentVm()
                 {
@@ -101,7 +102,10 @@ namespace KnowledgeSpace.BackendServer.Controllers
             var result = await _context.SaveChangesAsync();
             if (result > 0)
             {
-                return CreatedAtAction(nameof(GetCommentDetail), new { id = knowledgeBaseId, commentId = comment.Id }, request);
+                return CreatedAtAction(nameof(GetCommentDetail), new { id = knowledgeBaseId, commentId = comment.Id }, new CommentVm()
+                {
+                    Id = comment.Id
+                });
             }
             else
             {

@@ -23,3 +23,14 @@
 .field-validation-error{
 	color:red;
 }
+.cke {
+	margin-bottom: 10px !important;
+}
+
+.error {
+	color: red;
+}
+
+.validation-summary-errors {
+	color: red;
+}
