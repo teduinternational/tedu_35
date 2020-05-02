@@ -107,6 +107,13 @@ namespace KnowledgeSpace.WebPortal.Controllers
             return BadRequest();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Vote([FromForm] VoteCreateRequest request)
+        {
+            var result = await _knowledgeBaseApiClient.Vote(request);
+            return Ok(result);
+        }
+
         #endregion AJAX Methods
     }
 }
