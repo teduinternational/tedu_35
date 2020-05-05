@@ -30,8 +30,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpPost("{knowledgeBaseId}/votes")]
-        [ApiValidationFilter]
-        public async Task<IActionResult> PostVote(int knowledgeBaseId, [FromBody]VoteCreateRequest request)
+        public async Task<IActionResult> PostVote(int knowledgeBaseId)
         {
             var userId = User.GetUserId();
             var knowledgeBase = await _context.KnowledgeBases.FindAsync(knowledgeBaseId);
@@ -68,29 +67,6 @@ namespace KnowledgeSpace.BackendServer.Controllers
             {
                 return BadRequest(new ApiBadRequestResponse($"Vote failed"));
             }
-        }
-
-        [HttpDelete("{knowledgeBaseId}/votes/{userId}")]
-        public async Task<IActionResult> DeleteVote(int knowledgeBaseId, string userId)
-        {
-            var vote = await _context.Votes.FindAsync(knowledgeBaseId, userId);
-            if (vote == null)
-                return NotFound(new ApiNotFoundResponse("Cannot found vote"));
-
-            var knowledgeBase = await _context.KnowledgeBases.FindAsync(knowledgeBaseId);
-            if (knowledgeBase != null)
-                return BadRequest(new ApiBadRequestResponse($"Cannot found knowledge base with id {knowledgeBaseId}"));
-
-            knowledgeBase.NumberOfVotes = knowledgeBase.NumberOfVotes.GetValueOrDefault(0) - 1;
-            _context.KnowledgeBases.Update(knowledgeBase);
-
-            _context.Votes.Remove(vote);
-            var result = await _context.SaveChangesAsync();
-            if (result > 0)
-            {
-                return Ok();
-            }
-            return BadRequest(new ApiBadRequestResponse($"Delete vote failed"));
         }
 
         #endregion Votes

@@ -45,6 +45,13 @@
                     @Model.Detail.NumberOfComments.GetValueOrDefault(0).ToString("N0") bình luận
                 </a>
             </span>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button type="button" class="btn" data-toggle="modal" data-target="#reportModal">
+                    Báo xấu
+                </button>
+            }
+
             <span class="like-count">@Model.Detail.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
         </div><!-- end of post meta -->
 
@@ -197,3 +204,25 @@
         </form>
     </div>
 </script>
+
+<!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" data-backdrop="static"
+     aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportModalLabel">Báo xấu</h5>
+            </div>
+            <div class="modal-body">
+                <form id="frm_report">
+                    <input type="hidden" value="@Model.Detail.Id" name="knowledgeBaseId" />
+                    <textarea id="txt_report_content" name="content" class="text-area"></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
+            </div>
+        </div>
+    </div>
+</div>

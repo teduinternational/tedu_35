@@ -35,6 +35,8 @@ namespace KnowledgeSpace.WebPortal.Services
 
         Task<bool> UpdateViewCount(int id);
 
-        Task<int> Vote(VoteCreateRequest request);
+        Task<int> PostVote(VoteCreateRequest request);
+
+        Task<ReportVm> PostReport(ReportCreateRequest request);
     }
 }
