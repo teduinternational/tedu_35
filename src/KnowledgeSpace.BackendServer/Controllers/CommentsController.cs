@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using KnowledgeSpace.BackendServer.Authorization;
 using KnowledgeSpace.BackendServer.Constants;
@@ -103,6 +104,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
             var result = await _context.SaveChangesAsync();
             if (result > 0)
             {
+                await _cacheService.RemoveAsync(CacheConstants.RecentComments);
+
                 //Send mail
                 if (comment.ReplyId.HasValue)
                 {
@@ -174,6 +177,8 @@ namespace KnowledgeSpace.BackendServer.Controllers
             var result = await _context.SaveChangesAsync();
             if (result > 0)
             {
+                //Delete cache
+                await _cacheService.RemoveAsync(CacheConstants.RecentComments);
                 var commentVm = new CommentVm()
                 {
                     Id = comment.Id,
@@ -192,26 +197,33 @@ namespace KnowledgeSpace.BackendServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetRecentComments(int take)
         {
-            var query = from c in _context.Comments
-                        join u in _context.Users
-                            on c.OwnerUserId equals u.Id
-                        join k in _context.KnowledgeBases
-                        on c.KnowledgeBaseId equals k.Id
-                        orderby c.CreateDate descending
-                        select new { c, u, k };
-
-            var comments = await query.Take(take).Select(x => new CommentVm()
+            var cachedData = await _cacheService.GetAsync<List<CommentVm>>(CacheConstants.RecentComments);
+            if (cachedData == null)
             {
-                Id = x.c.Id,
-                CreateDate = x.c.CreateDate,
-                KnowledgeBaseId = x.c.KnowledgeBaseId,
-                OwnerUserId = x.c.OwnerUserId,
-                KnowledgeBaseTitle = x.k.Title,
-                OwnerName = x.u.FirstName + " " + x.u.LastName,
-                KnowledgeBaseSeoAlias = x.k.SeoAlias
-            }).ToListAsync();
+                var query = from c in _context.Comments
+                            join u in _context.Users
+                                on c.OwnerUserId equals u.Id
+                            join k in _context.KnowledgeBases
+                            on c.KnowledgeBaseId equals k.Id
+                            orderby c.CreateDate descending
+                            select new { c, u, k };
 
-            return Ok(comments);
+                var comments = await query.Take(take).Select(x => new CommentVm()
+                {
+                    Id = x.c.Id,
+                    CreateDate = x.c.CreateDate,
+                    KnowledgeBaseId = x.c.KnowledgeBaseId,
+                    OwnerUserId = x.c.OwnerUserId,
+                    KnowledgeBaseTitle = x.k.Title,
+                    OwnerName = x.u.FirstName + " " + x.u.LastName,
+                    KnowledgeBaseSeoAlias = x.k.SeoAlias
+                }).ToListAsync();
+
+                await _cacheService.SetAsync(CacheConstants.RecentComments, comments);
+                cachedData = comments;
+            }
+
+            return Ok(cachedData);
         }
 
         [HttpGet("{knowledgeBaseId}/comments/tree")]
