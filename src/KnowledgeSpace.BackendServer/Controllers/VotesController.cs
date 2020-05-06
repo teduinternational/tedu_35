@@ -30,15 +30,14 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpPost("{knowledgeBaseId}/votes")]
-        [ApiValidationFilter]
-        public async Task<IActionResult> PostVote(int knowledgeBaseId, [FromBody]VoteCreateRequest request)
+        public async Task<IActionResult> PostVote(int knowledgeBaseId)
         {
             var userId = User.GetUserId();
             var knowledgeBase = await _context.KnowledgeBases.FindAsync(knowledgeBaseId);
             if (knowledgeBase == null)
                 return BadRequest(new ApiBadRequestResponse($"Cannot found knowledge base with id {knowledgeBaseId}"));
 
-            var numberOfVotes = await _context.Votes.CountAsync(x => x.KnowledgeBaseId == knowledgeBaseId && x.UserId == userId);
+            var numberOfVotes = await _context.Votes.CountAsync(x => x.KnowledgeBaseId == knowledgeBaseId);
             var vote = await _context.Votes.FindAsync(knowledgeBaseId, userId);
             if (vote != null)
             {

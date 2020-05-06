@@ -61,9 +61,12 @@ namespace KnowledgeSpace.WebPortal.Services
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
-
-            var json = JsonConvert.SerializeObject(requestContent);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent httpContent = null;
+            if (requestContent != null)
+            {
+                var json = JsonConvert.SerializeObject(requestContent);
+                httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            }
 
             if (requiredLogin)
             {
