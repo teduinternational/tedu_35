@@ -30,8 +30,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
         }
 
         [HttpPost("{knowledgeBaseId}/votes")]
-        [ApiValidationFilter]
-        public async Task<IActionResult> PostVote(int knowledgeBaseId, [FromBody]VoteCreateRequest request)
+        public async Task<IActionResult> PostVote(int knowledgeBaseId)
         {
             var userId = User.GetUserId();
             var knowledgeBase = await _context.KnowledgeBases.FindAsync(knowledgeBaseId);

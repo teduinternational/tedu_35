@@ -19,19 +19,19 @@ export class ReportsDetailComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   public dialogTitle: string;
   public knowledgeBaseId: number;
-  public commentId: number;
+  public reportId: number;
   public btnDisabled = false;
   public blockedPanel = false;
   public report: Report;
 
   ngOnInit() {
-    if (this.commentId) {
-      this.loadFormDetails(this.knowledgeBaseId, this.commentId);
+    if (this.reportId) {
+      this.loadFormDetails(this.knowledgeBaseId, this.reportId);
     }
   }
-  private loadFormDetails(commentId, knowledgeBaseId) {
+  private loadFormDetails(knowledgeBaseId, reportId) {
     this.blockedPanel = true;
-    this.subscription.add(this.reportServices.getDetail(knowledgeBaseId, commentId)
+    this.subscription.add(this.reportServices.getDetail(knowledgeBaseId, reportId)
       .subscribe((response: Report) => {
         this.report = response;
         setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);

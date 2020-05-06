@@ -10,6 +10,10 @@
     {
       "library": "ckeditor@4.12.1",
       "destination": "wwwroot/lib/ckeditor"
+    },
+    {
+      "library": "twitter-bootstrap@2.2.2",
+      "destination": "wwwroot/lib/twitter-bootstrap"
     }
   ]
 }
