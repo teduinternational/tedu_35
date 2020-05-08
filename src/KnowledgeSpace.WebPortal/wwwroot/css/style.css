@@ -40,3 +40,12 @@
 .text-area {
     width: 97%;
 }
+input[name='captchaCode'] {
+    vertical-align: middle;
+    margin-top: 10px;
+    height: 23px;
+    width:90px;
+}
+.input-group-prepend{
+    display:inline;
+}

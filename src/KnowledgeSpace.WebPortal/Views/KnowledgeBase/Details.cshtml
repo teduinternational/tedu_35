@@ -107,9 +107,13 @@
                         <textarea class="span8" name="content" id="txt_new_comment_content" cols="58" rows="10"></textarea>
                     </div>
 
-                    <p class="allowed-tags">You can use these HTML tags and attributes <small><code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; &lt;strong&gt; </code></small></p>
+                    <p id="message-result" style="display:none;"></p>
 
                     <div>
+                        <div class="input-group-prepend">
+                            <img id="img-captcha" src="/get-captcha-image" />
+                        </div>
+                        <input type="text" name="captchaCode" id="txt_captcha" maxlength="4" />
                         <input class="btn" name="submit" type="submit" id="btn_send_comment" value="Gửi bình luận">
                     </div>
                 </form>
@@ -194,10 +198,17 @@
         <form action="/knowledgebase/addNewComment" method="post" id="frm_reply_comment_{{commentId}}">
             <input type="hidden" name="knowledgeBaseId" value="@Model.Detail.Id" />
             <input type="hidden" name="replyId" value="{{commentId}}" />
+
             <div>
                 <textarea class="span8" name="content" id="txt_reply_content_{{commentId}}" cols="58" rows="5"></textarea>
             </div>
-            <div>
+            <p id="message-result-reply-{{commentId}}" style="display:none;"></p>
+
+            <div class="form-actions">
+                <div class="input-group-prepend">
+                    <img id="img-captcha-reply-{{commentId}}" data-id="{{commentId}}" class="img-captcha" alt="Click vào ảnh để đổi" src="/get-captcha-image" />
+                </div>
+                <input type="text" name="captchaCode" maxlength="4" />
                 <input class="btn" name="submit" type="submit" id="btn_send_reply" value="Trả lời">
             </div>
         </form>
@@ -219,6 +230,10 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <div class="input-group-prepend">
+                    <img id="img-captcha" src="~/get-captcha-image" />
+                </div>
+                <input type="text" name="captchaCode" maxlength="4" />
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
             </div>

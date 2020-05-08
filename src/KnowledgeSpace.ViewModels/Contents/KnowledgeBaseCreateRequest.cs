@@ -44,5 +44,7 @@ namespace KnowledgeSpace.ViewModels.Contents
 
         [Display(Name = "Tệp đính kèm")]
         public List<IFormFile> Attachments { get; set; }
+
+        public string CaptchaCode { get; set; }
     }
 }

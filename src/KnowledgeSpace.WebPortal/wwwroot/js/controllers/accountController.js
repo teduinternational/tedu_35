@@ -46,6 +46,8 @@
                     processData: false,  // Important!
                     contentType: false,
                     cache: false,
+                    error: function (err) {
+                    }
                 });
             }
         });
