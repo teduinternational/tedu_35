@@ -113,7 +113,7 @@
                         <div class="input-group-prepend">
                             <img id="img-captcha" src="/get-captcha-image" />
                         </div>
-                        <input type="text" name="captchaCode" id="txt_captcha" maxlength="4" />
+                        <input type="text" name="captchaCode" id="txt_captcha" />
                         <input class="btn" name="submit" type="submit" id="btn_send_comment" value="Gửi bình luận">
                     </div>
                 </form>
@@ -208,7 +208,7 @@
                 <div class="input-group-prepend">
                     <img id="img-captcha-reply-{{commentId}}" data-id="{{commentId}}" class="img-captcha" alt="Click vào ảnh để đổi" src="/get-captcha-image" />
                 </div>
-                <input type="text" name="captchaCode" maxlength="4" />
+                <input type="text" name="captchaCode" />
                 <input class="btn" name="submit" type="submit" id="btn_send_reply" value="Trả lời">
             </div>
         </form>
@@ -235,7 +235,7 @@
                     <div class="input-group-prepend">
                         <img id="img-captcha-report" src="~/get-captcha-image" />
                     </div>
-                    <input type="text" name="captchaCode" maxlength="4" />
+                    <input type="text" name="captchaCode" />
                     <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                 </div>

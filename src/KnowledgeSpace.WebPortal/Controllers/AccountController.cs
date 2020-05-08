@@ -65,11 +65,12 @@ namespace KnowledgeSpace.WebPortal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             if (!Captcha.ValidateCaptchaCode(request.CaptchaCode, HttpContext))
             {
-                return BadRequest("Mã xác nhận không đúng");
+                ModelState.AddModelError("", "Mã xác nhận không đúng");
+                return BadRequest(ModelState);
             }
             var result = await _knowledgeBaseApiClient.PostKnowlegdeBase(request);
             if (result)
@@ -105,11 +106,12 @@ namespace KnowledgeSpace.WebPortal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             if (!Captcha.ValidateCaptchaCode(request.CaptchaCode, HttpContext))
             {
-                return BadRequest("Mã xác nhận không đúng");
+                ModelState.AddModelError("", "Mã xác nhận không đúng");
+                return BadRequest(ModelState);
             }
             var result = await _knowledgeBaseApiClient.PutKnowlegdeBase(request.Id.Value, request);
             if (result)

@@ -24,13 +24,13 @@
 
     <form class="row" action="/Account/EditKnowledgeBase" method="post" enctype="multipart/form-data" id="frm_edit_kb">
         <div class="span2">
-        </div>
-        <div class="span6">
-            <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
         </div>
+        <div class="span6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
         <div class="span2">
-            <label asp-for="CategoryId" class="control-label"></label>
+            Danh mục
         </div>
         <div class="span6">
             <select asp-for="CategoryId" required class="required input-xlarge"
@@ -40,7 +40,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="Title" class="control-label"></label>
+            Tiêu đề
         </div>
         <div class="span6">
             <input asp-for="Title" class="required input-xlarge" />
@@ -48,7 +48,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="Description" class="control-label"></label>
+            Mô tả
         </div>
         <div class="span6">
             <textarea asp-for="Description" rows="5" class="span6"></textarea>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="Environment" class="control-label"></label>
+            Môi trường
         </div>
         <div class="span6">
             <textarea asp-for="Environment" id="txt_environment" rows="5" class="required span6"></textarea>
@@ -64,7 +64,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="Problem" class="control-label"></label>
+            Vấn đề
         </div>
         <div class="span6">
             <textarea asp-for="Problem" rows="5" id="txt_problem" class="required span6"></textarea>
@@ -72,7 +72,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="StepToReproduce" class="control-label"></label>
+            Các bước tái hiện
         </div>
         <div class="span6">
             <textarea asp-for="StepToReproduce" id="txt_step_reproduce" rows="5" class="required span6"></textarea>
@@ -80,7 +80,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="ErrorMessage" class="control-label"></label>
+            Thông báo lỗi
         </div>
         <div class="span6">
             <input asp-for="ErrorMessage" class="input-xlarge" />
@@ -88,7 +88,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="Workaround" class="control-label"></label>
+            Sửa nhanh
         </div>
         <div class="span6">
             <textarea asp-for="Workaround" id="txt_workaround" rows="5" class="required span6"></textarea>
@@ -96,7 +96,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="Note" class="control-label"></label>
+            Giải pháp
         </div>
         <div class="span6">
             <textarea asp-for="Note" rows="5" id="txt_note" class="required span6"></textarea>
@@ -104,7 +104,7 @@
         </div>
 
         <div class="span2">
-            <label asp-for="Attachments" class="control-label"></label>
+            Đính kèm
         </div>
         <div class="span6" id="attachment_items">
             <p><input type="file" name="attachments" /></p>
@@ -115,12 +115,12 @@
             <div class="input-group-prepend">
                 <img id="img-captcha" src="~/get-captcha-image" />
             </div>
-            <input type="text" name="captchaCode" maxlength="4" />
+            <input type="text" name="captchaCode" />
             <input type="submit" name="submit" value="Cập nhật" class="btn btn-inverse">
             <img src="/images/loading.gif" id="contact-loader" alt="Đang xử lý...">
         </div>
 
-        <div class="span6 offset2 error-container"></div>
+        <div class="span6 offset2 error-container" id="message-result"></div>
         <div class="span8 offset2" id="message-sent"></div>
     </form>
 </div>
