@@ -220,23 +220,26 @@
      aria-labelledby="reportModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reportModalLabel">Báo xấu</h5>
-            </div>
-            <div class="modal-body">
-                <form id="frm_report">
+            <form id="frm_report">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">Báo xấu</h5>
+                </div>
+                <div class="modal-body">
+
                     <input type="hidden" value="@Model.Detail.Id" name="knowledgeBaseId" />
                     <textarea id="txt_report_content" name="content" class="text-area"></textarea>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <div class="input-group-prepend">
-                    <img id="img-captcha" src="~/get-captcha-image" />
+                    <p id="message-result-report" style="display:none;"></p>
+
                 </div>
-                <input type="text" name="captchaCode" maxlength="4" />
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
-            </div>
+                <div class="modal-footer">
+                    <div class="input-group-prepend">
+                        <img id="img-captcha-report" src="~/get-captcha-image" />
+                    </div>
+                    <input type="text" name="captchaCode" maxlength="4" />
+                    <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

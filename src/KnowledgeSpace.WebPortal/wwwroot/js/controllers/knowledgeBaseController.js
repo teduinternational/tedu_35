@@ -34,7 +34,6 @@
                     .addClass('alert-success')
                     .html('Bình luận thành công')
                     .show();
-
             }).error(function (err) {
                 $('#message-result').html('');
                 if (err.status === 400 && err.responseText) {
@@ -47,7 +46,6 @@
                         .addClass('alert-danger')
                         .show();
                     resetCaptchaImage('img-captcha');
-
                 }
             });
         });
@@ -107,7 +105,6 @@
                             .addClass('alert-danger')
                             .show();
                         resetCaptchaImage('img-captcha-reply-' + commentId);
-
                     }
                 });
             });
@@ -133,6 +130,20 @@
                 .done(function () {
                     $('#reportModal').modal('hide');
                     $('#txt_report_content').val('');
+                })
+                .error(function (err) {
+                    $('#message-result-report').html('');
+                    if (err.status === 400 && err.responseText) {
+                        var errMsgs = JSON.parse(err.responseText);
+                        for (field in errMsgs) {
+                            $('#message-result-report').append(errMsgs[field] + '<br>');
+                        }
+                        $('#message-result-report')
+                            .removeClass('alert-success"')
+                            .addClass('alert-danger')
+                            .show();
+                        resetCaptchaImage('img-captcha-report');
+                    }
                 });
         });
 
@@ -142,6 +153,10 @@
         $('body').on('click', '.img-captcha', function (e) {
             var id = $(this).data('id');
             resetCaptchaImage('img-captcha-reply-' + id);
+        });
+
+        $('body').on('click', '#img-captcha-report', function (e) {
+            resetCaptchaImage('img-captcha-report');
         });
     }
     function resetCaptchaImage(id) {
