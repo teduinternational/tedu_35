@@ -39,13 +39,27 @@
                     url: url,
                     type: 'POST',
                     data: formData,
-                    success: function (data) {
+                    success: function () {
                         window.location.href = '/my-kbs';
                     },
                     enctype: 'multipart/form-data',
                     processData: false,  // Important!
                     contentType: false,
+                    beforeSend: function () {
+                        $('#contact-loader').show();
+                    },
                     cache: false,
+                    error: function (err) {
+                        $('#contact-loader').hide();
+                        $('#message-result').html('');
+                        if (err.status === 400 && err.responseText) {
+                            var errMsgs = JSON.parse(err.responseText);
+                            for (field in errMsgs) {
+                                $('#message-result').append(errMsgs[field] + '<br>');
+                            }
+                            resetCaptchaImage('img-captcha');
+                        }
+                    }
                 });
             }
         });
@@ -73,9 +87,27 @@
                     enctype: 'multipart/form-data',
                     processData: false,  // Important!
                     contentType: false,
+                    beforeSend: function () {
+                        $('#contact-loader').show();
+                    },
                     cache: false,
+                    error: function (err) {
+                        $('#contact-loader').hide();
+                        $('#message-result').html('');
+                        if (err.status === 400 && err.responseText) {
+                            var errMsgs = JSON.parse(err.responseText);
+                            for (field in errMsgs) {
+                                $('#message-result').append(errMsgs[field] + '<br>');
+                            }
+                            resetCaptchaImage('img-captcha');
+                        }
+                    }
                 });
             }
+        });
+
+        $('body').on('click', '#img-captcha', function (e) {
+            resetCaptchaImage('img-captcha');
         });
     }
 
@@ -83,5 +115,10 @@
         for (instance in CKEDITOR.instances) {
             CKEDITOR.instances[instance].updateElement();
         }
+    }
+
+    function resetCaptchaImage(id) {
+        d = new Date();
+        $("#" + id).attr("src", "/get-captcha-image?" + d.getTime());
     }
 };

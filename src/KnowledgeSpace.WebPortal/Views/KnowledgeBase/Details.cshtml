@@ -107,9 +107,13 @@
                         <textarea class="span8" name="content" id="txt_new_comment_content" cols="58" rows="10"></textarea>
                     </div>
 
-                    <p class="allowed-tags">You can use these HTML tags and attributes <small><code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; &lt;strong&gt; </code></small></p>
+                    <p id="message-result" style="display:none;"></p>
 
                     <div>
+                        <div class="input-group-prepend">
+                            <img id="img-captcha" src="/get-captcha-image" />
+                        </div>
+                        <input type="text" name="captchaCode" id="txt_captcha" />
                         <input class="btn" name="submit" type="submit" id="btn_send_comment" value="Gửi bình luận">
                     </div>
                 </form>
@@ -197,7 +201,13 @@
             <div>
                 <textarea class="span8" name="content" id="txt_reply_content_{{commentId}}" cols="58" rows="5"></textarea>
             </div>
-            <div>
+            <p id="message-result-reply-{{commentId}}" style="display:none;"></p>
+
+            <div class="form-actions">
+                <div class="input-group-prepend">
+                    <img id="img-captcha-reply-{{commentId}}" data-id="{{commentId}}" class="img-captcha" alt="Click vào ảnh để đổi" src="/get-captcha-image" />
+                </div>
+                <input type="text" name="captchaCode" id="txt_captcha_reply_{{commentId}}" />
                 <input class="btn" name="submit" type="submit" id="btn_send_reply" value="Trả lời">
             </div>
         </form>
@@ -209,19 +219,25 @@
      aria-labelledby="reportModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reportModalLabel">Báo xấu</h5>
-            </div>
-            <div class="modal-body">
-                <form id="frm_report">
+            <form id="frm_report">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">Báo xấu</h5>
+                </div>
+                <div class="modal-body">
+
                     <input type="hidden" value="@Model.Detail.Id" name="knowledgeBaseId" />
                     <textarea id="txt_report_content" name="content" class="text-area"></textarea>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
-            </div>
+                    <p id="message-result-report" style="display:none;"></p>
+                </div>
+                <div class="modal-footer">
+                    <div class="input-group-prepend">
+                        <img id="img-captcha-report" src="~/get-captcha-image" />
+                    </div>
+                    <input type="text" name="captchaCode" />
+                    <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

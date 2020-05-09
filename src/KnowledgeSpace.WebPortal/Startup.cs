@@ -40,6 +40,12 @@ namespace KnowledgeSpace.WebPortal
         {
             services.AddHttpClient();
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+            });
+
             //IdentityModelEventSource.ShowPII = true; //Add this line
             services.AddAuthentication(options =>
             {
@@ -181,6 +187,8 @@ namespace KnowledgeSpace.WebPortal
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSession();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
