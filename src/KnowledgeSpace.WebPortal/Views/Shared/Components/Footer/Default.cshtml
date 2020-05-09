@@ -19,7 +19,7 @@
                     <ul>
                         @foreach (var item in Model)
                         {
-                            <li><a href="/cat/@item.SeoAlias-@item.Id">@item.Name</a></li>
+                            <li><a href="/cat/@item.SeoAlias-@item.Id" title="@item.Name">@item.Name</a></li>
                         }
                     </ul>
                 </section>
@@ -33,7 +33,6 @@
                             <li>No Tweets loaded !</li>
                         </ul>
                     </div>
-                    
                 </section>
             </div>
 

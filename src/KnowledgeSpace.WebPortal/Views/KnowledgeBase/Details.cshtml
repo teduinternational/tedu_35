@@ -1,7 +1,7 @@
 ﻿@model KnowledgeBaseDetailViewModel
-@using KnowledgeSpace.WebPortal.Extensions
 @{
-    ViewData["Title"] = Model.Detail.Title;
+    ViewData["Title"] = Model.Detail.Title + " - Knowledge Space";
+    ViewData["Description"] = Model.Detail.Description;
     Layout = "_SubLayout";
 }
 @section scripts{
@@ -78,7 +78,7 @@
             <strong>Tags:&nbsp;&nbsp;</strong>
             @foreach (var label in Model.Labels)
             {
-                <a href="/tag/@label.Id" rel="tag">@label.Name</a>
+                <a href="/tag/@label.Id" rel="tag" title="@label.Name">@label.Name</a>
             }
         </span>
     </div>

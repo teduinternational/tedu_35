@@ -29,14 +29,14 @@
     <div id="pagination">
         @if (Model.PageIndex != startIndex)
         {
-            <a href="@urlTemplate.Replace("{0}", "1")" title="1" class="btn">Đầu</a>
-            <a href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())" class="btn">Trước</a>
+            <a href="@urlTemplate.Replace("{0}", "1")" title="Trang 1" class="btn">Đầu</a>
+            <a href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())" title="Trang @((Model.PageIndex-1).ToString())" class="btn">Trước</a>
         }
         @for (var i = startIndex; i <= finishIndex; i++)
         {
             if (i == Model.PageIndex)
             {
-                <a href="#" class="btn active">@i</a>
+                <a href="#" class="btn active" title="Trang @i">@i</a>
             }
             else
             {
@@ -45,7 +45,7 @@
         }
         @if (Model.PageIndex != finishIndex)
         {
-            <a href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())" class="btn">Sau</a>
+            <a href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())" title="Trang @((Model.PageIndex+1).ToString())" class="btn">Sau</a>
             <a href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())" title="@Model.PageCount.ToString()" class="btn">Cuối</a>
         }
     </div>

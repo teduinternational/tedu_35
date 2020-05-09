@@ -1,7 +1,9 @@
 ﻿@model ListByCategoryIdViewModel
 @{
     Layout = "_SubLayout";
-    ViewData["Title"] = Model.Category.Name;
+    string suffixPage = Model.Data.PageIndex > 1 ? " - Trang " + Model.Data.PageIndex : "";
+    ViewData["Title"] = Model.Category.Name + suffixPage;
+    ViewData["Description"] = "Các bài viết trong danh mục " + Model.Category.SeoDescription + suffixPage;
 }
 <!-- start of page content -->
 <div class="span8 main-listing">
