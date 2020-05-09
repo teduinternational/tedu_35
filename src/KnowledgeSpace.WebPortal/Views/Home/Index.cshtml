@@ -21,7 +21,7 @@
                                 <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
                                 <span class="article-meta">
                                     @item.CreateDate.ToString("dd/MM/yyyy") trong
-                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @item.CategoryName">@item.CategoryName</a>
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
                                 </span>
                                 <span class="like-count">@item.NumberOfVotes</span>
                             </li>
@@ -39,7 +39,8 @@
                                 <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
                                 <span class="article-meta">
                                     @item.CreateDate.ToString("dd/MM/yyyy") trong
-                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@item.CategoryName</a>
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId"
+                                       title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
                                 </span>
                                 <span class="like-count">@item.NumberOfVotes</span>
                             </li>

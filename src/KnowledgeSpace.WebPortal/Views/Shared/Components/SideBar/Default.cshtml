@@ -24,7 +24,7 @@
                     <h4><a href="single.html">@item.Title</a></h4>
                     <span class="article-meta">
                         @item.CreateDate.ToString("dd/MM/yyyy") trong
-                        <a href="/kb/@item.SeoAlias-@item.Id" title="Xem bài viết trong danh mục @item.CategoryName">@item.CategoryName</a>
+                        <a href="/kb/@item.SeoAlias-@item.Id" title="Xem bài viết trong danh mục @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
                     </span>
                     <span class="like-count">@item.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
                 </li>
@@ -37,7 +37,7 @@
         <ul>
             @foreach (var item in Model.Categories)
             {
-                <li><a href="/cat/@item.SeoAlias-@item.Id" title="@item.Name">@item.Name</a></li>
+                <li><a href="/cat/@item.SeoAlias-@item.Id" title="@item.Name">@Html.Raw(item.Name)</a></li>
             }
         </ul>
     </section>
@@ -48,8 +48,8 @@
             @foreach (var item in Model.RecentComments)
             {
                 <li class="recentcomments">
-                    <a href="#" rel="external nofollow" class="url" title="@item.OwnerName">@item.OwnerName</a> trong
-                    <a href="/kb/@item.KnowledgeBaseSeoAlias-@item.KnowledgeBaseId" title="@item.KnowledgeBaseTitle">@item.KnowledgeBaseTitle</a>
+                    <a href="#" rel="external nofollow" class="url" title="@item.OwnerName">@Html.Raw(item.OwnerName)</a> trong
+                    <a href="/kb/@item.KnowledgeBaseSeoAlias-@item.KnowledgeBaseId" title="@Html.Raw(item.KnowledgeBaseTitle)">@Html.Raw(item.KnowledgeBaseTitle)</a>
                 </li>
 
             }
