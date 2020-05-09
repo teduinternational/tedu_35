@@ -10,9 +10,12 @@ namespace KnowledgeSpace.ViewModels.Contents
         public CommentCreateRequestValidator()
         {
             RuleFor(x => x.KnowledgeBaseId).GreaterThan(0)
-                .WithMessage("Knowledge base Id is not valid");
+                 .WithMessage("Mã bài đăng không đúng");
 
-            RuleFor(x => x.Content).NotEmpty().WithMessage("Content is required");
+            RuleFor(x => x.Content).NotEmpty().WithMessage("Chưa nhập nội dung");
+
+            RuleFor(x => x.CaptchaCode).NotEmpty()
+              .WithMessage("Nhập mã xác nhận");
         }
     }
 }
