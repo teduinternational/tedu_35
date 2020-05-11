@@ -184,10 +184,10 @@ namespace KnowledgeSpace.BackendServer
                     .StyleSources(s => s.Self())
                     .StyleSources(s => s.UnsafeInline())
                     .FontSources(s => s.Self())
-                    .FormActions(s => s.Self())
+                    //.FormActions(s => s.CustomSources(""))
                     .FrameAncestors(s => s.Self())
                     .ImageSources(s => s.Self())
-                    .ScriptSources(s => s.Self())
+                    .ScriptSources(s => s.UnsafeInline())
                 );
             app.UseErrorWrapping();
             app.UseStaticFiles();

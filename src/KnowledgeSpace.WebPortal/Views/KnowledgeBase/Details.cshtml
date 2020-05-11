@@ -89,6 +89,7 @@
 
         <ol class="commentlist" id="comment_list">
         </ol>
+        <a id="comment-pagination" data-page-index="1" href="#" style="display:none">Xem thêm bình luận</a>
         @if (User.Identity.IsAuthenticated)
         {
             <div id="respond">
@@ -155,6 +156,7 @@
         </article><!-- end of comment -->
     </li>
 </script>
+
 <script id="tmpl_comments" type="x-tmpl-mustache">
     <li class="comment even thread-even depth-1" id="li-comment-2">
         <article id="comment-2">
@@ -213,7 +215,6 @@
         </form>
     </div>
 </script>
-
 <!-- Modal -->
 <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" data-backdrop="static"
      aria-labelledby="reportModalLabel" aria-hidden="true">

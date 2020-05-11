@@ -26,6 +26,6 @@ namespace KnowledgeSpace.ViewModels.Contents
 
         public int? ReplyId { get; set; }
 
-        public List<CommentVm> Children { get; set; } = new List<CommentVm>();
+        public Pagination<CommentVm> Children { get; set; } = new Pagination<CommentVm>();
     }
 }
