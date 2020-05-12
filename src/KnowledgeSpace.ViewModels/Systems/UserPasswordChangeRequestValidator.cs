@@ -27,8 +27,9 @@ namespace KnowledgeSpace.ViewModels.Systems
             });
 
             RuleFor(x => x.NewPassword)
-               .MinimumLength(8).WithMessage(string.Format(Messages.MinLength, "Mật khẩu mới", 8))
-               .Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+               .MinimumLength(8).WithMessage(string.Format(Messages.MinLength, "Mật khẩu mới", 8));
+
+            RuleFor(x => x.NewPassword).Matches(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
                .When(x => x.NewPassword != null)
                .WithMessage("Mật khẩu chưa đủ độ phức tạp");
         }
