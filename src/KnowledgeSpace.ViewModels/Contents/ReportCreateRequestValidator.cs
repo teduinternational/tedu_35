@@ -11,7 +11,10 @@ namespace KnowledgeSpace.ViewModels.Contents
         {
             RuleFor(x => x.Content).NotEmpty().WithMessage("Phải nhập nội dung");
 
-            RuleFor(x => x.KnowledgeBaseId).NotNull().WithMessage("Chưa có mã bài đăng");
+            RuleFor(x => x.KnowledgeBaseId)
+                .NotNull()
+                .WithMessage("Chưa có mã bài đăng")
+                .GreaterThan(0).WithMessage(string.Format(Messages.Required, "Mã bài đăng"));
 
             RuleFor(x => x.CaptchaCode).NotEmpty().WithMessage("Bạn chưa nhập mã xác nhận");
         }
