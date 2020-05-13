@@ -10,7 +10,6 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -63,7 +62,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
             var usersController = new UsersController(_mockUserManager.Object, _mockRoleManager.Object, _context);
             var result = await usersController.PostUser(new UserCreateRequest()
             {
-                UserName = "test"
+                UserName = "test",
+                Dob = "12/12/2020"
             });
 
             Assert.NotNull(result);
@@ -79,7 +79,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
             var usersController = new UsersController(_mockUserManager.Object, _mockRoleManager.Object, _context);
             var result = await usersController.PostUser(new UserCreateRequest()
             {
-                UserName = "test"
+                UserName = "test",
+                Dob = "12/12/2020"
             });
 
             Assert.NotNull(result);
@@ -188,7 +189,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
             var usersController = new UsersController(_mockUserManager.Object, _mockRoleManager.Object, _context);
             var result = await usersController.PutUser("test", new UserCreateRequest()
             {
-                FirstName = "test2"
+                FirstName = "test2",
+                Dob = "12/12/2020"
             });
 
             Assert.NotNull(result);
@@ -210,7 +212,8 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
             var usersController = new UsersController(_mockUserManager.Object, _mockRoleManager.Object, _context);
             var result = await usersController.PutUser("test", new UserCreateRequest()
             {
-                UserName = "test1"
+                UserName = "test1",
+                Dob = "12/12/2020"
             });
 
             Assert.NotNull(result);

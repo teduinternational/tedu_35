@@ -3,19 +3,18 @@ using Xunit;
 
 namespace KnowledgeSpace.ViewModels.UnitTest.Systems
 {
-    public class RoleCreateRequestValidatorTest
+    public class RoleAssignRequestValidatorTest
     {
-        private RoleCreateRequestValidator validator;
-        private RoleCreateRequest request;
+        private RoleAssignRequestValidator validator;
+        private RoleAssignRequest request;
 
-        public RoleCreateRequestValidatorTest()
+        public RoleAssignRequestValidatorTest()
         {
-            request = new RoleCreateRequest()
+            request = new RoleAssignRequest()
             {
-                Id = "admin",
-                Name = "admin"
+                RoleNames = new string[] { "Admin" }
             };
-            validator = new RoleCreateRequestValidator();
+            validator = new RoleAssignRequestValidator();
         }
 
         [Fact]
@@ -26,26 +25,25 @@ namespace KnowledgeSpace.ViewModels.UnitTest.Systems
         }
 
         [Fact]
-        public void Should_Error_Result_When_Request_Miss_RoleId()
+        public void Should_Error_Result_When_Request_Miss_RoleNames()
         {
-            request.Id = string.Empty;
+            request.RoleNames = null;
             var result = validator.Validate(request);
             Assert.False(result.IsValid);
         }
 
         [Fact]
-        public void Should_Error_Result_When_Request_Miss_RoleName()
+        public void Should_Error_Result_When_Request_RoleNames_Is_Empty()
         {
-            request.Name = string.Empty;
+            request.RoleNames = new string[] { };
             var result = validator.Validate(request);
             Assert.False(result.IsValid);
         }
 
         [Fact]
-        public void Should_Error_Result_When_Request_Role_Empty()
+        public void Should_Error_Result_When_Request_RoleNames_Contains_Empty_Item()
         {
-            request.Id = string.Empty;
-            request.Name = string.Empty;
+            request.RoleNames = new string[] { "" };
             var result = validator.Validate(request);
             Assert.False(result.IsValid);
         }
