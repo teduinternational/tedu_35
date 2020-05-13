@@ -184,7 +184,7 @@ namespace KnowledgeSpace.BackendServer.Controllers
             if (user == null)
                 return NotFound();
 
-            var adminUsers = await _userManager.GetUsersInRoleAsync(SystemConstants.Roles.Admin);
+            var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.SystemConstants.Roles.Admin);
             var otherUsers = adminUsers.Where(x => x.Id != id).ToList();
             if (otherUsers.Count == 0)
             {
@@ -275,9 +275,9 @@ namespace KnowledgeSpace.BackendServer.Controllers
             {
                 return BadRequest(new ApiBadRequestResponse("Role names cannot empty"));
             }
-            if (request.RoleNames.Length == 1 && request.RoleNames[0] == SystemConstants.Roles.Admin)
+            if (request.RoleNames.Length == 1 && request.RoleNames[0] == Constants.SystemConstants.Roles.Admin)
             {
-                return BadRequest(new ApiBadRequestResponse($"Cannot remove {SystemConstants.Roles.Admin} role"));
+                return base.BadRequest(new ApiBadRequestResponse($"Cannot remove {Constants.SystemConstants.Roles.Admin} role"));
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)

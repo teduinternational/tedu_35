@@ -32,6 +32,15 @@
     <!--[if lt IE 9]>
     <script src="js/html5.js"></script>
     <![endif]-->
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+      var OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: "6d8ca07d-4c95-48d0-86a6-16c9d3305c39",
+        });
+      });
+    </script>
 </head>
 
 <body>
