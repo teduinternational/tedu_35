@@ -1,7 +1,4 @@
 ﻿using KnowledgeSpace.ViewModels.Systems;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace KnowledgeSpace.ViewModels.UnitTest.Systems

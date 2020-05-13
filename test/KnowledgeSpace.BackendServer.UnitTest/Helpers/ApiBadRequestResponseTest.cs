@@ -1,10 +1,7 @@
 ﻿using KnowledgeSpace.BackendServer.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace KnowledgeSpace.BackendServer.UnitTest.Helpers

@@ -1,8 +1,5 @@
 ﻿using KnowledgeSpace.BackendServer.Authorization;
 using KnowledgeSpace.BackendServer.Constants;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace KnowledgeSpace.BackendServer.UnitTest.Authorization

@@ -6,10 +6,8 @@ using KnowledgeSpace.ViewModels.Systems;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -22,7 +20,7 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
 
         public FunctionsControllerTest()
         {
-            _context = new InMemoryDbContextFactory().GetApplicationDbContext();
+            _context = new InMemoryDbContextFactory().GetApplicationDbContext("FunctionsControllerTest");
             _mockLogger = new Mock<ILogger<FunctionsController>>();
         }
 
