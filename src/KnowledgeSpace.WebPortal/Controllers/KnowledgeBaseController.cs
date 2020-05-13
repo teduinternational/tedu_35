@@ -93,9 +93,15 @@ namespace KnowledgeSpace.WebPortal.Controllers
 
         #region AJAX Methods
 
-        public async Task<IActionResult> GetCommentByKnowledgeBaseId(int knowledgeBaseId)
+        public async Task<IActionResult> GetCommentsByKnowledgeBaseId(int knowledgeBaseId, int pageIndex = 1, int pageSize = 2)
         {
-            var data = await _knowledgeBaseApiClient.GetCommentsTree(knowledgeBaseId);
+            var data = await _knowledgeBaseApiClient.GetCommentsTree(knowledgeBaseId, pageIndex, pageSize);
+            return Ok(data);
+        }
+
+        public async Task<IActionResult> GetRepliedCommentsByKnowledgeBaseId(int knowledgeBaseId, int rootCommentId, int pageIndex = 1, int pageSize = 2)
+        {
+            var data = await _knowledgeBaseApiClient.GetRepliedComments(knowledgeBaseId, rootCommentId, pageIndex, pageSize);
             return Ok(data);
         }
 
