@@ -48,6 +48,7 @@ namespace KnowledgeSpace.BackendServer
 
                     {
                         webBuilder.UseStartup<Startup>();
+                        webBuilder.UseKestrel(c => c.AddServerHeader = false);
                     });
     }
 }
