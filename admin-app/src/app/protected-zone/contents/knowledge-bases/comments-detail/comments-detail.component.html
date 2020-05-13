@@ -4,7 +4,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<form class="form-horizontal form-label-left" novalidate [formGroup]="entityForm">
+<form class="form-horizontal form-label-left" novalidate *ngIf="comment">
     <div class="modal-body div-scroll">
         <p-panel #pnl header="Thông tin" [toggleable]="true" [collapsed]="false" styleClass="m-b-10">
             <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
@@ -22,7 +22,7 @@
                         <span class="required">Ngày tạo:</span>
                     </div>
                     <div class="ui-grid-col-6">
-                        <span>{{comment.createDate}}</span>
+                        <span>{{comment.createDate | date:'dd/MM/yyyy hh:mm'}}</span>
                     </div>
                 </div>
                 <div class="ui-grid-row">
@@ -30,7 +30,7 @@
                         <span class="required">Người tạo:</span>
                     </div>
                     <div class="ui-grid-col-6">
-                        <span>{{comment.ownerUserName}}</span>
+                        <span>{{comment.ownerName}}</span>
                     </div>
                 </div>
             </div>

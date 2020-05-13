@@ -1,0 +1,46 @@
+﻿@model KnowledgeSpace.ViewModels.Pagination<KnowledgeSpace.ViewModels.Contents.KnowledgeBaseQuickVm>
+@{
+    ViewData["Title"] = "Bài viết của bạn";
+    Layout = "~/Views/Shared/_SubLayout.cshtml";
+}
+
+<div class="span8 page-content">
+
+    <ul class="breadcrumb">
+        <li><a href="/">Trang chủ</a><span class="divider">/</span></li>
+        <li class="active">Bài viết của bạn</li>
+    </ul>
+    <article class=" type-post format-standard hentry clearfix">
+        <h1 class="post-title"><a href="#">Bài đăng của bạn</a></h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tên bài</th>
+                    <th>Ngày tạo</th>
+                    <th>Danh mục</th>
+                    <th>Lượt xem</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td width="40%">@item.Title</td>
+                        <td>@item.CreateDate.ToString("dd/MM/yyyy hh:mm")</td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.ViewCount.GetValueOrDefault(0).ToString("N0")</td>
+                        <td><a href="/edit-kb/@item.Id">Chỉnh sửa</a></td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        @(await Component.InvokeAsync("Pager", Model))
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </article>
+</div>

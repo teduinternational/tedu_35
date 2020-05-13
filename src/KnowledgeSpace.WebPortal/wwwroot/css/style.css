@@ -10,3 +10,44 @@
 	Tags: custom-background, threaded-comments, translation-ready, white, one-column, two-columns, three-columns, four-columns, custom-menu, theme-options, flexible-width, full-width-template, featured-images, right-sidebar
 
 	----------------------------------------------------------------------------------------------------------------*/
+.body-section {
+    padding: 10px;
+}
+
+    .body-section a.new-kb {
+        width: 90%;
+        height: 32px;
+        font-size: 20px;
+        padding: 14px 10px 10px 10px;
+    }
+
+.field-validation-error {
+    color: red;
+}
+
+.cke {
+    margin-bottom: 10px !important;
+}
+
+.error {
+    color: red;
+}
+
+.validation-summary-errors {
+    color: red;
+}
+
+.text-area {
+    width: 97%;
+}
+
+input[name='captchaCode'] {
+    vertical-align: middle;
+    margin-top: 10px;
+    height: 23px;
+    width: 90px;
+}
+
+.input-group-prepend {
+    display: inline;
+}

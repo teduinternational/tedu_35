@@ -7,6 +7,7 @@ using KnowledgeSpace.BackendServer.Data.Entities;
 using KnowledgeSpace.BackendServer.Extensions;
 using KnowledgeSpace.BackendServer.IdentityServer;
 using KnowledgeSpace.BackendServer.Services;
+using KnowledgeSpace.ViewModels;
 using KnowledgeSpace.ViewModels.Systems;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -38,7 +39,7 @@ namespace KnowledgeSpace.BackendServer
         {
             //var secret = new IdentityServer4.Models.Secret("secret".Sha256());
             //1. Setup entity framework
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContextPool<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             //2. Setup idetntity
@@ -126,6 +127,9 @@ namespace KnowledgeSpace.BackendServer
             services.AddTransient<ISequenceService, SequenceService>();
 
             services.AddTransient<IStorageService, FileStorageService>();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddTransient<IViewRenderService, ViewRenderService>();
+            services.AddTransient<ICacheService, DistributedCacheService>();
 
             services.AddSwaggerGen(c =>
             {
@@ -153,6 +157,13 @@ namespace KnowledgeSpace.BackendServer
                         new List<string>{ "api.knowledgespace" }
                     }
                 });
+            });
+
+            services.AddDistributedSqlServerCache(o =>
+            {
+                o.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
+                o.SchemaName = "dbo";
+                o.TableName = "CacheTable";
             });
         }
 

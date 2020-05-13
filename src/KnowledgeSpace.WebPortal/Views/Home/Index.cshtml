@@ -1,6 +1,7 @@
 ﻿@model HomeViewModel
 @{
-    ViewData["Title"] = "Trang chủ";
+    ViewData["Title"] = "Trang chủ Knowledge Space";
+    ViewData["Description"] = "Trang chủ của hệ thống lưu trữ kiến thức Knowledge Space";
 }
 <div class="container">
     <div class="row">
@@ -20,7 +21,7 @@
                                 <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
                                 <span class="article-meta">
                                     @item.CreateDate.ToString("dd/MM/yyyy") trong
-                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @item.CategoryName">@item.CategoryName</a>
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
                                 </span>
                                 <span class="like-count">@item.NumberOfVotes</span>
                             </li>
@@ -38,7 +39,8 @@
                                 <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
                                 <span class="article-meta">
                                     @item.CreateDate.ToString("dd/MM/yyyy") trong
-                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@item.CategoryName</a>
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId"
+                                       title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
                                 </span>
                                 <span class="like-count">@item.NumberOfVotes</span>
                             </li>
@@ -50,7 +52,14 @@
         <!-- end of page content -->
         <!-- start of sidebar -->
         <aside class="span4 page-sidebar">
-
+            @if (User.Identity.IsAuthenticated)
+            {
+                <section class="widget">
+                    <div class="body-section">
+                        <a class="btn btn-success new-kb" href="/new-kb" title="Đăng bài mới">Đăng bài mới</a>
+                    </div>
+                </section>
+            }
             <section class="widget">
                 <div class="support-widget">
                     <h3 class="title">Hỗ trợ</h3>
@@ -62,10 +71,10 @@
                 <div class="quick-links-widget">
                     <h3 class="title">Liên kết</h3>
                     <ul id="menu-quick-links" class="menu clearfix">
-                        <li><a href="https://tedu.com.vn">TEDU</a></li>
-                        <li><a href="http://forum.tedu.com.vn">Diễn đàn</a></li>
-                        <li><a href="http://youtube.com/">Youtube Channel</a></li>
-                        <li><a href="https://facebook.com/teduchannel">Fanpage</a></li>
+                        <li><a href="https://tedu.com.vn" title="Trang chủ TEDU">TEDU</a></li>
+                        <li><a href="http://forum.tedu.com.vn" title="Diễn đàn TEDU">Diễn đàn</a></li>
+                        <li><a href="http://youtube.com/" title="Kênh Youtube TEDU">Youtube Channel</a></li>
+                        <li><a href="https://facebook.com/teduchannel" title="Facebook TEDU">Fanpage</a></li>
                     </ul>
                 </div>
             </section>
@@ -75,7 +84,7 @@
                 <div class="tagcloud">
                     @foreach (var item in Model.PopularLabels)
                     {
-                        <a href="tag/@item.Id" class="btn btn-mini">@Html.Raw(item.Name)</a>
+                        <a href="tag/@item.Id" class="btn btn-mini" title="@Html.Raw(item.Name)">@Html.Raw(item.Name)</a>
                     }
                 </div>
             </section>

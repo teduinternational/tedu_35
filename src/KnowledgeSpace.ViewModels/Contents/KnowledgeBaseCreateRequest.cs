@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace KnowledgeSpace.ViewModels.Contents
 {
     public class KnowledgeBaseCreateRequest
     {
+        public int? Id { get; set; }
+
         public int CategoryId { get; set; }
 
         public string Title { get; set; }
@@ -30,5 +33,7 @@ namespace KnowledgeSpace.ViewModels.Contents
         public string[] Labels { get; set; }
 
         public List<IFormFile> Attachments { get; set; }
+
+        public string CaptchaCode { get; set; }
     }
 }

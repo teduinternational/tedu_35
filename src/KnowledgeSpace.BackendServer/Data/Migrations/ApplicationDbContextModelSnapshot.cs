@@ -191,6 +191,9 @@ namespace KnowledgeSpace.BackendServer.Data.Migrations
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<int?>("ReplyId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Comments");

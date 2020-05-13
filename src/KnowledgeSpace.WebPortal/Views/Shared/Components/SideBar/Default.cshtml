@@ -1,0 +1,58 @@
+﻿@model SideBarViewModel
+<aside class="span4 page-sidebar">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <section class="widget">
+            <div class="body-section">
+                <a class="btn btn-success new-kb" href="/new-kb" title="Đăng bài mới">Đăng bài mới</a>
+            </div>
+        </section>
+    }
+    <section class="widget">
+        <div class="support-widget">
+            <h3 class="title">Hỗ trợ</h3>
+            <p class="intro">Bạn cần hỗ trợ, vui lòng liên hệ quản trị.</p>
+        </div>
+    </section>
+
+    <section class="widget">
+        <h3 class="title">Bài xem nhiều</h3>
+        <ul class="articles">
+            @foreach (var item in Model.PopularKnowledgeBases)
+            {
+                <li class="article-entry standard">
+                    <h4><a href="single.html">@item.Title</a></h4>
+                    <span class="article-meta">
+                        @item.CreateDate.ToString("dd/MM/yyyy") trong
+                        <a href="/kb/@item.SeoAlias-@item.Id" title="Xem bài viết trong danh mục @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
+                    </span>
+                    <span class="like-count">@item.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+                </li>
+            }
+        </ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="title">Danh mục</h3>
+        <ul>
+            @foreach (var item in Model.Categories)
+            {
+                <li><a href="/cat/@item.SeoAlias-@item.Id" title="@item.Name">@Html.Raw(item.Name)</a></li>
+            }
+        </ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="title">Bình luận mới</h3>
+        <ul id="recentcomments">
+            @foreach (var item in Model.RecentComments)
+            {
+                <li class="recentcomments">
+                    <a href="#" rel="external nofollow" class="url" title="@item.OwnerName">@Html.Raw(item.OwnerName)</a> trong
+                    <a href="/kb/@item.KnowledgeBaseSeoAlias-@item.KnowledgeBaseId" title="@Html.Raw(item.KnowledgeBaseTitle)">@Html.Raw(item.KnowledgeBaseTitle)</a>
+                </li>
+
+            }
+        </ul>
+    </section>
+</aside>

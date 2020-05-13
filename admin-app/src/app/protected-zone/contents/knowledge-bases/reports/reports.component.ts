@@ -79,7 +79,8 @@ export class ReportsComponent extends BaseComponent implements OnInit, OnDestroy
       return;
     }
     const initialState = {
-      entityId: this.selectedItems[0].id
+      reportId: this.selectedItems[0].id,
+      knowledgeBaseId: this.selectedItems[0].knowledgeBaseId
     };
     this.bsModalRef = this.modalService.show(ReportsDetailComponent,
       {
@@ -90,13 +91,14 @@ export class ReportsComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   deleteItems() {
-    const id = this.selectedItems[0].id;
+    const reportId = this.selectedItems[0].id;
+    const knowledgeBaseId = this.selectedItems[0].knowledgeBaseId;
     this.notificationService.showConfirmation(MessageConstants.CONFIRM_DELETE_MSG,
-      () => this.deleteItemsConfirm(id));
+      () => this.deleteItemsConfirm(knowledgeBaseId, reportId));
   }
-  deleteItemsConfirm(id) {
+  deleteItemsConfirm(knowledgeBaseId, reportId) {
     this.blockedPanel = true;
-    this.subscription.add(this.reportsService.delete(this.entityId, id).subscribe(() => {
+    this.subscription.add(this.reportsService.delete(knowledgeBaseId, reportId).subscribe(() => {
       this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
       this.loadData();
       this.selectedItems = [];

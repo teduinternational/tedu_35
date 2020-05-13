@@ -45,8 +45,9 @@
                     </td>
                     <td>{{row.id}}</td>
                     <td>{{row.content}}</td>
-                    <td>{{row.createDate}}</td>
+                    <td>{{row.createDate | date:'dd/MM/yyyy hh:mm'}}</td>
                     <td>{{row.ownerName}}</td>
+
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary">
