@@ -19,6 +19,7 @@ export class ReportsComponent extends BaseComponent implements OnInit, OnDestroy
   public bsModalRef: BsModalRef;
   public blockedPanel = false;
   public entityId: number;
+  public screenTitle: string;
   /**
    * Paging
    */

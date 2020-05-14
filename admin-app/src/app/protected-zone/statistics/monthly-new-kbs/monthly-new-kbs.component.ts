@@ -10,6 +10,8 @@ import { BaseComponent } from '@app/protected-zone/base/base.component';
 export class MonthlyNewKbsComponent extends BaseComponent implements OnInit {
 // Default
 public blockedPanel = false;
+public screenTitle: string;
+
 // Customer Receivable
 public items: any[];
 public year: number = new Date().getFullYear();

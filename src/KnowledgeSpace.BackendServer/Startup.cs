@@ -143,7 +143,7 @@ namespace KnowledgeSpace.BackendServer
                     {
                         Implicit = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri("https://localhost:5000/connect/authorize"),
+                            AuthorizationUrl = new Uri(Configuration["AuthorityUrl"] + "/connect/authorize"),
                             Scopes = new Dictionary<string, string> { { "api.knowledgespace", "KnowledgeSpace API" } }
                         },
                     },
@@ -175,14 +175,17 @@ namespace KnowledgeSpace.BackendServer
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
 
+                app.UseXContentTypeOptions();
+                app.UseReferrerPolicy(opts => opts.NoReferrer());
+                app.UseXXssProtection(options => options.EnabledWithBlockMode());
+                app.UseXfo(options => options.Deny());
+            }
             app.UseErrorWrapping();
 
-            app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
-            app.UseXContentTypeOptions();
-            app.UseReferrerPolicy(opts => opts.NoReferrer());
-            app.UseXXssProtection(options => options.EnabledWithBlockMode());
-            app.UseXfo(options => options.Deny());
             //app.UseCsp(opts => opts
             //        .BlockAllMixedContent()
             //        .StyleSources(s => s.Self())

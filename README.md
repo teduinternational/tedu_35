@@ -56,3 +56,13 @@ For each KB, user can vote it and comment to below KB.
            ONLINE = OFF, ALLOW_ROW_LOCKS = ON, 
            ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ```
+# Deployment
+1. Publish source code to package (BackendServer, WebPortal, Admin App)
+2. Install server environment (SQL Server, .NET Core Runtime, ASP.NET Core Runtime)
+3. Copy artifacts to Server
+4. Install IIS (Internet information service)
+5. Create IIS Web App (Configure Pool IIS No managed)
+6. Config connection string appsettings.Production.json
+
+# Reference
+1. https://jakeydocs.readthedocs.io/en/latest/client-side/using-gulp.html

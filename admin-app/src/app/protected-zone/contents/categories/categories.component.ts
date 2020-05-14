@@ -15,6 +15,7 @@ import { BaseComponent } from '@app/protected-zone/base/base.component';
 export class CategoriesComponent extends BaseComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
+  public screenTitle: string;
   // Default
   public bsModalRef: BsModalRef;
   public blockedPanel = false;

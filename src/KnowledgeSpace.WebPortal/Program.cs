@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -20,8 +21,9 @@ namespace KnowledgeSpace.WebPortal
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseKestrel(c => c.AddServerHeader = false);
+                    webBuilder.UseIISIntegration();
                 });
     }
 }
