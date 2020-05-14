@@ -63,6 +63,30 @@ For each KB, user can vote it and comment to below KB.
 4. Install IIS (Internet information service)
 5. Create IIS Web App (Configure Pool IIS No managed)
 6. Config connection string appsettings.Production.json
+7. Install Certificate for IIS (friendly name)
+8. Setup security IIS_IUSR permission for web app, enable 32 bit in pool, enable stdout log in webconfig.
+9. Instal rewrite URL Module for IIS (https://www.iis.net/downloads/microsoft/url-rewrite)
+10. Create webconfig
+```xml
+
+<configuration>
+      <system.webServer>
+        <rewrite>
+          <rules>
+            <rule name="AngularJS Routes" stopProcessing="true">
+              <match url=".*" />
+              <conditions logicalGrouping="MatchAll">
+                <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />   
+              </conditions>
+              <action type="Rewrite" url="/" />
+            </rule>
+          </rules>
+        </rewrite>
+      </system.webServer>
+</configuration>
+```
+11. Check url in setting
 
 # Reference
 1. https://jakeydocs.readthedocs.io/en/latest/client-side/using-gulp.html
