@@ -38,8 +38,18 @@ namespace KnowledgeSpace.WebPortal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient();
+            services.AddHttpClient("BackendApi").ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+                var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+                //if (environment == Environments.Development)
+                //{
+                //    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                //}
+                handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                return handler;
+            });
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);

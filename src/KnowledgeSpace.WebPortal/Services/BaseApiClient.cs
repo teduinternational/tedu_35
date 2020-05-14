@@ -29,7 +29,7 @@ namespace KnowledgeSpace.WebPortal.Services
 
         public async Task<List<T>> GetListAsync<T>(string url, bool requiredLogin = false)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("BackendApi");
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
             if (requiredLogin)
             {
@@ -44,7 +44,7 @@ namespace KnowledgeSpace.WebPortal.Services
 
         public async Task<T> GetAsync<T>(string url, bool requiredLogin = false)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("BackendApi");
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
             if (requiredLogin)
             {
@@ -59,7 +59,7 @@ namespace KnowledgeSpace.WebPortal.Services
 
         public async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("BackendApi");
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
             StringContent httpContent = null;
             if (requestContent != null)
@@ -85,7 +85,7 @@ namespace KnowledgeSpace.WebPortal.Services
 
         public async Task<bool> PutAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("BackendApi");
             client.BaseAddress = new Uri(_configuration["BackendApiUrl"]);
             HttpContent httpContent = null;
             if (requestContent != null)
