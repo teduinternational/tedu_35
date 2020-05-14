@@ -25,6 +25,8 @@ export class KnowledgeBasesComponent extends BaseComponent implements OnInit, On
   public pageDisplay = 10;
   public totalRecords: number;
   public keyword = '';
+
+  public screenTitle: string;
   // Role
   public items: any[];
   public selectedItems = [];

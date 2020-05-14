@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-base',
@@ -7,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BaseComponent implements OnInit {
   protected screenTitle = '';
-  constructor(private functionCode: string) {
+  private functionCode: string;
+  constructor(@Inject(String) functionCode: string) {
+    this.functionCode = functionCode;
   }
 
   ngOnInit(): void {

@@ -11,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { BlockUIModule } from 'primeng/blockui';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -20,6 +21,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     CommonModule,
     StatisticsRoutingModule,
     PanelModule,
+    FormsModule,
     ButtonModule,
     TableModule,
     BlockUIModule,

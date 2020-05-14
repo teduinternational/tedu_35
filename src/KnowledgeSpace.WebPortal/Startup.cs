@@ -38,8 +38,18 @@ namespace KnowledgeSpace.WebPortal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient();
+            services.AddHttpClient("BackendApi").ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+                var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+                //if (environment == Environments.Development)
+                //{
+                //    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                //}
+                handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                return handler;
+            });
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -185,17 +195,16 @@ namespace KnowledgeSpace.WebPortal
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
+                app.UseXContentTypeOptions();
+                app.UseReferrerPolicy(opts => opts.NoReferrer());
+                app.UseXXssProtection(options => options.EnabledWithBlockMode());
+                app.UseXfo(options => options.Deny());
             }
             app.UseSession();
 
             app.UseHttpsRedirection();
 
-            app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains().Preload());
-            app.UseXContentTypeOptions();
-            app.UseReferrerPolicy(opts => opts.NoReferrer());
-            app.UseXXssProtection(options => options.EnabledWithBlockMode());
-            app.UseXfo(options => options.Deny());
             //app.UseCsp(opts => opts
             //        .BlockAllMixedContent()
             //        .StyleSources(s => s.Self())

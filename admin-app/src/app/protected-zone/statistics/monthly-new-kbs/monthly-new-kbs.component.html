@@ -4,7 +4,7 @@
     <p-panel #pnl [style]="{'margin-bottom':'10px'}">
         <p-header>
             <div class="ui-g-6">
-                <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="year" type="number">
+                <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="year" type="number" />
             </div>
             <div class="ui-g-6">
                 <button pButton type="button" label="Tải báo cáo" icon="fa fa-plus" (click)="loadData()"></button>
