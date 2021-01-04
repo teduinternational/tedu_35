@@ -90,3 +90,6 @@ For each KB, user can vote it and comment to below KB.
 
 # Reference
 1. https://jakeydocs.readthedocs.io/en/latest/client-side/using-gulp.html
+
+# Fix issue
+- The Angular Compiler requires TypeScript >=3.6.4 and <3.8.0 but 3.8.2 was found instead --> Open admin-app and run command prompt: npm install typescript@3.7.5
