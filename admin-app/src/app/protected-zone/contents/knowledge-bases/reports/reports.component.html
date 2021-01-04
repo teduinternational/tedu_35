@@ -1,0 +1,67 @@
+<p>{{screenTitle}}</p>
+<div class="animated fadeIn">
+    <p-panel #pnl>
+        <p-header>
+            <div class="ui-g-6">
+                <button appPermission appFunction="CONTENT_COMMENT" appAction="VIEW" pButton type="button" label="Chi tiết"
+                    icon="fa fa-eye" (click)="showDetailModel()"></button>
+                <button appPermission appFunction="CONTENT_COMMENT" appAction="DELETE" pButton type="button" label="Xóa"
+                    icon="fa fa-trash" class="ui-button-danger" *ngIf="selectedItems.length > 0"
+                    (click)="deleteItems()"></button>
+            </div>
+            <div class="ui-g-6">
+                <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="keyword"
+                    placeholder="Nhập từ khóa..." type="text">
+            </div>
+        </p-header>
+
+        <p-table #dt [value]="items" selectionMode="multiple" [(selection)]="selectedItems" [metaKeySelection]="true"
+            [responsive]="true" [scrollable]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 35px">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th [pSortableColumn]="'id'">Mã
+                        <p-sortIcon [field]="'id'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'content'">Nội dung
+                        <p-sortIcon [field]="'content'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'createDate'">Ngày tạo
+                        <p-sortIcon [field]="'createDate'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'reportUserName'">Người tạo
+                        <p-sortIcon [field]="'reportUserName'"></p-sortIcon>
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr [pSelectableRow]="row">
+                    <td style="width: 35px;">
+                        <span class="ui-column-title">Lựa chọn</span>
+                        <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                    </td>
+                    <td>{{row.id}}</td>
+                    <td>{{row.content}}</td>
+                    <td>{{row.createDate}}</td>
+                    <td>{{row.reportUserName}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div style="text-align: left">
+                    Tổng số bản ghi: {{totalRecords | number}}
+                </div>
+            </ng-template>
+        </p-table>
+        <p-footer>
+            <p-paginator [rows]="pageSize" [totalRecords]="totalRecords" (onPageChange)="pageChanged($event)"
+                [rowsPerPageOptions]="[10,20,50,100]"></p-paginator>
+            <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+                <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+                    strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+            </p-blockUI>
+        </p-footer>
+    </p-panel>
+</div>

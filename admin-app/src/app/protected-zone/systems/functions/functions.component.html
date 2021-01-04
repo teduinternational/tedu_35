@@ -1,0 +1,95 @@
+<div class="animated fadeIn">
+    <p-panel #pnl [style]="{'margin-bottom':'10px'}">
+      <p-header>
+        <div class="ui-g-4">
+          <button appPermission appFunction="SYSTEM_FUNCTION" appAction="CREATE" pButton type="button" label="Thêm"
+            icon="fa fa-plus" (click)="showAddModal()"></button>
+          <button appPermission appFunction="SYSTEM_FUNCTION" appAction="DELETE" pButton type="button" label="Xóa"
+            icon="fa fa-trash" class="ui-button-danger" *ngIf="selectedItems.length > 0" (click)="deleteItems()"></button>
+          <button appPermission appFunction="SYSTEM_FUNCTION" appAction="UPDATE" pButton type="button" label="Sửa"
+            icon="fa fa-edit" class="ui-button-warning" *ngIf="selectedItems.length== 1"
+            (click)="showEditModal()"></button>
+        </div>
+        <div class="ui-g-4">
+          <p-checkbox label="Hiển thị hành động" [(ngModel)]="showCommandGrid" (click)="togglePanel()" binary="true">
+          </p-checkbox>
+        </div>
+      
+      </p-header>
+      <p-treeTable *ngIf="items" [value]="items" selectionMode="multiple" [(selection)]="selectedItems"
+        [metaKeySelection]="true" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnSelect($event)"
+        [scrollable]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 10%;">
+              <p-treeTableHeaderCheckbox></p-treeTableHeaderCheckbox>
+            </th>
+            <th>Tên</th>
+            <th class="pgrid-hidden-xs">Mã</th>
+            <th>Thứ tự</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+          <tr [ttSelectableRow]="rowNode">
+            <td style="width: 10%;">
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
+            </td>
+            <td>
+              {{rowData.name}}
+            </td>
+            <td class="pgrid-hidden-xs">
+              {{rowData.id}}
+            </td>
+            <td class="pgrid-hidden-sm">
+              {{rowData.sortOrder}}
+            </td>
+  
+          </tr>
+        </ng-template>
+      </p-treeTable>
+      <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+        <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+          strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+      </p-blockUI>
+    </p-panel>
+  
+    <p-panel #pnlCommand *ngIf="showCommandGrid">
+      <p-header>
+        <div class="pcol-12">
+          <button pButton appPermission appFunction="SYSTEM_FUNCTION" appAction="UPDATE" type="button" label="Thêm hành động" icon="fa fa-plus" *ngIf="selectedItems.length == 1"
+            (click)="addCommandsToFunction()"></button>
+          <button pButton type="button" appFunction="SYSTEM_FUNCTION" appAction="UPDATE" label="Xóa hành động" icon="fa fa-trash" class="ui-button-danger"
+            *ngIf="selectedCommandItems.length > 0" (click)="removeCommands()"></button>
+        </div>
+      </p-header>
+      <p-table #dt [value]="commands" selectionMode="multiple" [metaKeySelection]="true"
+        [(selection)]="selectionCommandItems" [responsive]="true" [scrollable]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 35px">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Mã hành động
+            </th>
+            <th>Tên hành động
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr [pSelectableRow]="row">
+            <td style="width: 35px">
+              <span class="ui-column-title">Lựa chọn</span>
+              <p-tableCheckbox [value]="row"></p-tableCheckbox>
+            </td>
+            <td>{{row.id}}</td>
+            <td>{{row.name}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-blockUI [target]="pnlCommand" [blocked]="blockedPanelAction">
+        <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+          strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+      </p-blockUI>
+    </p-panel>
+  </div>

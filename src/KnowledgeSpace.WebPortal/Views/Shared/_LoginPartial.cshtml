@@ -1,0 +1,10 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    <li><a href="/my-kbs">Bài đăng của tôi</a></li>
+    <li><a asp-controller="Account" asp-action="MyProfile" title="Thông tin cá nhân">@User.Identity.Name</a></li>
+    <li><a asp-controller="Account" asp-action="SignOut" title="Thoát">Thoát</a></li>
+}
+else
+{
+    <li><a asp-controller="Account" asp-action="SignIn" title="Đăng nhập">Đăng nhập</a></li>
+}

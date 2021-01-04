@@ -1,0 +1,34 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
+    <div class="list-group">
+        <div class="nested-menu" *ngFor="let item of functions">
+            <a class="list-group-item" (click)="addExpandClass(item.id)"
+                *ngIf="item.children.length > 0">
+                <i class="fa {{item.icon}}"></i>&nbsp;
+                <span>{{ item.name }}</span>
+            </a>
+            <a [routerLinkActive]="['router-link-active']" routerLink="{{item.url}}"
+                *ngIf="item.children.length == 0" class="list-group-item">
+                <i class="fa {{item.icon}}"></i>&nbsp;
+                <span>{{ item.name }}</span>
+            </a>
+            <li *ngIf="item.children.length > 0" class="nested" [class.expand]="showMenu === item.id">
+                <ul class="submenu">
+                    <li *ngFor="let subItem of item.children">
+                        <a href="javascript:void(0)" routerLink="{{subItem.url}}"
+                            [routerLinkActive]="['router-link-active']">
+                            <i class="fa {{subItem.icon}}"></i>&nbsp;
+                            <span>{{ subItem.name}}</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+        </div>
+
+
+    </div>
+    <div class="toggle-button" [ngClass]="{collapsed: collapsed}" (click)="toggleCollapsed()">
+        <i class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></i>&nbsp;
+        <span>{{ 'Collapse Sidebar' | translate }}</span>
+    </div>
+</nav>

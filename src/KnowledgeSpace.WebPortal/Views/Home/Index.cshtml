@@ -1,0 +1,94 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Trang chủ Knowledge Space";
+    ViewData["Description"] = "Trang chủ của hệ thống lưu trữ kiến thức Knowledge Space";
+}
+<div class="container">
+    <div class="row">
+
+        <!-- start of page content -->
+        <div class="span8 page-content">
+
+            <!-- Basic Home Page Template -->
+            <div class="row separator">
+                <section class="span4 articles-list">
+                    <h3>Bài bài viết xem nhiều</h3>
+                    <ul class="articles">
+                        @foreach (var item in Model.PopularKnowledgeBases)
+                        {
+                            var url = "/kb/" + item.SeoAlias + "-" + item.Id + "/";
+                            <li class="article-entry standard">
+                                <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
+                                <span class="article-meta">
+                                    @item.CreateDate.ToString("dd/MM/yyyy") trong
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId" title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
+                                </span>
+                                <span class="like-count">@item.NumberOfVotes</span>
+                            </li>
+                        }
+                    </ul>
+                </section>
+
+                <section class="span4 articles-list">
+                    <h3>Bài đăng mới nhất</h3>
+                    <ul class="articles">
+                        @foreach (var item in Model.LatestKnowledgeBases)
+                        {
+                            var url = "/kb/" + item.SeoAlias + "-" + item.Id + "/";
+                            <li class="article-entry standard">
+                                <h4><a href="@url">@Html.Raw(item.Title)</a></h4>
+                                <span class="article-meta">
+                                    @item.CreateDate.ToString("dd/MM/yyyy") trong
+                                    <a href="/cat/@item.CategoryAlias-@item.CategoryId"
+                                       title="Xem tất cả bài đăng trong @Html.Raw(item.CategoryName)">@Html.Raw(item.CategoryName)</a>
+                                </span>
+                                <span class="like-count">@item.NumberOfVotes</span>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            </div>
+        </div>
+        <!-- end of page content -->
+        <!-- start of sidebar -->
+        <aside class="span4 page-sidebar">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <section class="widget">
+                    <div class="body-section">
+                        <a class="btn btn-success new-kb" href="/new-kb" title="Đăng bài mới">Đăng bài mới</a>
+                    </div>
+                </section>
+            }
+            <section class="widget">
+                <div class="support-widget">
+                    <h3 class="title">Hỗ trợ</h3>
+                    <p class="intro">Hãy liên hệ với quản trị để được giải đáp thắc mắc.</p>
+                </div>
+            </section>
+
+            <section class="widget">
+                <div class="quick-links-widget">
+                    <h3 class="title">Liên kết</h3>
+                    <ul id="menu-quick-links" class="menu clearfix">
+                        <li><a href="https://tedu.com.vn" title="Trang chủ TEDU">TEDU</a></li>
+                        <li><a href="http://forum.tedu.com.vn" title="Diễn đàn TEDU">Diễn đàn</a></li>
+                        <li><a href="http://youtube.com/" title="Kênh Youtube TEDU">Youtube Channel</a></li>
+                        <li><a href="https://facebook.com/teduchannel" title="Facebook TEDU">Fanpage</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="title">Tags</h3>
+                <div class="tagcloud">
+                    @foreach (var item in Model.PopularLabels)
+                    {
+                        <a href="tag/@item.Id" class="btn btn-mini" title="@Html.Raw(item.Name)">@Html.Raw(item.Name)</a>
+                    }
+                </div>
+            </section>
+        </aside>
+        <!-- end of sidebar -->
+    </div>
+</div>

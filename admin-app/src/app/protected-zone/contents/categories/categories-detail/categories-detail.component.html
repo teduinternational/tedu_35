@@ -1,0 +1,88 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{dialogTitle}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form class="form-horizontal form-label-left" novalidate [formGroup]="entityForm">
+    <div class="modal-body div-scroll">
+        <p-panel #pnl header="Thông tin" [toggleable]="true" [collapsed]="false" styleClass="m-b-10">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Tên:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText (keyup)="generateSeoAlias()" formControlName="name">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="name"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Tên SEO:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="text" pInputText pKeyFilter="alphanum" formControlName="seoAlias">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="seoAlias"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Mô tả SEO:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea [rows]="5" [cols]="30" pInputTextarea formControlName="seoDescription"
+                            rows="5"></textarea>
+                    </div>
+                    <div class="ui-grid-col-4">
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Thứ tự:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input type="number" pInputText formControlName="sortOrder">
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <app-validation-message [entityForm]="entityForm" fieldName="sortOrder"
+                            [validationMessages]="validation_messages"></app-validation-message>
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        <span class="required">Danh mục cha:</span>
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-dropdown [options]="categories" [style]="{'width':'100%'}" placeholder="Chọn danh mục"
+                            filter="true" [showClear]="true" formControlName="parentId">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-grid-col-4">
+
+                    </div>
+                </div>
+            </div>
+            <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+                <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+                    strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+            </p-blockUI>
+        </p-panel>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="saveChange()" class="btn btn-primary">Lưu lại</button>
+        &nbsp;
+        <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Đóng</button>
+    </div>
+</form>

@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "mustache.js@3.1.0",
+      "destination": "wwwroot/lib/mustache.js",
+      "files": [ "mustache.min.js" ]
+    },
+    {
+      "library": "ckeditor@4.12.1",
+      "destination": "wwwroot/lib/ckeditor"
+    },
+    {
+      "library": "twitter-bootstrap@2.2.2",
+      "destination": "wwwroot/lib/twitter-bootstrap"
+    }
+  ]
+}

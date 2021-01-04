@@ -1,0 +1,18 @@
+﻿@model List<KnowledgeSpace.ViewModels.Contents.CategoryVm>
+<nav class="main-nav">
+    <div class="menu-top-menu-container">
+        <ul id="menu-top-menu" class="clearfix">
+            <li><a href="/">Trang chủ</a></li>
+            <li>
+                <a href="#">Bài đăng</a>
+                <ul class="sub-menu">
+                    @foreach (var item in Model)
+                    {
+                        <li><a href="/cat/@item.SeoAlias-@item.Id" title="@Html.Raw(item.Name)">@Html.Raw(item.Name)</a></li>
+                    }
+                </ul>
+            </li>
+            <partial name="_LoginPartial" />
+        </ul>
+    </div>
+</nav>

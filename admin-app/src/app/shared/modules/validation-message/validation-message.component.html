@@ -1,0 +1,8 @@
+<div class="ui-message ui-widget ui-corner-all ui-message-error"
+    *ngIf="entityForm.controls[fieldName].invalid && entityForm.controls[fieldName].dirty">
+    <div *ngFor="let validation of validationMessages[fieldName]">
+        <span *ngIf="entityForm.controls[fieldName].errors[validation.type]">
+            <i class="fa fa-close"></i> {{validation.message}}
+        </span>
+    </div>
+</div>

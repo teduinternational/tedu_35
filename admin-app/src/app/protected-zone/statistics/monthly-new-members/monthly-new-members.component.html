@@ -1,0 +1,47 @@
+<p>{{screenTitle}}</p>
+
+<div class="animated fadeIn">
+    <p-panel #pnl [style]="{'margin-bottom':'10px'}">
+        <p-header>
+            <div class="ui-g-6">
+                <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="year" type="number" />
+            </div>
+            <div class="ui-g-6">
+                <button pButton type="button" label="Tải báo cáo" icon="fa fa-plus" (click)="loadData()"></button>
+            </div>
+        </p-header>
+        <p-table #dt [value]="items" [metaKeySelection]="true" [resizableColumns]="true" columnResizeMode="expand"
+            [responsive]="true" [scrollable]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th [pSortableColumn]="'month'">Tháng
+                        <p-sortIcon [field]="'month'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'numberOfRegisters'">Bài mới
+                        <p-sortIcon [field]="'numberOfRegisters'"></p-sortIcon>
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr [pSelectableRow]="row">
+                    <td>
+                        <span class="ui-column-title">Tháng</span>{{row.month}}</td>
+                    <td>
+                        <span class="ui-column-title">Số bình luận</span>{{row.numberOfRegisters  | number}}</td>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div style="text-align: left">
+                    Tổng: {{totalItems | number}}
+                </div>
+            </ng-template>
+        </p-table>
+
+        <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+            <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+                strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+        </p-blockUI>
+    </p-panel>
+</div>

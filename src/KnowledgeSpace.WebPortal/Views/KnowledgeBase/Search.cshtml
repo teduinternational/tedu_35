@@ -1,0 +1,38 @@
+﻿@model SearchKnowledgeBaseViewModel
+@{
+    ViewData["Title"] = "Kết quả tìm kiếm cho từ khóa " + Model.Keyword;
+    Layout = "~/Views/Shared/_SubLayout.cshtml";
+    ViewData["Description"] = "Các bài viết được tìm bởi từ khóa " + Model.Keyword;
+
+}
+<!-- start of page content -->
+<div class="span8 main-listing">
+    @foreach (var item in Model.Data.Items)
+    {
+        var url = "/kb/" + item.SeoAlias + "-" + item.Id + "/";
+        <article class="format-standard type-post hentry clearfix">
+
+            <header class="clearfix">
+
+                <h3 class="post-title">
+                    <a href="@url">@Html.Raw(item.Title)</a>
+                </h3>
+
+                <div class="post-meta clearfix">
+                    <span class="date">@item.CreateDate.ToString("dd/MM/yyyy")</span>
+                    <span class="category"><a href="#" title="Xem tất cả bài viết trong @item.CategoryName">@item.CategoryName</a></span>
+                    <span class="comments"><a href="#" title="Bình luận trong @item.Title">@item.NumberOfComments.GetValueOrDefault(0).ToString("N0")</a></span>
+                    <span class="like-count">@item.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+                </div><!-- end of post meta -->
+            </header>
+
+            <p>
+                @item.Description
+                <a class="readmore-link" href="@url">Chi tiết</a>
+            </p>
+        </article>
+    }
+
+    @(await Component.InvokeAsync("Pager", Model.Data))
+</div>
+<!-- end of page content -->

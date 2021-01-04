@@ -1,0 +1,70 @@
+<p>{{screenTitle}}</p>
+<div class="animated fadeIn">
+    <p-panel #pnl>
+        <p-header>
+            <div class="ui-g-6">
+                <button appPermission appFunction="CONTENT_CATEGORY" appAction="CREATE" pButton type="button" label="Thêm"
+                    icon="fa fa-plus" (click)="showAddModal()"></button>
+                <button appPermission appFunction="CONTENT_CATEGORY" appAction="DELETE" pButton type="button" label="Xóa"
+                    icon="fa fa-trash" class="ui-button-danger" *ngIf="selectedItems.length > 0"
+                    (click)="deleteItems()"></button>
+                <button appPermission appFunction="CONTENT_CATEGORY" appAction="UPDATE" pButton type="button" label="Sửa"
+                    icon="fa fa-edit" class="ui-button-warning" *ngIf="selectedItems.length== 1"
+                    (click)="showEditModal()"></button>
+            </div>
+            <div class="ui-g-6">
+                <input style="width: 100%;" pInputText (keyup.enter)="loadData()" [(ngModel)]="keyword"
+                    placeholder="Nhập từ khóa..." type="text">
+            </div>
+        </p-header>
+
+        <p-table #dt [value]="items" selectionMode="multiple" [(selection)]="selectedItems" [metaKeySelection]="true"
+            [responsive]="true" [scrollable]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 35px">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th [pSortableColumn]="'id'">Mã
+                        <p-sortIcon [field]="'id'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'name'">Tên
+                        <p-sortIcon [field]="'name'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'seoAlias'">Alias
+                        <p-sortIcon [field]="'seoAlias'"></p-sortIcon>
+                    </th>
+                    <th [pSortableColumn]="'sortOrder'">Thứ tự
+                        <p-sortIcon [field]="'sortOrder'"></p-sortIcon>
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr [pSelectableRow]="row">
+                    <td style="width: 35px;">
+                        <span class="ui-column-title">Lựa chọn</span>
+                        <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                    </td>
+                    <td>{{row.id}}</td>
+                    <td>{{row.name}}</td>
+                    <td>{{row.seoAlias}}</td>
+                    <td>{{row.sortOrder}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div style="text-align: left">
+                    Tổng số bản ghi: {{totalRecords | number}}
+                </div>
+            </ng-template>
+        </p-table>
+        <p-footer>
+            <p-paginator [rows]="pageSize" [totalRecords]="totalRecords" (onPageChange)="pageChanged($event)"
+                [rowsPerPageOptions]="[10,20,50,100]"></p-paginator>
+            <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+                <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+                    strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+            </p-blockUI>
+        </p-footer>
+    </p-panel>
+</div>

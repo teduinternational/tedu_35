@@ -1,0 +1,125 @@
+﻿@model KnowledgeSpace.ViewModels.Contents.KnowledgeBaseCreateRequest
+
+@{
+    ViewData["Title"] = "Cập nhật bài đăng";
+    Layout = "~/Views/Shared/_SubLayout.cshtml";
+}
+@section scripts{
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/js/controllers/accountController.js" asp-append-version="true"></script>
+    <script>
+        var controller = new accountController();
+        controller.initialize();
+    </script>
+}
+
+<div class="span8 page-content">
+
+    <article class="type-page hentry clearfix">
+        <h1 class="post-title">
+            <a href="#">Đăng bài mới</a>
+        </h1>
+        <hr>
+    </article>
+
+    <form class="row" action="/Account/EditKnowledgeBase" method="post" enctype="multipart/form-data" id="frm_edit_kb">
+        <div class="span2">
+        </div>
+        <div class="span6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div class="span2">
+            Danh mục
+        </div>
+        <div class="span6">
+            <select asp-for="CategoryId" required class="required input-xlarge"
+                    asp-items="ViewBag.Categories">
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Tiêu đề
+        </div>
+        <div class="span6">
+            <input asp-for="Title" class="required input-xlarge" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Mô tả
+        </div>
+        <div class="span6">
+            <textarea asp-for="Description" rows="5" class="span6"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Môi trường
+        </div>
+        <div class="span6">
+            <textarea asp-for="Environment" id="txt_environment" rows="5" class="required span6"></textarea>
+            <span asp-validation-for="Environment" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Vấn đề
+        </div>
+        <div class="span6">
+            <textarea asp-for="Problem" rows="5" id="txt_problem" class="required span6"></textarea>
+            <span asp-validation-for="Problem" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Cách tái hiện
+        </div>
+        <div class="span6">
+            <textarea asp-for="StepToReproduce" id="txt_step_reproduce" rows="5" class="required span6"></textarea>
+            <span asp-validation-for="StepToReproduce" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Thông báo lỗi
+        </div>
+        <div class="span6">
+            <input asp-for="ErrorMessage" class="input-xlarge" />
+            <span asp-validation-for="ErrorMessage" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Cách sửa nhanh
+        </div>
+        <div class="span6">
+            <textarea asp-for="Workaround" id="txt_workaround" rows="5" class="required span6"></textarea>
+            <span asp-validation-for="Workaround" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            Giải pháp
+        </div>
+        <div class="span6">
+            <textarea asp-for="Note" rows="5" id="txt_note" class="required span6"></textarea>
+            <span asp-validation-for="Note" class="text-danger"></span>
+        </div>
+
+        <div class="span2">
+            File đính kèm
+        </div>
+        <div class="span6" id="attachment_items">
+            <p><input type="file" name="attachments" /></p>
+            <a id="btn_add_attachment" href="#">Thêm đính kèm</a>
+        </div>
+
+        <div class="span6 offset2 bm30">
+            <div class="input-group-prepend">
+                <img id="img-captcha" src="~/get-captcha-image" />
+            </div>
+            <input type="text" name="captchaCode" />
+            <input type="submit" name="submit" value="Cập nhật" class="btn btn-inverse">
+            <img src="/images/loading.gif" id="contact-loader" alt="Đang xử lý...">
+        </div>
+
+        <div class="span6 offset2 error-container" id="message-result"></div>
+    </form>
+</div>

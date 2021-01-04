@@ -1,0 +1,103 @@
+<div class="animated fadeIn">
+    <p-panel #pnl>
+      <p-header>
+        <div class="pcol-12">
+          <button pButton type="button" label="Lưu lại" *ngIf="selectedRole.id" icon="fa fa-edit"
+            class="ui-button-success" (click)="savePermission()"></button>
+          <button pButton type="button" label="Tải lại" icon="fa fa-remove" class="ui-button-primary"
+            (click)="reloadData()"></button>
+        </div>
+      </p-header>
+      <p-panel header="Chọn nhóm" [toggleable]="true" [collapsed]="false" styleClass="m-b-10">
+        <div class="row">
+          <label for="keyword" class="col-md-3">Nhóm người dùng</label>
+          <div class="col-md-9">
+            <p-dropdown [options]="roles" (onChange)="changeRole($event)" [style]="{'width':'100%'}" name="roleList"
+              placeholder="Chọn nhóm quyền" optionLabel="name" filter="true" [showClear]="true"
+              [(ngModel)]="selectedRole">
+            </p-dropdown>
+          </div>
+        </div>
+      </p-panel>
+      <p-treeTable [value]="functions" selectionMode="single" dataKey="id">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Chức năng</th>
+            <th style="width: 130px; text-align: center">
+              <p-checkbox (onChange)="selectAll($event,'VIEW')" [(ngModel)]="isSelectedAllViews" name="CheckAll">
+              </p-checkbox>
+              Xem
+            </th>
+            <th style="width: 130px; text-align: center">
+              <p-checkbox (onChange)="selectAll($event,'CREATE')" [(ngModel)]="isSelectedAllCreates" name="CheckAll">
+              </p-checkbox>
+              Thêm
+            </th>
+            <th style="width: 130px; text-align: center">
+              <p-checkbox (onChange)="selectAll($event,'UPDATE')" [(ngModel)]="isSelectedAllUpdates" name="CheckAll">
+              </p-checkbox>
+              Sửa
+            </th>
+            <th style="width: 130px; text-align: center">
+              <p-checkbox (onChange)="selectAll($event,'DELETE')" [(ngModel)]="isSelectedAllDeletes" name="CheckAll">
+              </p-checkbox>
+              Xóa
+            </th>
+            <th style="width: 130px; text-align: center">
+              <p-checkbox (onChange)="selectAll($event,'APPROVE')" [(ngModel)]="isSelectedAllApproves" name="CheckAll">
+              </p-checkbox>
+              Duyệt
+            </th>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+          <tr [ttSelectableRow]="rowNode">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              {{rowData.name}}
+            </td>
+            <th style="width: 100px; text-align: center">
+              <ng-container *ngIf="rowData.hasView==true">
+                <p-checkbox name="hasView" (onChange)="checkChanged($event,'VIEW',rowData.id,rowData.parentId)"
+                  [(ngModel)]="selectedViews" [value]="rowData.id"></p-checkbox>
+              </ng-container>
+            </th>
+            <th style="width: 100px; text-align: center">
+              <ng-container *ngIf="rowData.hasCreate==true">
+                <p-checkbox name="hasCreate" (onChange)="checkChanged($event,'CREATE',rowData.id,rowData.parentId)"
+                  [(ngModel)]="selectedCreates" [value]="rowData.id"></p-checkbox>
+              </ng-container>
+            </th>
+            <th style="width: 100px; text-align: center">
+              <ng-container *ngIf="rowData.hasUpdate==true">
+                <p-checkbox name="hasUpdate" (onChange)="checkChanged($event,'UPDATE',rowData.id,rowData.parentId)"
+                  [(ngModel)]="selectedUpdates" [value]="rowData.id"></p-checkbox>
+              </ng-container>
+            </th>
+            <th style="width: 100px; text-align: center">
+              <ng-container *ngIf="rowData.hasDelete==true">
+                <p-checkbox name="hasDelete" (onChange)="checkChanged($event,'DELETE',rowData.id,rowData.parentId)"
+                  [(ngModel)]="selectedDeletes" [value]="rowData.id"></p-checkbox>
+              </ng-container>
+            </th>
+            <th style="width: 100px; text-align: center">
+              <ng-container *ngIf="rowData.hasApprove==true">
+                <p-checkbox name="hasApprove" (onChange)="checkChanged($event,'APPROVE',rowData.id,rowData.parentId)"
+                  [(ngModel)]="selectedApproves" [value]="rowData.id"></p-checkbox>
+              </ng-container>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" style="text-align:center">
+              Không có dữ liệu, mời bạn chọn nhóm quyền để tải dữ liệu.
+            </td>
+          </tr>
+        </ng-template>
+      </p-treeTable>
+      <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+        <p-progressSpinner [style]="{width: '100px', height: '100px', position:'absolute',top:'25%',left:'50%'}"
+          strokeWidth="2" animationDuration=".5s"></p-progressSpinner>
+      </p-blockUI>
+    </p-panel>
+  </div>

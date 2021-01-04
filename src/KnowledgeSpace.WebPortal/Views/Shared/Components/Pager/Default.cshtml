@@ -1,0 +1,52 @@
+﻿@model KnowledgeSpace.ViewModels.PaginationBase
+@{
+    var urlTemplate = Url.Action() + "?page={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "page")
+        {
+            continue;
+        }
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+
+    var startIndex = Math.Max(Model.PageIndex - 5, 1);
+    var finishIndex = Math.Min(Model.PageIndex + 5, Model.PageCount);
+}
+@if (Model.PageCount > 1)
+{
+    <div id="pagination">
+        @if (Model.PageIndex != startIndex)
+        {
+            <a href="@urlTemplate.Replace("{0}", "1")" title="Trang 1" class="btn">Đầu</a>
+            <a href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())" title="Trang @((Model.PageIndex-1).ToString())" class="btn">Trước</a>
+        }
+        @for (var i = startIndex; i <= finishIndex; i++)
+        {
+            if (i == Model.PageIndex)
+            {
+                <a href="#" class="btn active" title="Trang @i">@i</a>
+            }
+            else
+            {
+                <a href="@urlTemplate.Replace("{0}", i.ToString())" title="Trang @i.ToString()" class="btn">@i</a>
+            }
+        }
+        @if (Model.PageIndex != finishIndex)
+        {
+            <a href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())" title="Trang @((Model.PageIndex+1).ToString())" class="btn">Sau</a>
+            <a href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())" title="@Model.PageCount.ToString()" class="btn">Cuối</a>
+        }
+    </div>
+}

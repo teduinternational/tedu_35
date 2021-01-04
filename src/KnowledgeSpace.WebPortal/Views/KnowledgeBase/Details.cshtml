@@ -1,0 +1,245 @@
+﻿@model KnowledgeBaseDetailViewModel
+@{
+    ViewData["Title"] = Model.Detail.Title + " - Knowledge Space";
+    ViewData["Description"] = Model.Detail.Description;
+    Layout = "_SubLayout";
+}
+@section scripts{
+    <script src="~/lib/mustache.js/mustache.min.js"></script>
+    <script src="~/js/controllers/knowledgeBaseController.js" asp-append-version="true"></script>
+    <script>
+        var controller = new knowledgeBaseController();
+        controller.initialize();
+    </script>
+}
+<input type="hidden" id="hid_knowledge_base_id" value="@Model.Detail.Id" />
+@if (User.Identity.IsAuthenticated)
+{
+    <input type="hidden" id="hid_current_login_name" value="@Model.CurrentUser.FirstName @Model.CurrentUser.LastName" />
+
+}
+<div class="span8 page-content">
+
+    <ul class="breadcrumb">
+        <li><a href="/">Trang chủ</a><span class="divider">/</span></li>
+        <li>
+            <a href="/cat/@Model.Category.SeoAlias-@Model.Category.Id"
+               title="Xem tất cả bài trong @Model.Category.Name">@Model.Category.Name</a>
+            <span class="divider">/</span>
+        </li>
+        <li class="active">@Model.Detail.Title</li>
+    </ul>
+
+    <article class=" type-post format-standard hentry clearfix">
+
+        <h1 class="post-title"><a href="#">@Model.Detail.Title</a></h1>
+
+        <div class="post-meta clearfix">
+            <span class="date">@Model.Detail.CreateDate.ToString("dd/MM/yyyy hh:mm")</span>
+            <span class="category">
+                <a href="/cat/@Model.Category.SeoAlias-@Model.Category.Id"
+                   title="Xem tất cả bài trong @Model.Category.Name">@Model.Category.Name</a>
+            </span>
+            <span class="comments">
+                <a href="#" title="Bình luận trong bài @Model.Detail.Title">
+                    @Model.Detail.NumberOfComments.GetValueOrDefault(0).ToString("N0") bình luận
+                </a>
+            </span>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button type="button" class="btn" data-toggle="modal" data-target="#reportModal">
+                    Báo xấu
+                </button>
+            }
+            <span class="like-count">@Model.Detail.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+        </div><!-- end of post meta -->
+
+        <p> <strong>Vấn đề:</strong> @Html.Raw(Model.Detail.Problem)</p>
+
+        <p> <strong>Môi trường:</strong> @Html.Raw(Model.Detail.Environment)</p>
+
+        <p> <strong>Các bước tái hiện:</strong> @Html.Raw(Model.Detail.StepToReproduce)</p>
+
+        <p> <strong>Giải pháp:</strong> @Html.Raw(Model.Detail.Workaround)</p>
+
+        <p> <strong>Chú ý:</strong> @Html.Raw(Model.Detail.Note)</p>
+    </article>
+
+    <div class="like-btn">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form id="frm_vote" action="#" method="post">
+                <input type="hidden" name="knowledgeBaseId" value="@Model.Detail.Id">
+                <span class="like-it">@Model.Detail.NumberOfVotes.GetValueOrDefault(0).ToString("N0")</span>
+            </form>
+        }
+
+        <span class="tags">
+            <strong>Tags:&nbsp;&nbsp;</strong>
+            @foreach (var label in Model.Labels)
+            {
+                <a href="/tag/@label.Id" rel="tag" title="@label.Name">@label.Name</a>
+            }
+        </span>
+    </div>
+
+    <section id="comments">
+        <input type="hidden" value="@Model.Detail.NumberOfComments.GetValueOrDefault(0)" id="hid_number_comments" />
+        <h3 id="comments-title">(@Model.Detail.NumberOfComments.GetValueOrDefault(0).ToString("N0")) bình luận</h3>
+
+        <ol class="commentlist" id="comment_list">
+        </ol>
+        <a id="comment-pagination" data-page-index="1" href="#" style="display:none">Xem thêm bình luận</a>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div id="respond">
+
+                <h3>Đăng bình luận</h3>
+
+                <div class="cancel-comment-reply">
+                    <a rel="nofollow" id="cancel-comment-reply-link" href="#" style="display:none;">Click here to cancel reply.</a>
+                </div>
+
+                <form action="/knowledgebase/addNewComment" method="post" id="commentform">
+                    <input type="hidden" name="knowledgeBaseId" value="@Model.Detail.Id" />
+                    <p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>
+                    <div>
+                        <label for="comment">Bình luận</label>
+                        <textarea class="span8" name="content" id="txt_new_comment_content" cols="58" rows="10"></textarea>
+                    </div>
+
+                    <p id="message-result" style="display:none;"></p>
+
+                    <div>
+                        <div class="input-group-prepend">
+                            <img id="img-captcha" src="/get-captcha-image" />
+                        </div>
+                        <input type="text" name="captchaCode" id="txt_captcha" />
+                        <input class="btn" name="submit" type="submit" id="btn_send_comment" value="Gửi bình luận">
+                    </div>
+                </form>
+            </div>
+        }
+        else
+        {
+            <p class="comment-notes">Mời bạn <a asp-controller="Account" asp-action="SignIn">đăng nhập</a> để bình luận</p>
+
+        }
+    </section><!-- end of comments -->
+</div>
+
+<script id="tmpl_children_comments" type="x-tmpl-mustache">
+    <li class="comment byuser comment-author-saqib-sarwar bypostauthor odd alt depth-2" id="li-comment-{{id}}">
+        <article id="comment-3">
+
+            <a href="">
+                <img alt="{{ownerName}}" src="/images/no-avatar.png" class="avatar avatar-60 photo" height="60" width="60">
+            </a>
+
+            <div class="comment-meta">
+
+                <h5 class="author">
+                    <cite class="fn">{{ownerName}}</cite>
+                    - <a class="comment-reply-link" href="#">Trả lời</a>
+                </h5>
+
+                <p class="date">
+                    <a href="#">
+                        <time>{{createDate}}</time>
+                    </a>
+                </p>
+            </div><!-- end .comment-meta -->
+
+            <div class="comment-body">
+                {{{content}}}
+            </div><!-- end of comment-body -->
+        </article><!-- end of comment -->
+    </li>
+</script>
+<script id="tmpl_comments" type="x-tmpl-mustache">
+    <li class="comment even thread-even depth-1" id="li-comment-2">
+        <article id="comment-2">
+
+            <a href="#">
+                <img alt="{{ownerName}}" src="/images/no-avatar.png" class="avatar avatar-60 photo" height="60" width="60">
+            </a>
+
+            <div class="comment-meta">
+
+                <h5 class="author">
+                    <cite class="fn">
+                        <a href="#" rel="external nofollow" class="url">{{ownerName}}</a>
+                    </cite>
+                    - <a class="comment-reply-link" href="#" data-commentid="{{id}}">Trả lời</a>
+                </h5>
+
+                <p class="date">
+                    <a href="#">
+                        <time datetime="2013-02-26T13:18:47+00:00">{{createDate}}</time>
+                    </a>
+                </p>
+            </div><!-- end .comment-meta -->
+
+            <div class="comment-body">
+                {{content}}
+            </div><!-- end of comment-body -->
+            <div id="reply_comment_{{id}}"></div>
+        </article><!-- end of comment -->
+
+        <ul class="children" id="children_comments_{{id}}">
+
+            {{{childrenHtml}}}
+        </ul>
+    </li>
+</script>
+
+<script id="tmpl_reply_comment" type="x-tmpl-mustache">
+    <div id="respond">
+        <h3>Trả lời bình luận</h3>
+        <form action="/knowledgebase/addNewComment" method="post" id="frm_reply_comment_{{commentId}}">
+            <input type="hidden" name="knowledgeBaseId" value="@Model.Detail.Id" />
+            <input type="hidden" name="replyId" value="{{commentId}}" />
+            <div>
+                <textarea class="span8" name="content" id="txt_reply_content_{{commentId}}" cols="58" rows="5"></textarea>
+            </div>
+            <p id="message-result-reply-{{commentId}}" style="display:none;"></p>
+
+            <div class="form-actions">
+                <div class="input-group-prepend">
+                    <img id="img-captcha-reply-{{commentId}}" data-id="{{commentId}}" class="img-captcha" alt="Click vào ảnh để đổi" src="/get-captcha-image" />
+                </div>
+                <input type="text" name="captchaCode" id="txt_captcha_reply_{{commentId}}" />
+                <input class="btn" name="submit" type="submit" id="btn_send_reply" value="Trả lời">
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" data-backdrop="static"
+     aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="frm_report">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">Báo xấu</h5>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" value="@Model.Detail.Id" name="knowledgeBaseId" />
+                    <textarea id="txt_report_content" name="content" class="text-area"></textarea>
+                    <p id="message-result-report" style="display:none;"></p>
+                </div>
+                <div class="modal-footer">
+                    <div class="input-group-prepend">
+                        <img id="img-captcha-report" src="~/get-captcha-image" />
+                    </div>
+                    <input type="text" name="captchaCode" />
+                    <button type="button" class="btn btn-primary" id="btn_send_report">Báo cáo</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
