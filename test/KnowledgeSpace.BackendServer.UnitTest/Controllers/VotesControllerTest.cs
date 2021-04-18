@@ -25,7 +25,7 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
         private Mock<IEmailSender> _mockEmailSender;
         private Mock<IViewRenderService> _mockViewRenderService;
         private Mock<ICacheService> _mockCacheService;
-
+        private Mock<IOneSignalService> _oneSignalService;
         public VotesControllerTest()
         {
             _context = new InMemoryDbContextFactory().GetApplicationDbContext("VotesControllerTest");
@@ -35,13 +35,14 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
             _mockEmailSender = new Mock<IEmailSender>();
             _mockViewRenderService = new Mock<IViewRenderService>();
             _mockCacheService = new Mock<ICacheService>();
+            _oneSignalService = new Mock<IOneSignalService>();
         }
 
         [Fact]
         public async Task GetVotes_ValidKbId_RecordMatch()
         {
             var controller = new KnowledgeBasesController(_context, _mockSequenceService.Object, _mockStorageService.Object,
-                           _mockLoggerService.Object, _mockEmailSender.Object, _mockViewRenderService.Object, _mockCacheService.Object);
+                           _mockLoggerService.Object, _mockEmailSender.Object, _mockViewRenderService.Object, _mockCacheService.Object,_oneSignalService.Object);
             _context.Votes.AddRange(new List<Vote>()
             {
                 new Vote(){ KnowledgeBaseId = 1, UserId = Guid.NewGuid().ToString(), CreateDate = DateTime.Now},
@@ -65,7 +66,7 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
         {
             var controller = new KnowledgeBasesController(_context, _mockSequenceService.Object, _mockStorageService.Object,
                                      _mockLoggerService.Object, _mockEmailSender.Object, _mockViewRenderService.Object,
-                                     _mockCacheService.Object);
+                                     _mockCacheService.Object, _oneSignalService.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]{
                     new Claim(ClaimTypes.NameIdentifier, "1"),
                 }, "mock"));
@@ -94,7 +95,7 @@ namespace KnowledgeSpace.BackendServer.UnitTest.Controllers
         {
             var controller = new KnowledgeBasesController(_context, _mockSequenceService.Object, _mockStorageService.Object,
                                      _mockLoggerService.Object, _mockEmailSender.Object, _mockViewRenderService.Object,
-                                     _mockCacheService.Object);
+                                     _mockCacheService.Object, _oneSignalService.Object);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]{
                     new Claim(ClaimTypes.NameIdentifier, "1"),
                 }, "mock"));
